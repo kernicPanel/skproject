@@ -1,1 +1,5 @@
-run "npm install" in root to initialize
+run "npm install" in root to install modules dependencies.
+
+run "node server.js" to run server
+
+open "http://localhost:8081/" to connect
