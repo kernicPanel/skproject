@@ -1,8 +1,9 @@
 //setup Dependencies
-var connect = require('connect')
-    , express = require('express')
-    , io = require('socket.io')
-    , port = (process.env.PORT || 8081);
+var connect = require('connect'),
+    express = require('express'),
+    io = require('socket.io'),
+    port = (process.env.PORT || 8081),
+    test = require('./lib/test.js');
 
 //Setup Express
 var server = express.createServer();
@@ -20,18 +21,18 @@ server.configure(function(){
 server.error(function(err, req, res, next){
     if (err instanceof NotFound) {
         res.render('404.jade', { locals: { 
-                  title : '404 - Not Found'
-                 ,description: ''
-                 ,author: ''
-                 ,analyticssiteid: 'XXXXXXX' 
+                  title : '404 - Not Found',
+                  description: '',
+                  author: '',
+                  analyticssiteid: 'XXXXXXX' 
                 },status: 404 });
     } else {
         res.render('500.jade', { locals: { 
-                  title : 'The Server Encountered an Error'
-                 ,description: ''
-                 ,author: ''
-                 ,analyticssiteid: 'XXXXXXX'
-                 ,error: err 
+                  title : 'The Server Encountered an Error',
+                  description: '',
+                  author: '',
+                  analyticssiteid: 'XXXXXXX',
+                  error: err 
                 },status: 500 });
     }
 });
@@ -44,6 +45,7 @@ io.sockets.on('connection', function(socket){
   socket.on('message', function(data){
     socket.broadcast.emit('server_message',data);
     socket.emit('server_message',data);
+    socket.emit('server_message',test.echo());
   });
   socket.on('disconnect', function(){
     console.log('Client Disconnected.');
@@ -60,10 +62,10 @@ io.sockets.on('connection', function(socket){
 server.get('/', function(req,res){
   res.render('index.jade', {
     locals : { 
-              title : 'Your Page Title'
-             ,description: 'Your Page Description'
-             ,author: 'Your Name'
-             ,analyticssiteid: 'XXXXXXX' 
+              title : 'Your Page Title',
+              description: 'Your Page Description',
+              author: 'Your Name',
+              analyticssiteid: 'XXXXXXX' 
             }
   });
 });
