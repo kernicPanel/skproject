@@ -2,6 +2,7 @@
 var connect = require('connect'),
     express = require('express'),
     io = require('socket.io'),
+    Redmine = require('redmine'),
     port = (process.env.PORT || 8081),
     test = require('./lib/test.js');
 
@@ -38,6 +39,12 @@ server.error(function(err, req, res, next){
 });
 server.listen( port);
 
+var redmine = new Redmine({
+  host: 'demo.redmine.org',
+  apiKey: '83a40892b14c33ece8b160b480da8f327eb83b0b'
+});
+
+
 //Setup Socket.IO
 var io = io.listen(server);
 io.sockets.on('connection', function(socket){
@@ -47,6 +54,17 @@ io.sockets.on('connection', function(socket){
     socket.emit('server_message',data);
     socket.emit('server_message',test.echo());
     socket.emit('server_message','ECHO TOTO');
+
+    // get issue
+    redmine.getIssues({project_id: 2776}, function(err, data) {
+      if (err) {
+        console.log("Error: " + err.message);
+        return;
+      }
+
+      console.log("Issues:");
+      console.log(data);
+    });
   });
   socket.on('disconnect', function(){
     console.log('Client Disconnected.');

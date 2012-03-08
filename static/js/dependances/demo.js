@@ -185,8 +185,8 @@ $(function () {
     });
 
     // Filament datepicker
-    $('#rangeA').daterangepicker();
-    $('#rangeBa, #rangeBb').daterangepicker();
+    //$('#rangeA').daterangepicker();
+    //$('#rangeBa, #rangeBb').daterangepicker();
 
 
     // Dynamic tabs
