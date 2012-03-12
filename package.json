@@ -9,7 +9,9 @@
     "jade": "0.20.0",
     "mongoose": "2.4.8",
     "socket.io": "0.8.7",
-    "redmine": "*"
+    "redmine": "*",
+    "underscore": "*",
+    "backbone": "*"
   },
   "devDependencies": {
     "vows": "0.5.x",
