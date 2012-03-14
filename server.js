@@ -18,7 +18,7 @@ Server.setup = require("./lib/setup.js").setup({
   express : express,
   paths : {
     views :  path.join(application_root,"views"),
-    root : path.join(application_root,"public"),
+    root : path.join(application_root,"static"),
     controllers : path.join(application_root,"controllers"),
     models : path.join(application_root,"models")
   }

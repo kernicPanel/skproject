@@ -79,7 +79,8 @@ html.no-js(lang='en')
     include header
 
     //block content
-    include index
+    //include index
+    include backboneTest
 
     block footer
         footer
@@ -105,15 +106,15 @@ html.no-js(lang='en')
         script(defer, src='/js/dependances/underscore-min.js')
         script(defer, src='/js/dependances/backbone-min.js')
         //Third-party
-        script(defer, src='/third-party/jQuery-UI-Date-Range-Picker/js/date.js')
-        script(defer, src='/third-party/jQuery-UI-Date-Range-Picker/js/daterangepicker.jQuery.js')
-        script(defer, src='/third-party/jQuery-UI-FileInput/js/enhance.min.js')
-        script(defer, src='/third-party/jQuery-UI-FileInput/js/fileinput.jquery.js')
-        script(defer, src='/third-party/wijmo/js/jquery.bgiframe-2.1.3-pre.js')
-        script(defer, src='/third-party/wijmo/js/jquery.mousewheel.min.js')
-        script(defer, src='/third-party/wijmo/js/jquery.wijmo-open.1.5.0.min.js')
-        script(defer, src='/js/script.js')
+        //script(defer, src='/third-party/jQuery-UI-Date-Range-Picker/js/date.js')
+        //script(defer, src='/third-party/jQuery-UI-Date-Range-Picker/js/daterangepicker.jQuery.js')
+        //script(defer, src='/third-party/jQuery-UI-FileInput/js/enhance.min.js')
+        //script(defer, src='/third-party/jQuery-UI-FileInput/js/fileinput.jquery.js')
+        //script(defer, src='/third-party/wijmo/js/jquery.bgiframe-2.1.3-pre.js')
+        //script(defer, src='/third-party/wijmo/js/jquery.mousewheel.min.js')
+        //script(defer, src='/third-party/wijmo/js/jquery.wijmo-open.1.5.0.min.js')
         script(defer, src='/socket.io/socket.io.js')
+        script(defer, src='/js/script.js')
           script
             var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview'],['_trackPageLoadTime']];
             (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.async=1;
@@ -124,4 +125,4 @@ html.no-js(lang='en')
           script(defer)
             window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})
         //Dependances
-        script(defer, src='/js/dependances/demo.js')
+        //script(defer, src='/js/dependances/demo.js')
