@@ -1,92 +1,122 @@
-//setup Dependencies
-var connect = require('connect'),
-    express = require('express'),
-    io = require('socket.io'),
-    port = (process.env.PORT || 8081),
-    test = require('./lib/test.js');
+global._ = require("underscore");
 
-//Setup Express
-var server = express.createServer();
-server.configure(function(){
-    server.set('views', __dirname + '/views');
-    server.set('view options', { layout: false });
-    server.use(connect.bodyParser());
-    server.use(express.cookieParser());
-    server.use(express.session({ secret: "shhhhhhhhh!"}));
-    server.use(connect.static(__dirname + '/static'));
-    server.use(server.router);
-});
+var Server = {},
+    express = require("express"),
+    path = require("path"),
+    sys = require("util"),
+    application_root = __dirname;
 
-//setup the errors
-server.error(function(err, req, res, next){
-    if (err instanceof NotFound) {
-        res.render('404.jade', { locals: {
-                  title : '404 - Not Found',
-                  description: '',
-                  author: '',
-                  analyticssiteid: 'XXXXXXX'
-                },status: 404 });
-    } else {
-        res.render('500.jade', { locals: {
-                  title : 'The Server Encountered an Error',
-                  description: '',
-                  author: '',
-                  analyticssiteid: 'XXXXXXX',
-                  error: err
-                },status: 500 });
-    }
-});
-server.listen( port);
+global.Server = Server;
+Server.root = application_root;
+global.app = express.createServer();
 
-//Setup Socket.IO
-var io = io.listen(server);
-io.sockets.on('connection', function(socket){
-  console.log('Client Connected');
-  socket.on('message', function(data){
-    socket.broadcast.emit('server_message',data);
-    socket.emit('server_message',data);
-    socket.emit('server_message',test.echo());
-    socket.emit('server_message','ECHO TOTO');
-  });
-  socket.on('disconnect', function(){
-    console.log('Client Disconnected.');
-  });
+Server.setup = require("./lib/setup.js").setup({
+  //redis: require("./lib/redis-client").createClient(),
+  app: app, 
+  mongoose : require("mongoose"),
+  io : require("socket.io"),
+  express : express,
+  paths : {
+    views :  path.join(application_root,"views"),
+    root : path.join(application_root,"static"),
+    controllers : path.join(application_root,"controllers"),
+    models : path.join(application_root,"models")
+  }
 });
 
 
-///////////////////////////////////////////
-//              Routes                   //
-///////////////////////////////////////////
-
-/////// ADD ALL YOUR ROUTES HERE  /////////
-
-server.get('/', function(req,res){
-  res.render('index.jade', {
-    locals : {
-              title : 'Your Page Title',
-              description: 'Your Page Description',
-              author: 'Your Name',
-              analyticssiteid: 'XXXXXXX'
-            }
-  });
-});
-
-
-//A Route for Creating a 500 Error (Useful to keep around)
-server.get('/500', function(req, res){
-    throw new Error('This is a 500 Error');
-});
-
-//The 404 Route (ALWAYS Keep this as the last route)
-server.get('/*', function(req, res){
-    throw new NotFound;
-});
-
-function NotFound(msg){
-    this.name = 'NotFound';
-    Error.call(this, msg);
-    Error.captureStackTrace(this, arguments.callee);
-}
-
-
-console.log('Listening on http://0.0.0.0:' + port );
+/*
+ * //setup Dependencies
+ *var connect = require('connect'),
+ *    express = require('express'),
+ *    io = require('socket.io'),
+ *    port = (process.env.PORT || 8081),
+ *    test = require('./lib/test.js');
+ *
+ * //Setup Express
+ *var server = express.createServer();
+ *server.configure(function(){
+ *    server.set('views', __dirname + '/views');
+ *    server.set('view options', { layout: false });
+ *    server.use(connect.bodyParser());
+ *    server.use(express.cookieParser());
+ *    server.use(express.session({ secret: "shhhhhhhhh!"}));
+ *    server.use(connect.static(__dirname + '/static'));
+ *    server.use(server.router);
+ *});
+ *
+ * //setup the errors
+ *server.error(function(err, req, res, next){
+ *    if (err instanceof NotFound) {
+ *        res.render('404.jade', { locals: {
+ *                  title : '404 - Not Found',
+ *                  description: '',
+ *                  author: '',
+ *                  analyticssiteid: 'XXXXXXX'
+ *                },status: 404 });
+ *    } else {
+ *        res.render('500.jade', { locals: {
+ *                  title : 'The Server Encountered an Error',
+ *                  description: '',
+ *                  author: '',
+ *                  analyticssiteid: 'XXXXXXX',
+ *                  error: err
+ *                },status: 500 });
+ *    }
+ *});
+ *server.listen( port);
+ *
+ * //Setup Socket.IO
+ *var io = io.listen(server);
+ *io.sockets.on('connection', function(socket){
+ *  console.log('Client Connected');
+ *  socket.on('message', function(data){
+ *    socket.broadcast.emit('server_message',data);
+ *    socket.emit('server_message',data);
+ *    socket.emit('server_message',test.echo());
+ *    socket.emit('server_message','ECHO TOTO');
+ *  });
+ *  socket.on('disconnect', function(){
+ *    console.log('Client Disconnected.');
+ *  });
+ *});
+ *
+ *
+ * ///////////////////////////////////////////
+ * //              Routes                   //
+ * ///////////////////////////////////////////
+ * 
+ * /////// ADD ALL YOUR ROUTES HERE  /////////
+ *
+ *server.get('/', function(req,res){
+ *  //res.render('index.jade', {
+ *  res.render('backboneTest.jade', {
+ *    locals : {
+ *              title : 'Your Page Title',
+ *              description: 'Your Page Description',
+ *              author: 'Your Name',
+ *              analyticssiteid: 'XXXXXXX'
+ *            }
+ *  });
+ *});
+ *
+ *
+ * //A Route for Creating a 500 Error (Useful to keep around)
+ *server.get('/500', function(req, res){
+ *    throw new Error('This is a 500 Error');
+ *});
+ *
+ * //The 404 Route (ALWAYS Keep this as the last route)
+ *server.get('/*', function(req, res){
+ *    throw new NotFound;
+ *});
+ *
+ *function NotFound(msg){
+ *    this.name = 'NotFound';
+ *    Error.call(this, msg);
+ *    Error.captureStackTrace(this, arguments.callee);
+ *}
+ *
+ *
+ *console.log('Listening on http://0.0.0.0:' + port );
+ */
