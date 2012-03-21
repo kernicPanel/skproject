@@ -18,13 +18,14 @@ $(document).ready(function() {
     });
 
     socket.on('redmine::connect', function(data){
-        socket.emit("redmine::sync");
+        //socket.emit("redmine::sync");
         /*
          *socket.emit('redmine::sync', 'sync', function (data) {
          *  console.log(data); // data will be 'woot'
          *});
          */
     });
+    
 
     socket.on('redmine::response', function(data){
         console.log("data : ", data);

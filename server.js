@@ -65,6 +65,7 @@ io.sockets.on('connection', function(socket){
 
 //init lib modules
 var redmine = require('./lib/redmine.js');
+redmine.sync();
 
 ///////////////////////////////////////////
 //              Routes                   //
