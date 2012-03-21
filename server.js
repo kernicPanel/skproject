@@ -64,8 +64,12 @@ io.sockets.on('connection', function(socket){
 
 
 //init lib modules
-var redmine = require('./lib/redmine.js');
-redmine.sync();
+var redmine = require('./lib/redmine.js'),
+    mongo = require('./lib/mongo.js');
+redmine.sync(null, function(){
+    mongo.initObjects( null, function(){} );
+});
+
 
 ///////////////////////////////////////////
 //              Routes                   //
@@ -82,6 +86,19 @@ server.get('/', function(req,res){
               analyticssiteid: 'XXXXXXX'
             }
   });
+  /*
+   *res.render('index.jade', {
+   *  locals : {
+   *            title : 'Your Page Title',
+   *            description: 'Your Page Description',
+   *            author: 'Your Name',
+   *            analyticssiteid: 'XXXXXXX',
+   *            projects: projects,
+   *            issues: issues,
+   *            users: users
+   *          }
+   *});
+   */
 });
 
 
