@@ -1,9 +1,16 @@
+global.config = require('./lib/config');
+//console.log("config : ", config);
+
 //setup Dependencies
 var connect = require('connect'),
     express = require('express'),
     io = require('socket.io'),
-    port = (process.env.PORT || 8081),
+    mongoose = require('mongoose'),
+    port = (process.env.PORT || config.server.port),
+    host = (process.env.HOST || config.server.host),
     test = require('./lib/test.js');
+
+global.db = mongoose.connect(config.mongo.host);
 
 //Setup Express
 var server = express.createServer();
@@ -36,11 +43,13 @@ server.error(function(err, req, res, next){
                 },status: 500 });
     }
 });
-server.listen( port);
+server.listen( port, host);
 
 //Setup Socket.IO
 var io = io.listen(server);
+global.io = io;
 io.sockets.on('connection', function(socket){
+    //global.socket = socket;
   console.log('Client Connected');
   socket.on('message', function(data){
     socket.broadcast.emit('server_message',data);
@@ -53,6 +62,9 @@ io.sockets.on('connection', function(socket){
   });
 });
 
+
+//init lib modules
+var redmine = require('./lib/redmine.js');
 
 ///////////////////////////////////////////
 //              Routes                   //
@@ -89,4 +101,4 @@ function NotFound(msg){
 }
 
 
-console.log('Listening on http://0.0.0.0:' + port );
+console.log('Listening on '+ host + ':' + port );
