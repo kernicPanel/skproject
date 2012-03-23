@@ -10,7 +10,7 @@ var connect = require('connect'),
     host = (process.env.HOST || config.server.host),
     test = require('./lib/test.js');
 
-global.db = mongoose.connect(config.mongo.host);
+//global.db = mongoose.connect(config.mongo.host);
 
 //Setup Express
 var server = express.createServer();
@@ -64,11 +64,20 @@ io.sockets.on('connection', function(socket){
 
 
 //init lib modules
-var redmine = require('./lib/redmine.js'),
-    mongo = require('./lib/mongo.js');
-redmine.sync(null, function(){
-    mongo.initObjects( null, function(){} );
-});
+var redmine = require('./lib/redmine.js');
+/*
+ *var redmine = require('./lib/redmine.js'),
+ *    mongo = require('./lib/mongo.js');
+ */
+/*
+ *redmine.sync(null, function(){
+ *    mongo.initObjects( null, function(){} );
+ *});
+ */
+
+redmine.init();
+
+//mongo.initObjects( null, function(){} );
 
 
 ///////////////////////////////////////////
