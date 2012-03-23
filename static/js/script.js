@@ -18,6 +18,31 @@ $(document).ready(function() {
     });
 
     socket.on('redmine::connect', function(data){
-        socket.emit("redmine::sync");
+        //socket.emit("redmine::sync");
+        /*
+         *socket.emit('redmine::sync', 'sync', function (data) {
+         *  console.log(data); // data will be 'woot'
+         *});
+         */
     });
+    
+
+    socket.on('redmine::response', function(data){
+        console.log("data : ", data);
+    });
+
+/*
+ *    socket.on('mongo::connect', function(data){
+ *        socket.emit("mongo::initObjects");
+ *        //socket.emit('mongo::sync', 'sync', function (data) {
+ *          //console.log(data); // data will be 'woot'
+ *        //});
+ *    });
+ *    
+ *
+ *    socket.on('mongo::response', function(data){
+ *        console.log("data : ", data);
+ *    });
+ */
+
 });
