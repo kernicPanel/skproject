@@ -1,8 +1,7 @@
 script(id="skuser", type="text/html")
   .user
     p {{name}}
-    p {{current}}
+    ul.issues
 
-script(id="issues", type="text/html")
-  .issue
-    p {{subject}}
+script(id="issue", type="text/html")
+  li.issue {{subject}}
