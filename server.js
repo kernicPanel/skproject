@@ -79,6 +79,7 @@ redmine.init();
 
 //mongo.initObjects( null, function(){} );
 
+var irc = require('./lib/irc.js');
 
 ///////////////////////////////////////////
 //              Routes                   //
