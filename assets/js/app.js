@@ -28,8 +28,8 @@ $(function() {
 
         // Re-render the contents of the todo item.
         render: function() {
-            console.log("render : ");
-            console.log("this.el : ", this.el);
+            //console.log("render : ");
+            //console.log("this.el : ", this.el);
             return this;
         },
         addUser: function(skuser) {
@@ -46,6 +46,9 @@ $(function() {
 
     window.skuserView = new SkUserView();
 
+    //
+    //Issues
+    //
     window.Issue = Backbone.Model.extend({
         initialize: function() {
         }
@@ -72,8 +75,8 @@ $(function() {
 
         // Re-render the contents of the todo item.
         render: function() {
-            console.log("render : ");
-            console.log("this.el : ", this.el);
+            //console.log("render : ");
+            //console.log("this.el : ", this.el);
             return this;
         },
         setUser: function(userId) {
@@ -92,7 +95,19 @@ $(function() {
         }
     });
 
-    //window.issueView = new IssueView();
+    $('#sync').click(function() {
+        socket.emit('redmine::sync', function (data) {
+          console.log(data);
+        });
+    });
+
+    /*
+     *$('#getusers').click(function() {
+     *    socket.emit('getUsersIssues', function (data) {
+     *      console.log(data);
+     *    });
+     *});
+     */
 
     socket.on('redmine::connect', function(data){
         console.log("redmine connect : ");
