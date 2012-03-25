@@ -3,12 +3,13 @@ block header
         div(class='topbar')
             div(class='fill')
                 div(class='container')
-                    a(class='brand', href='http://github.com/addyosmani/jquery-ui-bootstrap')='jQuery UI Bootstrap'
+                    //a(class='brand', href='http://github.com/addyosmani/jquery-ui-bootstrap')='jQuery UI Bootstrap'
+                    span(class='brand')='skProject'
                     ul.nav
-                        li.active
-                            a(href='#') Home
                         li
-                            a(href='http://github.com/addyosmani/jquery-ui-bootstrap/issues') Feedback/Issues
-                        li
-                            a(href='http://twitter.com/addyosmani') Contact
+                            a#sync(href='#') Sync
+                        //li
+                            //a#getusers(href='#') Get Users
+                        //li
+                            //a(href='http://twitter.com/addyosmani') Contact
                         form.pull-right(action='')
