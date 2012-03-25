@@ -24,57 +24,8 @@ html.no-js(lang='en')
     link(rel='stylesheet', href='/third-party/jQuery-UI-Date-Range-Picker/css/ui.daterangepicker.css')
     link(rel='stylesheet', href='/third-party/jQuery-UI-FileInput/css/enhanced.css')
     link(rel='stylesheet', href='/third-party/wijmo/css/jquery.wijmo-open.1.5.0.css')
-    style
-        /* Override some defaults */
-        html, body {
-        background-color: #eee;
-        }
-        body {
-        padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
-        }
-        .container > footer p {
-        text-align: center; /* center align it with the container */
-        }
-        .container {
-        width: 820px; /* downsize our container to make the content feel a bit tighter and more cohesive. NOTE: this removes two full columns from the grid, meaning you only go to 14 columns and not 16. */
-        }
-
-        /* The white background content wrapper */
-        .container > .content {
-        background-color: #fff;
-        padding: 20px;
-        margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
-        -webkit-border-radius: 0 0 6px 6px;
-           -moz-border-radius: 0 0 6px 6px;
-                border-radius: 0 0 6px 6px;
-        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
-           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
-                box-shadow: 0 1px 2px rgba(0,0,0,.15);
-        }
-
-        /* Page header tweaks */
-        .page-header {
-        background-color: #f5f5f5;
-        padding: 20px 20px 10px;
-        margin: -20px -20px 20px;
-        }
-
-        /* Styles you shouldn't keep as they are for displaying this base example only */
-        .content .span10,
-        .content .span4 {
-        min-height: 500px;
-        }
-        /* Give a quick and non-cross-browser friendly divider */
-        .content .span4 {
-        margin-left: 0;
-        padding-left: 19px;
-        border-left: 1px solid #eee;
-        }
-
-        .topbar .btn {
-        border: 0;
-        }
-    //-script(src='js/libs/modernizr-2.0.6.min.js')
+    //script(src='js/libs/modernizr-2.0.6.min.js')
+    include templates
   body
     include header
 
@@ -85,39 +36,25 @@ html.no-js(lang='en')
             //
                 static dialog
             #dialog-message(title='Modal Dialog')
-                p
-                    span.ui-icon.ui-icon-circle-check(style='float: left; margin: 0 7px 50px 0;')
-                    | Your files have downloaded successfully into the My Downloads folder.
-                p
-                    | Currently using
-                    b 36% of your storage space
-                    | .
             //
                 end static dialog
-        script(src='//ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js')
-        script
-          window.jQuery || document.write('<script src="js/libs/jquery-1.7.1.min.js"><\\/script>')
-        //-script(defer, src='js/plugins.js')
         //Dependances
-        script(defer, src='/js/dependances/jquery-ui-1.8.16.custom.min.js')
-        //Third-party
-        script(defer, src='/third-party/jQuery-UI-Date-Range-Picker/js/date.js')
-        script(defer, src='/third-party/jQuery-UI-Date-Range-Picker/js/daterangepicker.jQuery.js')
-        script(defer, src='/third-party/wijmo/js/jquery.mousewheel.min.js')
-        script(defer, src='/third-party/wijmo/js/jquery.bgiframe-2.1.3-pre.js')
-        script(defer, src='/third-party/wijmo/js/jquery.wijmo-open.1.5.0.min.js')
-        script(defer, src='/third-party/jQuery-UI-FileInput/js/enhance.min.js')
-        script(defer, src='/third-party/jQuery-UI-FileInput/js/fileinput.jquery.js')
-        script(defer, src='/js/script.js')
-        script(defer, src='/socket.io/socket.io.js')
-          script
-            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview'],['_trackPageLoadTime']];
-            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];g.async=1;
-            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-            s.parentNode.insertBefore(g,s)}(document,'script'));
+        //script(defer, src='/js/dependances/jquery-1.7.1.min.js')
+        //script(defer, src='/js/dependances/jquery-ui-1.8.16.custom.min.js')
+        script(defer, src='/js/libs/socket.io.js')
+        script(defer, src='/js/libs/jquery-1.7.1.min.js')
+        script(defer, src='/js/libs/jquery.scrollTo-1.4.2-min.js')
+        script(defer, src='/js/libs/underscore-min.js')
+        script(defer, src='/js/libs/backbone-min.js')
+        script(defer, src='/js/libs/ICanHaz.min.js')
+        script(defer, src='/js/libs/bootstrap.min.js')
+        //script(defer, src='/js/utils.js')
+        //script(defer, src='/js/models.js')
+        //script(defer, src='/js/collections.js')
+
+        //!= js('app')
+        script(defer, src='/js/app.js')
         //if lt IE 7
           script(defer, src='//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js')
           script(defer)
             window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})
-        //Dependances
-        script(defer, src='/js/dependances/demo.js')
