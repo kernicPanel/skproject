@@ -79,6 +79,7 @@ redmine.init();
 
 //mongo.initObjects( null, function(){} );
 
+var irc = require('./lib/irc.js');
 
 ///////////////////////////////////////////
 //              Routes                   //
@@ -95,19 +96,17 @@ server.get('/', function(req,res){
               analyticssiteid: 'XXXXXXX'
             }
   });
-  /*
-   *res.render('index.jade', {
-   *  locals : {
-   *            title : 'Your Page Title',
-   *            description: 'Your Page Description',
-   *            author: 'Your Name',
-   *            analyticssiteid: 'XXXXXXX',
-   *            projects: projects,
-   *            issues: issues,
-   *            users: users
-   *          }
-   *});
-   */
+});
+
+server.get('/demo', function(req,res){
+  res.render('index_demo.jade', {
+    locals : {
+              title : 'Your Page Title',
+              description: 'Your Page Description',
+              author: 'Your Name',
+              analyticssiteid: 'XXXXXXX'
+            }
+  });
 });
 
 
