@@ -39,7 +39,7 @@ $(function() {
             var html = ich.skuser({
                 name: skuser.get('name')
             });
-            $(html).attr('id', 'skuser-' + skuser.get('_id'));
+            $(html).attr('id', 'skuser-' + skuser.get('id'));
             $(this.el).append(html);
         }
     });
@@ -90,7 +90,7 @@ $(function() {
             var html = ich.issue({
                 subject: issue.get('subject')
             });
-            $(html).attr('id', 'issue-' + issue.get('_id'));
+            $(html).attr('id', 'issue-' + issue.get('id'));
             $(this.el).append(html);
         }
     });
@@ -101,13 +101,17 @@ $(function() {
         });
     });
 
-    /*
-     *$('#getusers').click(function() {
-     *    socket.emit('getUsersIssues', function (data) {
-     *      console.log(data);
-     *    });
-     *});
-     */
+    $('#setusers').click(function() {
+        socket.emit('setUsersIssues', function (data) {
+          console.log(data);
+        });
+    });
+
+    $('#getusers').click(function() {
+        socket.emit('getUsersIssues', function (data) {
+          console.log(data);
+        });
+    });
 
     socket.on('redmine::connect', function(data){
         console.log("redmine connect : ");
@@ -126,9 +130,9 @@ $(function() {
                 var loopCount2 = data[i].redmine.issues.length;
                 for (var j = 0; j < loopCount2; j++) {
                     var curIssue = data[i].redmine.issues[j];
-                    console.log("curIssue : ", curIssue);
+                    //console.log("curIssue : ", curIssue);
                     var issueView = new IssueView();
-                    issueView.setUser(skuser.get('_id'));
+                    issueView.setUser(skuser.get('id'));
                     var issue = new Issue();
                     issue.set(curIssue);
                     issueView.addIssue(issue);
