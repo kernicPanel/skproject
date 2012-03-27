@@ -5,7 +5,6 @@ app.Views.SkUserView = Backbone.View.extend({
 
     el: $('.content'),
 
-    // The TodoView listens for changes to its model, re-rendering.
     initialize: function() {
         _.bindAll(this, 'render', 'addUser', 'appendUser'); // remember: every function that uses 'this' as the current object should be in here
 
@@ -15,10 +14,7 @@ app.Views.SkUserView = Backbone.View.extend({
         this.render();
     },
 
-    // Re-render the contents of the todo item.
     render: function() {
-        //console.log("render : ");
-        //console.log("this.el : ", this.el);
         return this;
     },
     addUser: function(skuser) {
@@ -29,12 +25,20 @@ app.Views.SkUserView = Backbone.View.extend({
             name: skuser.get('name'),
             count: skuser.get('redmine').issues.length
         });
+        var issues = skuser.get('redmine').issues;
+        _.each(issues, function(issue){ 
+            var issuesHtml = ich.userIssue({
+                project: issue.project.name,
+                subject: issue.subject,
+                description: issue.description
+            });
+            $(html).find('.issues').append(issuesHtml);
+        });
+
         $(html).attr('id', 'skuser-' + skuser.get('id'));
         $(this.el).append(html);
     }
 });
-
-//app.skuserView = new SkUserView();
 
 //
 //Issues
@@ -43,7 +47,6 @@ app.Views.IssueView = Backbone.View.extend({
 
     el: $('.content'),
 
-    // The TodoView listens for changes to its model, re-rendering.
     initialize: function() {
         _.bindAll(this, 'render', 'setUser', 'addIssue', 'appendIssue'); // remember: every function that uses 'this' as the current object should be in here
 
@@ -53,14 +56,10 @@ app.Views.IssueView = Backbone.View.extend({
         this.render();
     },
 
-    // Re-render the contents of the todo item.
     render: function() {
-        //console.log("render : ");
-        //console.log("this.el : ", this.el);
         return this;
     },
     setUser: function(userId) {
-        //this.collection.add(issue); // add issue to collection; view is updated via event 'add'
         this.el = $('#skuser-' + userId + ' ul.issues');
     },
     addIssue: function(issue) {
@@ -69,8 +68,8 @@ app.Views.IssueView = Backbone.View.extend({
     appendIssue: function(issue){
         var html = ich.userIssue({
             project: issue.get('project').name,
-        subject: issue.get('subject'),
-        description: issue.get('description')
+            subject: issue.get('subject'),
+            description: issue.get('description')
         });
         $(html).attr('id', 'issue-' + issue.get('id'));
         $(this.el).append(html);
@@ -80,7 +79,6 @@ app.Views.IssueView = Backbone.View.extend({
 app.Views.ProjectIssueView = app.Views.IssueView.extend({
 
     setProject: function(userId) {
-        //this.collection.add(issue); // add issue to collection; view is updated via event 'add'
         this.el = $('#skproject-' + userId + ' ul.issues');
     },
     appendIssue: function(issue){
@@ -105,7 +103,6 @@ app.Views.SkProjectView = Backbone.View.extend({
 
     el: $('.content'),
 
-    // The TodoView listens for changes to its model, re-rendering.
     initialize: function() {
         _.bindAll(this, 'render', 'addProject', 'appendProject'); // remember: every function that uses 'this' as the current object should be in here
 
@@ -115,10 +112,7 @@ app.Views.SkProjectView = Backbone.View.extend({
         this.render();
     },
 
-    // Re-render the contents of the todo item.
     render: function() {
-        //console.log("render : ");
-        //console.log("this.el : ", this.el);
         return this;
     },
     addProject: function(skproject) {
@@ -129,6 +123,20 @@ app.Views.SkProjectView = Backbone.View.extend({
             name: skproject.get('name'),
             count: skproject.get('issues').length
         });
+        var issues = skproject.get('issues');
+        _.each(issues, function(issue){ 
+            var username = 'non assigné';
+            if (issue.assigned_to) {
+                username = issue.assigned_to.name;
+            }
+            var issuesHtml = ich.projectIssue({
+                username: username,
+                subject: issue.subject,
+                description: issue.description
+            });
+            $(html).find('.issues').append(issuesHtml);
+        });
+
         $(html).attr('id', 'skproject-' + skproject.get('id'));
         $(this.el).append(html);
     }

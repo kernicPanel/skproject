@@ -74,18 +74,6 @@ var app = {
                 //skuserView.remove(skuser);
                 skuser.set(data[i]);
                 app.views.skuserView.addUser(skuser);
-
-                var loopCount2 = data[i].redmine.issues.length;
-                for (var j = 0; j < loopCount2; j++) {
-                    var curIssue = data[i].redmine.issues[j];
-                    //console.log("curIssue : ", curIssue);
-                    var issueView = new app.Views.IssueView();
-                    issueView.setUser(skuser.get('id'));
-                    var issue = new app.Models.Issue();
-                    issue.set(curIssue);
-                    issueView.addIssue(issue);
-                }
-                delete loopCount2;
             }
             delete loopCount;
             $('.desc').hide().slideUp();
@@ -103,18 +91,6 @@ var app = {
                 //skprojectView.remove(skproject);
                 skproject.set(data[i]);
                 app.views.skprojectView.addProject(skproject);
-
-                var loopCount2 = data[i].issues.length;
-                for (var j = 0; j < loopCount2; j++) {
-                    var curIssue = data[i].issues[j];
-                    //console.log("curIssue : ", curIssue);
-                    var issueView = new app.Views.ProjectIssueView();
-                    issueView.setProject(skproject.get('id'));
-                    var issue = new app.Models.Issue();
-                    issue.set(curIssue);
-                    issueView.addIssue(issue);
-                }
-                delete loopCount2;
             }
             delete loopCount;
             $('.desc').hide().slideUp();

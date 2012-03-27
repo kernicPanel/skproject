@@ -6,7 +6,6 @@ app.Models.SkUser = Backbone.Model.extend({
     }
 });
 
-//app.skuser = new SkUser('my name');
 app.Collections.SkUserList = Backbone.Collection.extend({
     model: app.Models.SkUser
 });
@@ -34,7 +33,6 @@ app.Models.SkProject = Backbone.Model.extend({
     }
 });
 
-//app.skproject = new SkProject('my name');
 app.Collections.SkProjectList = Backbone.Collection.extend({
     model: app.Models.SkProject
 });
