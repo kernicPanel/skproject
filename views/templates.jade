@@ -1,0 +1,21 @@
+script(id="skuser", type="text/html")
+  .user
+    p {{name}}
+    ul.issues
+
+script(id="userIssue", type="text/html")
+  li.issue 
+    a {{project}} : {{subject}}
+    pre.desc {{description}}
+
+script(id="skproject", type="text/html")
+  .project
+    p {{name}}
+    ul.issues
+
+script(id="projectIssue", type="text/html")
+  li.issue
+    a {{subject}} :
+      b {{username}}
+    pre.desc {{description}}
+
