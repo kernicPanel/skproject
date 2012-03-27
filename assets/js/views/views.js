@@ -1,7 +1,7 @@
 //
 //Users
 //
-app.SkUserView = Backbone.View.extend({
+app.Views.SkUserView = Backbone.View.extend({
 
     el: $('.content'),
 
@@ -9,7 +9,7 @@ app.SkUserView = Backbone.View.extend({
     initialize: function() {
         _.bindAll(this, 'render', 'addUser', 'appendUser'); // remember: every function that uses 'this' as the current object should be in here
 
-        this.collection = new SkUserList();
+        this.collection = new app.Collections.SkUserList();
         this.collection.bind('add', this.appendUser); // collection event binder
 
         this.render();
@@ -33,12 +33,12 @@ app.SkUserView = Backbone.View.extend({
     }
 });
 
-app.skuserView = new SkUserView();
+//app.skuserView = new SkUserView();
 
 //
 //Issues
 //
-app.IssueView = Backbone.View.extend({
+app.Views.IssueView = Backbone.View.extend({
 
     el: $('.content'),
 
@@ -46,7 +46,7 @@ app.IssueView = Backbone.View.extend({
     initialize: function() {
         _.bindAll(this, 'render', 'setUser', 'addIssue', 'appendIssue'); // remember: every function that uses 'this' as the current object should be in here
 
-        this.collection = new IssueList();
+        this.collection = new app.Collections.IssueList();
         this.collection.bind('add', this.appendIssue); // collection event binder
 
         this.render();
@@ -76,7 +76,7 @@ app.IssueView = Backbone.View.extend({
     }
 });
 
-app.ProjectIssueView = IssueView.extend({
+app.Views.ProjectIssueView = app.Views.IssueView.extend({
 
     setProject: function(userId) {
         //this.collection.add(issue); // add issue to collection; view is updated via event 'add'
@@ -100,7 +100,7 @@ app.ProjectIssueView = IssueView.extend({
 //
 //Projects
 //
-app.SkProjectView = Backbone.View.extend({
+app.Views.SkProjectView = Backbone.View.extend({
 
     el: $('.content'),
 
@@ -108,7 +108,7 @@ app.SkProjectView = Backbone.View.extend({
     initialize: function() {
         _.bindAll(this, 'render', 'addProject', 'appendProject'); // remember: every function that uses 'this' as the current object should be in here
 
-        this.collection = new SkProjectList();
+        this.collection = new app.Collections.SkProjectList();
         this.collection.bind('add', this.appendProject); // collection event binder
 
         this.render();

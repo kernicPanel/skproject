@@ -1,27 +1,27 @@
 //
 //Users
 //
-app.SkUser = Backbone.Model.extend({
+app.Models.SkUser = Backbone.Model.extend({
     initialize: function() {
     }
 });
 
 //app.skuser = new SkUser('my name');
-app.SkUserList = Backbone.Collection.extend({
-    model: SkUser
+app.Collections.SkUserList = Backbone.Collection.extend({
+    model: app.Models.SkUser
 });
 
 
 //
 //Issues
 //
-app.Issue = Backbone.Model.extend({
+app.Models.Issue = Backbone.Model.extend({
     initialize: function() {
     }
 });
 
-var IssueList = Backbone.Collection.extend({
-    model: Issue
+app.Collections.IssueList = Backbone.Collection.extend({
+    model: app.Models.Issue
 });
 
 
@@ -29,14 +29,14 @@ var IssueList = Backbone.Collection.extend({
 //
 //Projects
 //
-app.SkProject = Backbone.Model.extend({
+app.Models.SkProject = Backbone.Model.extend({
     initialize: function() {
     }
 });
 
 //app.skproject = new SkProject('my name');
-app.SkProjectList = Backbone.Collection.extend({
-    model: SkProject
+app.Collections.SkProjectList = Backbone.Collection.extend({
+    model: app.Models.SkProject
 });
 
 
