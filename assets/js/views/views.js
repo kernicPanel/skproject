@@ -26,7 +26,8 @@ app.Views.SkUserView = Backbone.View.extend({
     },
     appendUser: function(skuser){
         var html = ich.skuser({
-            name: skuser.get('name')
+            name: skuser.get('name'),
+            count: skuser.get('redmine').issues.length
         });
         $(html).attr('id', 'skuser-' + skuser.get('id'));
         $(this.el).append(html);
@@ -125,7 +126,8 @@ app.Views.SkProjectView = Backbone.View.extend({
     },
     appendProject: function(skproject){
         var html = ich.skproject({
-            name: skproject.get('name')
+            name: skproject.get('name'),
+            count: skproject.get('issues').length
         });
         $(html).attr('id', 'skproject-' + skproject.get('id'));
         $(this.el).append(html);
