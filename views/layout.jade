@@ -48,12 +48,14 @@ html.no-js(lang='en')
         script(defer, src='/js/libs/backbone-min.js')
         script(defer, src='/js/libs/ICanHaz.min.js')
         script(defer, src='/js/libs/bootstrap.min.js')
-        //script(defer, src='/js/utils.js')
-        //script(defer, src='/js/models.js')
-        //script(defer, src='/js/collections.js')
 
         //!= js('app')
         script(defer, src='/js/app.js')
+
+        //script(defer, src='/js/utils.js')
+        script(defer, src='/js/models/models.js')
+        //script(defer, src='/js/collections.js')
+        script(defer, src='/js/views/views.js')
         //if lt IE 7
           script(defer, src='//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js')
           script(defer)
