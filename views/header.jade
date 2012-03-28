@@ -1,3 +1,21 @@
 block header
     header
-        span='Je suis le header'
+        div(class='topbar')
+            div(class='fill')
+                div(class='container')
+                    //a(class='brand', href='http://github.com/addyosmani/jquery-ui-bootstrap')='jQuery UI Bootstrap'
+                    span(class='brand')='skProject'
+                    ul.nav
+                        li
+                            a#sync(href='#') Rebuild base
+                        li
+                            a#setusers(href='#') Create users
+                        li
+                            a#getusers(href='#') Get users
+                        li
+                            a#setprojects(href='#') Create projects
+                        li
+                            a#getprojects(href='#') Get projects
+                        //li
+                            //a(href='http://twitter.com/addyosmani') Contact
+                        form.pull-right(action='')

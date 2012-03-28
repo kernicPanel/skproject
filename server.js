@@ -1,9 +1,16 @@
+global.config = require('./lib/config');
+//console.log("config : ", config);
+
 //setup Dependencies
 var connect = require('connect'),
     express = require('express'),
     io = require('socket.io'),
-    port = (process.env.PORT || 8081),
+    mongoose = require('mongoose'),
+    port = (process.env.PORT || config.server.port),
+    host = (process.env.HOST || config.server.host),
     test = require('./lib/test.js');
+
+//global.db = mongoose.connect(config.mongo.host);
 
 //Setup Express
 var server = express.createServer();
@@ -13,7 +20,7 @@ server.configure(function(){
     server.use(connect.bodyParser());
     server.use(express.cookieParser());
     server.use(express.session({ secret: "shhhhhhhhh!"}));
-    server.use(connect.static(__dirname + '/static'));
+    server.use(connect.static(__dirname + '/assets'));
     server.use(server.router);
 });
 
@@ -36,11 +43,13 @@ server.error(function(err, req, res, next){
                 },status: 500 });
     }
 });
-server.listen( port);
+server.listen( port, host);
 
 //Setup Socket.IO
 var io = io.listen(server);
+global.io = io;
 io.sockets.on('connection', function(socket){
+    //global.socket = socket;
   console.log('Client Connected');
   socket.on('message', function(data){
     socket.broadcast.emit('server_message',data);
@@ -54,6 +63,25 @@ io.sockets.on('connection', function(socket){
 });
 
 
+//init lib modules
+var redmine = require('./lib/redmine.js');
+/*
+ *var redmine = require('./lib/redmine.js'),
+ *    mongo = require('./lib/mongo.js');
+ */
+/*
+ *redmine.sync(null, function(){
+ *    mongo.initObjects( null, function(){} );
+ *});
+ */
+
+redmine.init();
+
+//mongo.initObjects( null, function(){} );
+
+//var irc = require('./lib/irc.js');
+//irc.init();
+
 ///////////////////////////////////////////
 //              Routes                   //
 ///////////////////////////////////////////
@@ -62,6 +90,17 @@ io.sockets.on('connection', function(socket){
 
 server.get('/', function(req,res){
   res.render('index.jade', {
+    locals : {
+              title : 'Your Page Title',
+              description: 'Your Page Description',
+              author: 'Your Name',
+              analyticssiteid: 'XXXXXXX'
+            }
+  });
+});
+
+server.get('/demo', function(req,res){
+  res.render('index_demo.jade', {
     locals : {
               title : 'Your Page Title',
               description: 'Your Page Description',
@@ -89,4 +128,4 @@ function NotFound(msg){
 }
 
 
-console.log('Listening on http://0.0.0.0:' + port );
+console.log('Listening on '+ host + ':' + port );
