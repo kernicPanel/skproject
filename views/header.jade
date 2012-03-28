@@ -1,21 +1,32 @@
 block header
-    header
-        div(class='topbar')
-            div(class='fill')
-                div(class='container')
-                    //a(class='brand', href='http://github.com/addyosmani/jquery-ui-bootstrap')='jQuery UI Bootstrap'
-                    span(class='brand')='skProject'
-                    ul.nav
-                        li
-                            a#sync(href='#') Rebuild base
-                        li
-                            a#setusers(href='#') Create users
-                        li
-                            a#getusers(href='#') Get users
-                        li
-                            a#setprojects(href='#') Create projects
-                        li
-                            a#getprojects(href='#') Get projects
-                        //li
-                            //a(href='http://twitter.com/addyosmani') Contact
-                        form.pull-right(action='')
+  .navbar.navbar-fixed-top
+      .navbar-inner
+          .container-fluid
+            a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+            a.brand(href='#') skProject
+            .nav-collapse
+              ul.nav
+                  li.dropdown
+                      a.dropdown-toggle(href='#', data-toggle='dropdown')
+                          | Admin
+                          b.caret
+                        ul.dropdown-menu
+                          li
+                              a#sync(href='#') Rebuild base
+                          li
+                              a#setusers(href='#') Create users
+                          li
+                              a#setprojects(href='#') Create projects
+                  li.divider-vertical
+                  li
+                      a#getusers(href='#') Get users
+                  li
+                      a#getprojects(href='#') Get projects
+              p.navbar-text.pull-right
+                | Logged in as
+                a(href='#') username
+            //
+              /.nav-collapse 
