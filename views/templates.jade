@@ -2,7 +2,7 @@ script(id="skuser", type="text/html")
   li.user
     p 
       a(data-toggle='collapse', data-parent='.nav-list', href='{{issuesIdTarget}}')
-        |  {{name}} ({{count}})
+        |  {{name}} ({{count}}) current : {{current}}
     ul.issues.collapse(id='{{issuesId}}')
 
 script(id="userIssue", type="text/html")
