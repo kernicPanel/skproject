@@ -1,21 +1,32 @@
 script(id="skuser", type="text/html")
-  .user
-    p {{name}} ({{count}})
-    ul.issues
+  li.user
+    p 
+      a(data-toggle='collapse', data-parent='.nav-list', href='{{issuesIdTarget}}')
+        |  {{name}} ({{count}}) current : {{current}}
+    ul.issues.collapse(id='{{issuesId}}')
 
 script(id="userIssue", type="text/html")
-  li.issue 
+  li.issue
     a {{project}} : {{subject}}
     pre.desc {{description}}
 
 script(id="skproject", type="text/html")
-  .project
-    p {{name}} ({{count}})
-    ul.issues
+  li.project
+    p 
+      a(data-toggle='collapse', data-parent='.nav-list', href='{{issuesIdTarget}}')
+        |  {{name}} ({{count}})
+    ul.issues.collapse(id='{{issuesId}}')
 
 script(id="projectIssue", type="text/html")
   li.issue
     a {{subject}} : 
       b {{username}}
     pre.desc {{description}}
+
+script(id="issue", type="text/html")
+    h1 {{subject}}
+    .hero-unit
+      pre.desc {{description}}
+    p
+      a.btn.btn-primary.btn-large Learn more »
 
