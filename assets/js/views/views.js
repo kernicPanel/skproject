@@ -23,6 +23,7 @@ app.Views.SkUserView = Backbone.View.extend({
     appendUser: function(skuser){
         var html = ich.skuser({
             name: skuser.get('name'),
+            current: skuser.get('current'),
             count: skuser.get('redmine').issues.length,
             issuesId: 'issues-' + skuser.get('id'),
             issuesIdTarget: '#issues-' + skuser.get('id')
