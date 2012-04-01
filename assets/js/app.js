@@ -58,7 +58,7 @@ var app = {
     });
 
 
-    socket.on('redmine::connect', function(data){
+    //socket.on('redmine::connect', function(data){
         console.log("redmine connect : ");
         /*
          *socket.emit('getUsersIssues', function (data) {
@@ -106,10 +106,14 @@ var app = {
             });
         });
 
+        socket.on('push', function(data){
+            console.log("push : ");
+            console.log("data : ", data);
+        });
         socket.on('log', function(data){
             console.log("data : ", data);
         });
-    });
+    //});
   }
 };
 
