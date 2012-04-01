@@ -67,12 +67,13 @@ var app = {
          */
 
         socket.on('getUsersIssues::response', function(data){
-            console.log("data : ", data);
+            console.log("getUsersIssues data : ", data);
             var loopCount = data.length;
             for (var i = 0; i < loopCount; i++) {
                 skuser = new app.Models.SkUser();
                 //skuserView.remove(skuser);
                 skuser.set(data[i]);
+                //skuser.set({id: data[i].login});
                 app.views.skuserView.addUser(skuser);
             }
             delete loopCount;
@@ -81,6 +82,11 @@ var app = {
                 console.log("click : ");
                 $(this).next('.desc').slideToggle();
             });
+        });
+
+        socket.on('updateCurrentIssue::response', function(data){
+            console.log("updateCurrentIssue data : ", data);
+            app.views.skuserView.updateCurrentIssue(data.user, data.issue);
         });
 
         socket.on('getSkProjects::response', function(data){

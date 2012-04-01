@@ -49,7 +49,7 @@ server.listen( port, host);
 var io = io.listen(server);
 global.io = io;
 io.sockets.on('connection', function(socket){
-    //global.socket = socket;
+    global.socket = socket;
   console.log('Client Connected');
   socket.on('message', function(data){
     socket.broadcast.emit('server_message',data);
@@ -89,6 +89,14 @@ irc.init();
 /////// ADD ALL YOUR ROUTES HERE  /////////
 
 server.get('/', function(req,res){
+  io.sockets.on('connection', function(socket){
+      global.push = true;
+      global.socket = socket;
+      socket.on('disconnect', function(){
+          console.log('Client Disconnected.');
+          global.push = false;
+      });
+  });
   res.render('index.jade', {
     locals : {
               title : 'Your Page Title',
