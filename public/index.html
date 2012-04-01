@@ -1,0 +1,126 @@
+<!--[if lt IE 7]><html lang="en" class="no-js ie6 oldie"></html><![endif]-->
+<!--[if IE 7]><html lang="en" class="no-js ie7 oldie"></html><![endif]-->
+<!--[if IE 8]><html lang="en" class="no-js ie8 oldie"></html><![endif]-->
+<!--[if gt IE 8]><!-->
+
+<html lang="en" class="no-js" xmlns="http://www.w3.org/1999/xhtml">
+<!--<![end if]-->
+
+<head>
+  <meta name="generator" content=
+  "HTML Tidy for Linux/x86 (vers 11 February 2007), see www.w3.org" />
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+
+  <title>Your Page Title</title>
+  <meta name="description" content="Your Page Description" />
+  <meta name="author" content="Your Name" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!--Dependances--><!--link(rel='stylesheet', href='/css/dependances/custom-theme/jquery-ui-1.8.16.custom.css')-->
+  <link rel="stylesheet" href="/css/bootstrap.css" type="text/css" /><!--Third-party-->
+  <!--link(rel='stylesheet', href='/third-party/jQuery-UI-Date-Range-Picker/css/ui.daterangepicker.css')--><!--link(rel='stylesheet', href='/third-party/jQuery-UI-FileInput/css/enhanced.css')--><!--link(rel='stylesheet', href='/third-party/wijmo/css/jquery.wijmo-open.1.5.0.css')--><!--link(rel='stylesheet', href='/css/dependances/demo.css')-->
+  <link rel="stylesheet" href="/css/style.css" type="text/css" />
+  <link rel="stylesheet" href="/css/bootstrap-responsive.css" type="text/css" />
+  <!--script(src='js/libs/modernizr-2.0.6.min.js')-->
+  <script id="skuser" type="text/html">
+<![CDATA[
+  <li class="user"><p><a data-toggle="collapse" data-parent=".nav-list" href="{{issuesIdTarget}}"> {{name}} ({{count}}) current :
+  <span class="current">{{current}}</span></a></p><ul id="{{issuesId}}" class="issues collapse"></ul></li>
+  ]]>
+  </script>
+  <script id="userIssue" type="text/html">
+<![CDATA[
+  <li class="issue"><a>{{project}} : {{subject}}</a><pre class="desc">{{description}}</pre></li>
+  ]]>
+  </script>
+  <script id="skproject" type="text/html">
+<![CDATA[
+  <li class="project"><p><a data-toggle="collapse" data-parent=".nav-list" href="{{issuesIdTarget}}"> {{name}} ({{count}})
+  </a></p><ul id="{{issuesId}}" class="issues collapse"></ul></li>
+  ]]>
+  </script>
+  <script id="projectIssue" type="text/html">
+<![CDATA[
+  <li class="issue"><a>{{subject}} : <b>{{username}}</b></a><pre class="desc">{{description}}</pre></li>
+  ]]>
+  </script>
+  <script id="issue" type="text/html">
+<![CDATA[
+  <h1>{{subject}}</h1><div class="hero-unit"><pre class="desc">{{description}}</pre></div><p><a class="btn btn-primary btn-large">Learn more Â»</a></p>
+  ]]>
+  </script>
+</head>
+
+<body>
+  <div class="navbar navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container-fluid">
+        <a data-toggle="collapse" data-target=".nav-collapse" class=
+        "btn btn-navbar"></a><a href="#" class="brand">skProject</a>
+
+        <div class="nav-collapse">
+          <ul class="nav">
+            <li class="dropdown">
+              <a href="#" data-toggle="dropdown" class="dropdown-toggle">Admin</a>
+
+              <ul class="dropdown-menu">
+                <li><a id="sync" href="#">Rebuild base</a></li>
+
+                <li><a id="setusers" href="#">Create users</a></li>
+
+                <li><a id="setprojects" href="#">Create projects</a></li>
+              </ul>
+            </li>
+
+            <li><a id="getusers" href="#">Get users</a></li>
+
+            <li><a id="getprojects" href="#">Get projects</a></li>
+          </ul>
+
+          <p class="navbar-text pull-right">Logged in as <a href="#">username</a></p>
+        </div><!--/.nav-collapse 
+-->
+      </div>
+    </div>
+  </div>
+
+  <div class="container-fluid">
+    <div class="row-fluid">
+      <div class="span4">
+        <div class="well sidebar-nav">
+          <ul class="nav nav-list"></ul>
+        </div><!--/.well 
+-->
+      </div><!--/span
+-->
+
+      <div class="span8">
+        <div class="content"></div>
+      </div>
+    </div>
+  </div><!--<static>dialog</static>-->
+
+  <div id="dialog-message" title="Modal Dialog"></div><!--<end>static dialog</end>-->
+  <!--Dependances--><!--script(defer, src='/js/dependances/jquery-1.7.1.min.js')-->
+  <!--script(defer, src='/js/dependances/jquery-ui-1.8.16.custom.min.js')--><script defer="defer"
+  src="/js/libs/socket.io.js" type="text/javascript">
+</script><script defer="defer" src="/js/libs/hook.js" type="text/javascript">
+</script><script defer="defer" src="/js/libs/jquery-1.7.1.min.js" type="text/javascript">
+</script><script defer="defer" src="/js/libs/jquery.scrollTo-1.4.2-min.js" type=
+"text/javascript">
+</script><script defer="defer" src="/js/libs/underscore-min.js" type="text/javascript">
+</script><script defer="defer" src="/js/libs/backbone-min.js" type="text/javascript">
+</script><script defer="defer" src="/js/libs/ICanHaz.min.js" type="text/javascript">
+</script><script defer="defer" src="/js/libs/bootstrap.min.js" type="text/javascript">
+</script><!--!= js('app')--><script defer="defer" src="/js/app.js" type=
+"text/javascript">
+</script><!--script(defer, src='/js/utils.js')--><script defer="defer" src=
+"/js/models/models.js" type="text/javascript">
+</script><!--script(defer, src='/js/collections.js')--><script defer="defer" src=
+"/js/views/views.js" type="text/javascript">
+</script>
+<!--[if lt IE 7]><script defer src="//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js"></script><script defer>window.attachEvent('onload',function(){CFInstall.check({mode:'overlay'})})
+</script><![endif]-->
+</body>
+</html>
+

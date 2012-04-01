@@ -11,6 +11,19 @@ var connect = require('connect'),
     test = require('./lib/test.js');
 
 //global.db = mongoose.connect(config.mongo.host);
+var Hook = require('hook.io').Hook;
+var hook = new Hook( {
+      'name': 'the-test-hook',
+      'hook-host': config.server.host,
+      //'hook-port': config.server.port,
+      'hook-port': 8082,
+      'debug': true
+});
+hook.start();
+hook.on('*', function(data){
+    console.log(data);
+});
+//test.init();
 
 //Setup Express
 var server = express.createServer();
@@ -46,21 +59,23 @@ server.error(function(err, req, res, next){
 server.listen( port, host);
 
 //Setup Socket.IO
-var io = io.listen(server);
-global.io = io;
-io.sockets.on('connection', function(socket){
-    global.socket = socket;
-  console.log('Client Connected');
-  socket.on('message', function(data){
-    socket.broadcast.emit('server_message',data);
-    socket.emit('server_message',data);
-    socket.emit('server_message',test.echo());
-    socket.emit('server_message','ECHO TOTO');
-  });
-  socket.on('disconnect', function(){
-    console.log('Client Disconnected.');
-  });
-});
+/*
+ *var io = io.listen(server);
+ *global.io = io;
+ *io.sockets.on('connection', function(socket){
+ *    global.socket = socket;
+ *  console.log('Client Connected');
+ *  socket.on('message', function(data){
+ *    socket.broadcast.emit('server_message',data);
+ *    socket.emit('server_message',data);
+ *    socket.emit('server_message',test.echo());
+ *    socket.emit('server_message','ECHO TOTO');
+ *  });
+ *  socket.on('disconnect', function(){
+ *    console.log('Client Disconnected.');
+ *  });
+ *});
+ */
 
 
 //init lib modules
@@ -75,12 +90,12 @@ var redmine = require('./lib/redmine.js');
  *});
  */
 
-redmine.init();
+//redmine.init();
 
 //mongo.initObjects( null, function(){} );
 
-var irc = require('./lib/irc.js');
-irc.init();
+//var irc = require('./lib/irc.js');
+//irc.init();
 
 ///////////////////////////////////////////
 //              Routes                   //
@@ -89,14 +104,16 @@ irc.init();
 /////// ADD ALL YOUR ROUTES HERE  /////////
 
 server.get('/', function(req,res){
-  io.sockets.on('connection', function(socket){
-      global.push = true;
-      global.socket = socket;
-      socket.on('disconnect', function(){
-          console.log('Client Disconnected.');
-          global.push = false;
-      });
-  });
+  /*
+   *io.sockets.on('connection', function(socket){
+   *    global.push = true;
+   *    global.socket = socket;
+   *    socket.on('disconnect', function(){
+   *        console.log('Client Disconnected.');
+   *        global.push = false;
+   *    });
+   *});
+   */
   res.render('index.jade', {
     locals : {
               title : 'Your Page Title',
