@@ -3,12 +3,8 @@ extends layout
 block content
   .container-fluid
       .row-fluid
-          .span4
-            .well.sidebar-nav
-              ul.nav.nav-list
-            //
-              /.well 
-          //
-            /span
-          .span8
-            .content
+          .span12
+            #sort-by.btn-group
+                a.btn(href='#name') name
+                a.btn(href='#count') count
+            #content

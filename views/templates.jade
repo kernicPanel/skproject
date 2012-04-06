@@ -1,9 +1,14 @@
 script(id="skuser", type="text/html")
-  li.user
-    p 
-      a(data-toggle='collapse', data-parent='.nav-list', href='{{issuesIdTarget}}')
-        |  {{name}} ({{count}}) current :
+  .user.well.span4
+    a.expand
+      i.icon-resize-full
+    h1.name  {{name}}
+    p  Tâche en cours : 
         span.current {{current}}
+    p 
+      a(data-toggle='collapse', data-parent='.nav-list', href='{{issuesIdTarget}}') Tâches assignées
+        span.count.badge  {{count}}
+        i.icon-chevron-down
     ul.issues.collapse(id='{{issuesId}}')
 
 script(id="userIssue", type="text/html")
