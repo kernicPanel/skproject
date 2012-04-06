@@ -3,7 +3,8 @@
 //
 app.Views.SkUserView = Backbone.View.extend({
 
-    el: $('.nav-list'),
+    //el: $('.nav-list'),
+    el: $('#content'),
 
     initialize: function() {
         _.bindAll(this, 'render', 'addUser', 'appendUser'); // remember: every function that uses 'this' as the current object should be in here
@@ -43,6 +44,11 @@ app.Views.SkUserView = Backbone.View.extend({
         //$(this.el).append(html);
         //$('.collapse').collapse('hide');
         $(this.el).append(html).collapse();
+        $(this.el).on('shown hidden', function (e) {
+            test = e;
+            console.log("e.currentTarget: ", e.currentTarget);
+              $('#content').isotope();
+        });
     /*
      *button.btn.btn-danger(data-toggle='collapse', data-target='{{issuesIdTarget}}')
      *      | {{name}} ({{count}})

@@ -78,9 +78,57 @@ var app = {
             }
             delete loopCount;
             $('.desc').hide().slideUp();
+            $('.user .expand').on("click", function() {
+                console.log("click : ", this);
+                var $user = $(this).parents('.user');
+                if ($user.hasClass('span4')) {
+                    $user.removeClass('span4').addClass('span6');
+                    $(this).find('i').removeClass('icon-resize-full').addClass('icon-resize-small');
+                }
+                else if ($user.hasClass('span6')) {
+                    $user.removeClass('span6').addClass('span4');
+                    $(this).find('i').removeClass('icon-resize-small').addClass('icon-resize-full');
+                }
+                $('#content').isotope();
+            });
             $(".issue").find('a').on("click", function() {
-                console.log("click : ");
-                $(this).next('.desc').slideToggle();
+                console.log("click : ", this);
+                $(this)
+                //.find('i')
+                    //.toggleClass('icon-chevron-down')
+                    //.toggleClass('icon-chevron-up')
+                //.end()
+                .next('.desc').slideToggle('fast', function() {
+                    $('#content').isotope();
+                });
+            });
+
+            var $content = $('#content');
+            $content.isotope({
+                // options
+                itemSelector : '.user',
+                //layoutMode : 'fitRows',
+                getSortData : {
+                    name : function ( $elem ) {
+                        return $elem.find('.name').text();
+                    },
+                    count : function ( $elem ) {
+                        return $elem.find('.count').text();
+                    }
+                },
+                sortBy : 'name'
+            });
+            $isotope = $content.data('isotope');
+            $('#sort-by a').click(function(){
+                // get href attribute, minus the '#'
+                var sortName = $(this).attr('href').slice(1);
+                if ($isotope.options.sortBy === sortName) {
+                    $content.isotope({ sortAscending : !$isotope.options.sortAscending });
+                }
+                else {
+                    $content.isotope({ sortBy : sortName });
+                }
+                return false;
             });
         });
 
