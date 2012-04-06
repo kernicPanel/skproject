@@ -113,7 +113,7 @@ var app = {
                         return $elem.find('.name').text();
                     },
                     count : function ( $elem ) {
-                        return $elem.find('.count').text();
+                        return parseInt($elem.find('.count').text(), 10);
                     }
                 },
                 sortBy : 'name'
