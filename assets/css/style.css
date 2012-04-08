@@ -224,13 +224,16 @@ body {
 a {
     cursor: pointer;
 }
+
 .nav {
     font-size: 12px;
 }
+
 ul.nav {
     font-size: 12px;
     margin-top: 0;
 }
+
 .navbar .brand {
     padding: 8px 10px 12px;
 }
@@ -238,9 +241,11 @@ ul.nav {
 .navbar .nav {
     padding: 0;
 }
+
 .sidebar-nav {
     padding: 9px 0;
 }
+
 .sidebar-nav ul {
     padding: 0;
     margin: 0;
@@ -250,11 +255,24 @@ ul.nav {
     list-style-type: none;
     padding-left: 5px;
 }
+
 .sidebar-nav li li {
     list-style-type: none;
     padding-left: 5px;
     line-height: 1.1em;
     margin-bottom: 4px;
+}
+
+.user {
+    width: 250px;
+    float: left;
+    position: relative;
+    display: block;
+    margin: 10px !important;
+}
+
+.user.span8 {
+    width: 800px;
 }
 
 .user h1 {
@@ -283,6 +301,7 @@ ul.nav {
     line-height: 1.1em;
     margin-bottom: 1em;
 }
+
 .user .issues li li {
     list-style-type: none;
     padding-left: 5px;
