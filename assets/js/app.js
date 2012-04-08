@@ -82,11 +82,11 @@ var app = {
                 console.log("click : ", this);
                 var $user = $(this).parents('.user');
                 if ($user.hasClass('span4')) {
-                    $user.removeClass('span4').addClass('span6');
+                    $user.removeClass('span4').addClass('span8');
                     $(this).find('i').removeClass('icon-resize-full').addClass('icon-resize-small');
                 }
-                else if ($user.hasClass('span6')) {
-                    $user.removeClass('span6').addClass('span4');
+                else if ($user.hasClass('span8')) {
+                    $user.removeClass('span8').addClass('span4');
                     $(this).find('i').removeClass('icon-resize-small').addClass('icon-resize-full');
                 }
                 $('#content').isotope();
