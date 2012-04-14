@@ -311,7 +311,37 @@ ul.nav {
     margin-bottom: 4px;
 }
 
+.issue span {
+  padding: 1px 9px 2px;
+  font-size: 12.025px;
+  font-weight: bold;
+  white-space: nowrap;
+  color: #ffffff;
+  background-color: #999999;
+  -webkit-border-radius: 9px;
+  -moz-border-radius: 9px;
+  border-radius: 9px;
+}
 
+.issue span.Bas {
+    background-color: #468847;
+}
+
+.issue span.Normal {
+    background-color: #2D6987;
+}
+
+.issue span.Haut {
+    background-color: #F89406;
+}
+
+.issue span.Urgent {
+    background-color: #953B39;
+}
+
+.issue span.Immédiat {
+    background-color: #1A1A1A;
+}
 
 .isotope,
 .isotope .isotope-item {
