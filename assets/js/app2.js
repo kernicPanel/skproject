@@ -9,7 +9,8 @@ var App = Ember.Application.create({
 
 App.users = Ember.Object.extend();
 
-App.Team = Ember.View.extend({
+App.Team = Ember.View.create({
+    templateName: "team",
     test: function(event){
         console.log("test3 this : ", this);
         console.log("test3 event : ", event);
@@ -18,16 +19,13 @@ App.Team = Ember.View.extend({
     },
     didInsertElement: function(){
         console.log("motherfucKER this.$() : ", this.$());
-        //this.$().find('.issues').slideUp();
     }
-});
+}).appendTo('#content');
 
 App.userController = Ember.ArrayController.create({
     content: [],
     loadUser: function(data){
         App.userController.pushObject(data);
-        console.log("user : ", data.toString());
-        $('.issues').slideUp();
     },
     test: function(data){
         console.log("test this : ", this);
@@ -35,12 +33,10 @@ App.userController = Ember.ArrayController.create({
         c_this = this;
         c_data = data;
         console.log("data.get('_parentView').get('content').get('redmine').issues : ", data.get('_parentView').get('content').get('redmine').issues);
-        App.Team.test();
     }
 });
 
 App.User = Em.View.extend({
-    //tagName: "li",
     templateName: "user",
     test: function(event){
         console.log("test3 this : ", this);
@@ -50,30 +46,38 @@ App.User = Em.View.extend({
     },
     showIssues: function(event){
         //console.log("event.view.$() : ", event.view.$());
-        event.view.$().find('.issues').slideToggle();
-    },
-    showIssueDesc: function(event){
-        console.log("event : ", event);
-        //console.log("event.view.$() : ", event.view.$());
-        //event.view.$().find('.issues').slideToggle();
+        event.view.$()
+            .find('.user').toggleClass('span4 span12')
+            .find('.issues').slideToggle('fast', function() {
+                App.$content.isotope({}, function() {
+                    $.scrollTo(event.view.$().find('.user').position().top + 50, 400);
+                });
+            });
     },
     didInsertElement: function(){
-        //console.log("this.$() : ", this.$());
+        console.log("this : ", this);
+        console.log("this.$() : ", this.$());
         this.$().find('.issues').slideUp();
+        test = this.$().find('.user');
+        App.$content.isotope( 'appended', this.$().find('.user') );
+        App.$content.isotope({ sortBy : 'name' });
     }
 });
 
 App.Issue = Em.View.extend({
-    //tagName: "li",
     templateName: "issue",
     showIssueDesc: function(event){
-        console.log("event : ", event);
+        //console.log("event : ", event);
         //console.log("event.view.$() : ", event.view.$());
-        event.view.$().find('.desc').slideToggle();
+        event.view.$().find('.desc').slideToggle('fast', function() {
+            App.$content.isotope();
+        });
     },
     didInsertElement: function(){
         //console.log("this.$() : ", this.$());
-        this.$().find('.desc').slideUp();
+        this.$().find('.desc').slideUp('fast', function() {
+            App.$content.isotope();
+        });
     }
 });
 
@@ -100,6 +104,37 @@ socket.on('redmine::connect', function(data){
         }
         delete loopCount;
         console.log("done : ");
+        App.$content = $('#content');
+        App.$content.isotope({
+            // options
+            itemSelector : '.user',
+            //layoutMode : 'fitRows',
+            animationOptions: {
+                duration: 400,
+                queue: false
+            },
+            getSortData : {
+                name : function ( $elem ) {
+                    return $elem.find('.name').text();
+                },
+                count : function ( $elem ) {
+                    return parseInt($elem.find('.count').text(), 10);
+                }
+            },
+            sortBy : 'name'
+        });
+        App.$isotope = App.$content.data('isotope');
+        $('#sort-by a').click(function(){
+            // get href attribute, minus the '#'
+            var sortName = $(this).attr('href').slice(1);
+            if (App.$isotope.options.sortBy === sortName) {
+                App.$content.isotope({ sortAscending : !App.$isotope.options.sortAscending });
+            }
+            else {
+                App.$content.isotope({ sortBy : sortName });
+            }
+            return false;
+        });
     });
 
     socket.on('updateCurrentIssue::response', function(data){
