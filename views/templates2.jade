@@ -1,0 +1,27 @@
+script(type="text/x-handlebars")
+  {{#view  App.Team id="looping-view"}}
+  {{#each App.userController}}
+  {{view App.User contentBinding="this"}}
+  {{/each}}
+  {{/view}}
+
+script(type="text/x-handlebars", data-template-name="user")
+  .user.well.span4
+    a.expand
+      i.icon-resize-full
+    h1.name  {{content.name}}
+    p  Tâche en cours : 
+        span.current  {{content.current}}
+    p 
+      | <a {{action "showIssues" on="click"}}>Tâches assignées </a>
+      span.count.badge  {{content.redmine.issues.length}}
+      i.icon-chevron-down
+    ul.issues
+      {{#each content.redmine.issues}}
+      {{view App.Issue contentBinding="this"}}
+      {{/each}}
+
+script(type="text/x-handlebars", data-template-name="issue")
+  li.issue
+    | <a {{action "showIssueDesc" on="click"}}>{{content.project.name}} : {{content.subject}}</a>
+    pre.desc {{content.description}}
