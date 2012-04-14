@@ -67,20 +67,74 @@ var app = {
          */
 
         socket.on('getUsersIssues::response', function(data){
-            console.log("data : ", data);
+            console.log("getUsersIssues data : ", data);
             var loopCount = data.length;
             for (var i = 0; i < loopCount; i++) {
                 skuser = new app.Models.SkUser();
                 //skuserView.remove(skuser);
                 skuser.set(data[i]);
+                //skuser.set({id: data[i].login});
                 app.views.skuserView.addUser(skuser);
             }
             delete loopCount;
             $('.desc').hide().slideUp();
-            $(".issue").find('a').on("click", function() {
-                console.log("click : ");
-                $(this).next('.desc').slideToggle();
+            $('.user .expand').on("click", function() {
+                console.log("click : ", this);
+                var $user = $(this).parents('.user');
+                if ($user.hasClass('span4')) {
+                    $user.removeClass('span4').addClass('span8');
+                    $(this).find('i').removeClass('icon-resize-full').addClass('icon-resize-small');
+                }
+                else if ($user.hasClass('span8')) {
+                    $user.removeClass('span8').addClass('span4');
+                    $(this).find('i').removeClass('icon-resize-small').addClass('icon-resize-full');
+                }
+                $('#content').isotope();
             });
+            $(".issue").find('a').on("click", function() {
+                console.log("click : ", this);
+                $(this)
+                //.find('i')
+                    //.toggleClass('icon-chevron-down')
+                    //.toggleClass('icon-chevron-up')
+                //.end()
+                .next('.desc').slideToggle('fast', function() {
+                    $('#content').isotope();
+                });
+            });
+
+            var $content = $('#content');
+            $content.isotope({
+                // options
+                itemSelector : '.user',
+                //layoutMode : 'fitRows',
+                getSortData : {
+                    name : function ( $elem ) {
+                        return $elem.find('.name').text();
+                    },
+                    count : function ( $elem ) {
+                        return parseInt($elem.find('.count').text(), 10);
+                    }
+                },
+                sortBy : 'name'
+            });
+            $isotope = $content.data('isotope');
+            $('#sort-by a').click(function(){
+                // get href attribute, minus the '#'
+                var sortName = $(this).attr('href').slice(1);
+                if ($isotope.options.sortBy === sortName) {
+                    $content.isotope({ sortAscending : !$isotope.options.sortAscending });
+                }
+                else {
+                    $content.isotope({ sortBy : sortName });
+                }
+                return false;
+            });
+        });
+
+        socket.on('updateCurrentIssue::response', function(data){
+            console.log("updateCurrentIssue data : ", data);
+            app.views.skuserView.updateCurrentIssue(data.user, data.issue);
         });
 
         socket.on('getSkProjects::response', function(data){

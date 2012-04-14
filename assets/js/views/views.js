@@ -3,7 +3,8 @@
 //
 app.Views.SkUserView = Backbone.View.extend({
 
-    el: $('.nav-list'),
+    //el: $('.nav-list'),
+    el: $('#content'),
 
     initialize: function() {
         _.bindAll(this, 'render', 'addUser', 'appendUser'); // remember: every function that uses 'this' as the current object should be in here
@@ -21,9 +22,10 @@ app.Views.SkUserView = Backbone.View.extend({
         this.collection.add(skuser); // add skUser to collection; view is updated via event 'add'
     },
     appendUser: function(skuser){
+        var currentIssue = skuser.get('current') || 'init';
         var html = ich.skuser({
             name: skuser.get('name'),
-            current: skuser.get('current'),
+            current: currentIssue,
             count: skuser.get('redmine').issues.length,
             issuesId: 'issues-' + skuser.get('id'),
             issuesIdTarget: '#issues-' + skuser.get('id')
@@ -42,11 +44,23 @@ app.Views.SkUserView = Backbone.View.extend({
         //$(this.el).append(html);
         //$('.collapse').collapse('hide');
         $(this.el).append(html).collapse();
+        $(this.el).on('shown hidden', function (e) {
+            test = e;
+            console.log("e.currentTarget: ", e.currentTarget);
+              $('#content').isotope();
+        });
     /*
      *button.btn.btn-danger(data-toggle='collapse', data-target='{{issuesIdTarget}}')
      *      | {{name}} ({{count}})
      *ul.issues.collapse(id='{{issuesId}}')
      */
+    },
+    updateCurrentIssue: function(login, issue){
+        var user = this.collection.where({login:login})[0];
+        user.set({current: issue});
+        var id = user.get('id');
+        var userElem = $('#skuser-' + id);
+        $('#skuser-' + id).find('.current').html(issue);
     }
 });
 
