@@ -264,11 +264,14 @@ ul.nav {
 }
 
 .user {
-    width: 250px;
+    /*width: 250px;*/
     float: left;
     position: relative;
     display: block;
     margin: 10px !important;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
 }
 
 .user.span8 {

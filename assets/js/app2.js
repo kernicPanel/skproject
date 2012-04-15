@@ -95,7 +95,8 @@ socket.on('redmine::connect', function(data){
         //App.userController.loadUsers(data);
         var loopCount = data.length;
         for (var i = 0; i < loopCount; i++) {
-            console.log("getUsersIssues data : ", data[i].redmine);
+            console.log("getUsersIssues data : ", data[i]);
+            console.log("getUsersIssues redmine : ", data[i].redmine);
             var user = App.users.create(data[i]);
             user.set('userId', 'user-' + user.get('id'));
             user.set('issuesId', 'issues-' + user.get('id'));
