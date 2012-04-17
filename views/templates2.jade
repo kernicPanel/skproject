@@ -79,21 +79,22 @@ script(type="text/x-handlebars", data-template-name="issue")
   {{#each content.issues}}
   //li.issue
   | <li class="issue" {{bindAttr id="type_id"}}>
-  | <span {{bindAttr class="priority.name"}}>{{priority.name}}</span>
-  | <a  {{action "showIssue" on="click"}}>{{project.name}}  : {{subject}}</a>
-  .issueContent
-    {{view App.IssueContent contentBinding="this"}}
+  {{view App.IssueContent contentBinding="this"}}
+  | </li>
   {{/each}}
 
 script(type="text/x-handlebars", data-template-name="issueContent")
-  .info
-    span.tracker {{content.tracker.name}}
-    span.status {{content.status.name}}
-  pre {{content.description}}
-  .action
-  | <a {{action "loadMore"}}>load more</a>
-  .journal
-    {{view App.IssueJournal contentBinding="this"}}
+  | <span {{bindAttr class="content.priority.name"}}>{{content.priority.name}}</span>
+  | <a  {{action "showIssue"}}>{{content.project.name}}  : {{content.subject}}</a>
+  .issueContent
+    .info
+      span.tracker {{content.tracker.name}}
+      span.status {{content.status.name}}
+    pre {{description}}
+    .action
+    | <a {{action "loadMore"}}>load more</a>
+    .journal
+      {{view App.IssueJournal contentBinding="this"}}
 
 script(type="text/x-handlebars", data-template-name="issueJournal")
   {{#each content.journal}}

@@ -40,6 +40,11 @@ App.userController = Ember.ArrayController.create({
 
 App.issueController = Ember.ArrayController.create({
     content: [],
+    showIssue: function(event) {
+        console.log("event : ", event);
+        test = event;
+        
+    },
     loadIssue: function(data){
         console.log("this : ", this);
         App.issueController.pushObject(data);
@@ -55,6 +60,7 @@ App.User = Em.View.extend({
         v2_event = event;
     },
     showIssues: function(event){
+        console.log("showIssues : ");
         //console.log("event.view.$() : ", event.view.$());
         var view = event.view;
         test = event;
@@ -64,19 +70,23 @@ App.User = Em.View.extend({
             socket.emit('redmine::getUserIssues', view.$().find('.user').get(0).id, function (data) {
                 console.log(data);
                 //console.log(data[0].description);
-                //test = data;
+                test = data;
                 //var issue = App.issue.create(data);
                 //App.issueController.loadIssue(issue);
                 var issues = data;
                 view.$().find('.issues').addClass('loaded');
                 view.set('issues', issues);
+                //view.set('description', issue.description);
+                //view.set('tracker', issue.tracker);
+                //view.set('status', issue.status);
+                //view.set('id', issue.id);
                 view.$()
                     .find('.user').toggleClass('span4 span12')
                     .find('.issues').slideToggle('fast', function() {
-                    App.$content.isotope({}, function() {
-                        $.scrollTo(event.view.$().find('.user').offset().top - 50, 400);
+                        App.$content.isotope({}, function() {
+                            $.scrollTo(event.view.$().find('.user').offset().top - 50, 400);
+                        });
                     });
-                });
             });
         }
         else {
@@ -100,10 +110,12 @@ App.User = Em.View.extend({
          */
     },
     didInsertElement: function(){
+        console.log("didInsertElement : ");
         //console.log("this : ", this);
         //console.log("this.$() : ", this.$());
-        this.$().find('.issues').slideUp();
-        test = this.$().find('.user');
+        this.$().find('.issues, .info').slideUp();
+        //test = this.$().find('.user');
+        testInsert = this;
         App.$content.isotope( 'appended', this.$().find('.user') );
         App.$content.isotope({ sortBy : 'name' });
     }
@@ -112,6 +124,7 @@ App.User = Em.View.extend({
 App.Issue = Em.View.extend({
     templateName: "issue",
     showIssue: function(event){
+        console.log("showIssue : ");
         //console.log("event : ", event);
         var view = event.view;
         test = event;
@@ -129,7 +142,7 @@ App.Issue = Em.View.extend({
                 view.set('tracker', issue.tracker);
                 view.set('status', issue.status);
                 view.set('id', issue.id);
-                view.$().find('.issueContent').slideToggle('fast', function() {
+                $(event.target).next('.issueContent').slideToggle('fast', function() {
                     App.$content.isotope({}, function() {
                         $.scrollTo(event.view.$().find('.issue').offset().top - 50, 400);
                     });
@@ -137,7 +150,7 @@ App.Issue = Em.View.extend({
             });
         }
         else {
-            view.$().find('.issueContent').slideToggle('fast', function() {
+            $(event.target).next('.issueContent').slideToggle('fast', function() {
                 App.$content.isotope({}, function() {
                     $.scrollTo(event.view.$().parents('.user').position().top + 50, 400);
                 });
@@ -145,8 +158,9 @@ App.Issue = Em.View.extend({
         }
     },
     didInsertElement: function(){
+        console.log("didInsertElement : ");
         //console.log("this.$() : ", this.$());
-        this.$().find('.issueContent').slideUp('fast', function() {
+        this.$().find('.issueContent, .journal').slideUp('fast', function() {
             App.$content.isotope();
         });
     }
@@ -154,10 +168,47 @@ App.Issue = Em.View.extend({
 
 App.IssueContent = Em.View.extend({
     templateName: "issueContent",
+    showIssue: function(event){
+        console.log("showIssue : ");
+        //console.log("event : ", event);
+        var view = event.view;
+        test = event;
+        //console.log("event.view.$() : ", event.view.$());
+        if (!view.$().find('.issueContent').hasClass('loaded')) {
+            socket.emit('redmine::getIssue', event.view.$().parents('.issue').get(0).id, function (data) {
+                console.log(data);
+                //console.log(data[0].description);
+                //test = data;
+                //var issue = App.issue.create(data);
+                //App.issueController.loadIssue(issue);
+                var issue = data[0];
+                view.$().find('.issueContent').addClass('loaded');
+                view.set('description', issue.description);
+                view.set('tracker', issue.tracker);
+                view.set('status', issue.status);
+                view.set('id', issue.id);
+                $(event.target).next('.issueContent').slideToggle('fast', function() {
+                    App.$content.isotope({}, function() {
+                        $.scrollTo(event.view.$().parents('.issue').offset().top - 50, 400);
+                    });
+                });
+            });
+        }
+        else {
+            $(event.target).next('.issueContent').slideToggle('fast', function() {
+                App.$content.isotope({}, function() {
+                    $.scrollTo(event.view.$().parents('.user').position().top + 50, 400);
+                });
+            });
+        }
+    },
     loadMore: function(event) {
+        console.log("loadMore : ");
         console.log("this : ", this);
         console.log("event : ", event);
         var view = event.view;
+
+        test = event;
         console.log("view : ", view);
         if (!view.$().find('.journal').hasClass('loaded')) {
             socket.emit('redmine::getCompleteIssue', view.$().parents('.issue').get(0).id, function (data) {
@@ -180,8 +231,10 @@ App.IssueContent = Em.View.extend({
         }
     },
     didInsertElement: function(){
+        console.log("didInsertElement : ");
+        testInsert = this;
         //console.log("this.$() : ", this.$());
-        this.$().find('.journal').slideUp('fast', function() {
+        this.$().find('.issueContent, .journal').slideUp('fast', function() {
             App.$content.isotope();
         });
     }
@@ -254,7 +307,7 @@ socket.on('redmine::connect', function(data){
     });
 
     socket.on('updateCurrentIssue::response', function(data){
-        console.log("updateCurrentIssue data : ", data);
+        //console.log("updateCurrentIssue data : ", data);
         var user = App.userController.findProperty('login', data.user);
         if (!!user) {
             user.set('current', data.issue);
