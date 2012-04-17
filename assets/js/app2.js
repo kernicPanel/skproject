@@ -56,13 +56,48 @@ App.User = Em.View.extend({
     },
     showIssues: function(event){
         //console.log("event.view.$() : ", event.view.$());
-        event.view.$()
-            .find('.user').toggleClass('span4 span12')
-            .find('.issues').slideToggle('fast', function() {
-                App.$content.isotope({}, function() {
-                    $.scrollTo(event.view.$().find('.user').position().top + 50, 400);
+        var view = event.view;
+        test = event;
+        //console.log("event.view.$() : ", event.view.$());
+        if (!view.$().find('.issues').hasClass('loaded')) {
+            console.log("view.$().find('.user').get(0).id : ", view.$().find('.user').get(0).id);
+            socket.emit('redmine::getUserIssues', view.$().find('.user').get(0).id, function (data) {
+                console.log(data);
+                //console.log(data[0].description);
+                //test = data;
+                //var issue = App.issue.create(data);
+                //App.issueController.loadIssue(issue);
+                var issues = data;
+                view.$().find('.issues').addClass('loaded');
+                view.set('issues', issues);
+                view.$()
+                    .find('.user').toggleClass('span4 span12')
+                    .find('.issues').slideToggle('fast', function() {
+                    App.$content.isotope({}, function() {
+                        $.scrollTo(event.view.$().find('.user').offset().top - 50, 400);
+                    });
                 });
             });
+        }
+        else {
+            view.$()
+                .find('.user').toggleClass('span4 span12')
+                .find('.issues').slideToggle('fast', function() {
+                    App.$content.isotope({}, function() {
+                        $.scrollTo(view.$().find('.user').position().top + 50, 400);
+                    });
+                });
+        }
+
+        /*
+         *event.view.$()
+         *    .find('.user').toggleClass('span4 span12')
+         *    .find('.issues').slideToggle('fast', function() {
+         *        App.$content.isotope({}, function() {
+         *            $.scrollTo(event.view.$().find('.user').position().top + 50, 400);
+         *        });
+         *    });
+         */
     },
     didInsertElement: function(){
         //console.log("this : ", this);
@@ -161,19 +196,22 @@ App.IssueJournal = Em.View.extend({
 
 socket.on('redmine::connect', function(data){
     console.log("redmine connect : ");
+    socket.emit('getUsers', function (data) {
+        console.log(data); // data will be 'woot'
+    });
     /*
      *socket.emit('getUsersIssues', function (data) {
      *    console.log(data); // data will be 'woot'
      *});
      */
 
-    socket.on('getUsersIssues::response', function(data){
-        //console.log("getUsersIssues data : ", data);
+    socket.on('getUsers::response', function(data){
+        //console.log("getUsers data : ", data);
         //App.userController.loadUsers(data);
         var loopCount = data.length;
         for (var i = 0; i < loopCount; i++) {
-            //console.log("getUsersIssues data : ", data[i]);
-            //console.log("getUsersIssues redmine : ", data[i].redmine);
+            //console.log("getUsers data : ", data[i]);
+            //console.log("getUsers redmine : ", data[i].redmine);
             var user = App.users.create(data[i]);
             user.set('userId', 'user-' + user.get('id'));
             user.set('issuesId', 'issues-' + user.get('id'));
@@ -242,7 +280,7 @@ $('#setusers').click(function() {
 
 $('#getusers').click(function() {
     //skuserView.remove();
-    socket.emit('getUsersIssues', function (data) {
+    socket.emit('getUsers', function (data) {
       console.log(data);
     });
 });
