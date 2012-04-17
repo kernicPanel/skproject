@@ -318,7 +318,7 @@ ul.nav {
     margin-bottom: 4px;
 }
 
-.issue span {
+.issues span {
   padding: 1px 9px 2px;
   font-size: 12.025px;
   font-weight: bold;
@@ -330,24 +330,28 @@ ul.nav {
   border-radius: 9px;
 }
 
-.issue span.Bas {
+.issues span.Bas {
     background-color: #468847;
 }
 
-.issue span.Normal {
+.issues span.Normal {
     background-color: #2D6987;
 }
 
-.issue span.Haut {
+.issues span.Haut {
     background-color: #F89406;
 }
 
-.issue span.Urgent {
+.issues span.Urgent {
     background-color: #953B39;
 }
 
-.issue span.Immédiat {
+.issues span.Immédiat {
     background-color: #1A1A1A;
+}
+
+.issue .info {
+    margin: 10px 0;
 }
 
 .isotope,
