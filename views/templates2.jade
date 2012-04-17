@@ -57,31 +57,33 @@ script(type="text/x-handlebars", data-template-name="team")
   {{/each}}
 
 script(type="text/x-handlebars", data-template-name="user")
-  .user.well.span4
-    //{{#view Ember.Button target="App.userController" action="test"}}
-    //Load Books
-    //{{/view}}
-    //a.expand
-      i.icon-resize-full
-    h1.name  {{content.name}}
-    p  Tâche en cours : 
-        span.current  {{content.current}}
-    p 
-      | <a {{action "showIssues" on="click"}}>Tâches assignées </a>
-      span.count.badge  {{content.redmine.issues.length}}
-      i.icon-chevron-down
-    ul.issues
-      {{#each content.redmine.issues}}
-      {{view App.Issue contentBinding="this"}}
-      {{/each}}
+  //.user.well.span4
+  | <div class="user well span4" {{bindAttr id="content.type_id"}}>
+  //{{#view Ember.Button target="App.userController" action="test"}}
+  //Load Books
+  //{{/view}}
+  //a.expand
+    i.icon-resize-full
+  h1.name  {{content.name}}
+  p  Tâche en cours : 
+      span.current  {{content.current}}
+  p 
+    | <a {{action "showIssues" on="click"}}>Tâches assignées </a>
+    span.count.badge  {{content.redmine.issuesCount}}
+    i.icon-chevron-down
+  ul.issues
+    {{view App.Issue contentBinding="this"}}
+  | </div>
 
 script(type="text/x-handlebars", data-template-name="issue")
+  {{#each content.issues}}
   //li.issue
-  | <li class="issue" {{bindAttr id="content.type_id"}}>
-  | <span {{bindAttr class="content.priority.name"}}>{{content.priority.name}}</span>
-  | <a  {{action "showIssue" on="click"}}>{{content.project.name}}  : {{content.subject}}</a>
+  | <li class="issue" {{bindAttr id="type_id"}}>
+  | <span {{bindAttr class="priority.name"}}>{{priority.name}}</span>
+  | <a  {{action "showIssue" on="click"}}>{{project.name}}  : {{subject}}</a>
   .issueContent
     {{view App.IssueContent contentBinding="this"}}
+  {{/each}}
 
 script(type="text/x-handlebars", data-template-name="issueContent")
   .info
