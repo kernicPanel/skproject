@@ -230,7 +230,8 @@ App.IssueContent = Em.View.extend({
                 //test = data;
                 //var issue = App.issue.create(data);
                 //App.issueController.loadIssue(issue);
-                var issue = data[0];
+                //var issue = data[0];
+                var issue = data;
                 view.$().find('.issueContent').addClass('loaded');
                 view.set('description', issue.description);
                 view.set('tracker', issue.tracker);
@@ -253,15 +254,15 @@ App.IssueContent = Em.View.extend({
     },
     loadMore: function(event) {
         console.log("loadMore : ");
-        console.log("this : ", this);
-        console.log("event : ", event);
+        //console.log("this : ", this);
+        //console.log("event : ", event);
         var view = event.view;
 
         test = event;
         console.log("view : ", view);
         if (!view.$().find('.journal').hasClass('loaded')) {
             socket.emit('redmine::getCompleteIssue', view.$().parents('.issue').get(0).id, function (data) {
-                console.log("data : ", data.issue.journals);
+                console.log("journals : ", data.issue.journals);
                 //var issue = data[0];
                 view.$().find('.journal').addClass('loaded');
                 //view.set('description', issue.description);
