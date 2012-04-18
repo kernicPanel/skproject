@@ -224,13 +224,16 @@ body {
 a {
     cursor: pointer;
 }
+
 .nav {
     font-size: 12px;
 }
+
 ul.nav {
     font-size: 12px;
     margin-top: 0;
 }
+
 .navbar .brand {
     padding: 8px 10px 12px;
 }
@@ -238,9 +241,11 @@ ul.nav {
 .navbar .nav {
     padding: 0;
 }
+
 .sidebar-nav {
     padding: 9px 0;
 }
+
 .sidebar-nav ul {
     padding: 0;
     margin: 0;
@@ -250,11 +255,32 @@ ul.nav {
     list-style-type: none;
     padding-left: 5px;
 }
+
 .sidebar-nav li li {
     list-style-type: none;
     padding-left: 5px;
     line-height: 1.1em;
     margin-bottom: 4px;
+}
+
+.user {
+    /*width: 250px;*/
+    float: left;
+    position: relative;
+    display: block;
+    margin: 10px !important;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.user.span8 {
+    width: 800px;
+}
+
+.user.span12 {
+    width: 100%;
+    margin: 10px 0 !important;
 }
 
 .user h1 {
@@ -266,10 +292,16 @@ ul.nav {
     float: right;
 }
 
-.user .issues {
+.user p {
     margin: 0;
+}
+
+.user .issues {
+    margin: 10px 0 0;
     padding: 0;
     font-size: 13px;
+    /*height: 0;*/
+    /*display: none;*/
 }
 
 .user .issues ul {
@@ -283,6 +315,7 @@ ul.nav {
     line-height: 1.1em;
     margin-bottom: 1em;
 }
+
 .user .issues li li {
     list-style-type: none;
     padding-left: 5px;
@@ -290,7 +323,41 @@ ul.nav {
     margin-bottom: 4px;
 }
 
+.issues span {
+  padding: 1px 9px 2px;
+  font-size: 12.025px;
+  font-weight: bold;
+  white-space: nowrap;
+  color: #ffffff;
+  background-color: #999999;
+  -webkit-border-radius: 9px;
+  -moz-border-radius: 9px;
+  border-radius: 9px;
+}
 
+.issues span.Bas {
+    background-color: #468847;
+}
+
+.issues span.Normal {
+    background-color: #2D6987;
+}
+
+.issues span.Haut {
+    background-color: #F89406;
+}
+
+.issues span.Urgent {
+    background-color: #953B39;
+}
+
+.issues span.Immédiat {
+    background-color: #1A1A1A;
+}
+
+.issue .info {
+    margin: 10px 0;
+}
 
 .isotope,
 .isotope .isotope-item {
@@ -331,6 +398,61 @@ ul.nav {
 }
 
 
+.ember-view {
+  width: 100%;
+  *zoom: 1;
+}
+.ember-view:before,
+.ember-view:after {
+  display: table;
+  content: "";
+}
+.ember-view:after {
+  clear: both;
+}
+.ember-view > [class*="span"] {
+  float: left;
+  margin-left: 2.127659574%;
+}
+.ember-view > [class*="span"]:first-child {
+  margin-left: 0;
+}
+.ember-view > .span12 {
+  width: 99.99999998999999%;
+}
+.ember-view > .span11 {
+  width: 91.489361693%;
+}
+.ember-view > .span10 {
+  width: 82.97872339599999%;
+}
+.ember-view > .span9 {
+  width: 74.468085099%;
+}
+.ember-view > .span8 {
+  width: 65.95744680199999%;
+}
+.ember-view > .span7 {
+  width: 57.446808505%;
+}
+.ember-view > .span6 {
+  width: 48.93617020799999%;
+}
+.ember-view > .span5 {
+  width: 40.425531911%;
+}
+.ember-view > .span4 {
+  width: 31.914893614%;
+}
+.ember-view > .span3 {
+  width: 23.404255317%;
+}
+.ember-view > .span2 {
+  width: 14.89361702%;
+}
+.ember-view > .span1 {
+  width: 6.382978723%;
+}
 
 
 /* ==|== media queries ======================================================
