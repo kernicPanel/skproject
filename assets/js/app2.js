@@ -28,6 +28,28 @@ App.userController = Ember.ArrayController.create({
     loadUser: function(data){
         App.userController.pushObject(data);
     },
+    loadIssues: function(userId, data){
+        console.log("userController loadIssues userId : ", userId);
+        console.log("userController loadIssues data : ", data);
+        var loopCount = data.length;
+        for (var i = 0; i < loopCount; i++) {
+            //console.log("getUsers data : ", data[i]);
+            //console.log("getUsers redmine : ", data[i].redmine);
+            var issue = App.issue.create(data[i]);
+            App.issueController.loadIssue(issue);
+            var user = App.userController.findProperty('id', userId);
+            if (!!user) {
+                //user.set('currentId', data.issueId);
+                //user.set('currentName', data.issueName);
+                //user.set('currentStatus', data.issueStatus);
+                //user.set('currentTime', data.issueTime);
+                ////user.set('currentUrl', data.issueUrl);
+                //App.$content.isotope();
+            }
+
+        }
+        delete loopCount;
+    },
     test: function(data){
         console.log("test this : ", this);
         console.log("test data : ", data);
@@ -45,9 +67,25 @@ App.issueController = Ember.ArrayController.create({
         test = event;
         
     },
-    loadIssue: function(data){
+    loadIssue: function(issue){
         console.log("this : ", this);
-        App.issueController.pushObject(data);
+        console.log("loadIssue : ", issue);
+        issue.assignedToId = issue.assigned_to.id;
+        App.issueController.pushObject(issue);
+    },
+    loadIssues: function(data){
+        //console.log("this : ", this);
+        console.log("loadIssues data : ", data);
+
+        var loopCount = data.length;
+        for (var i = 0; i < loopCount; i++) {
+            //console.log("getUsers data : ", data[i]);
+            //console.log("getUsers redmine : ", data[i].redmine);
+            var issue = App.issue.create(data[i]);
+            App.issueController.loadIssue(issue);
+
+        }
+        delete loopCount;
     }
 });
 
@@ -61,20 +99,31 @@ App.User = Em.View.extend({
     },
     showIssues: function(event){
         console.log("showIssues : ");
+        console.log("this : ", this);
         //console.log("event.view.$() : ", event.view.$());
         var view = event.view;
         test = event;
         //console.log("event.view.$() : ", event.view.$());
         if (!view.$().find('.issues').hasClass('loaded')) {
-            console.log("view.$().find('.user').get(0).id : ", view.$().find('.user').get(0).id);
-            socket.emit('redmine::getUserIssues', view.$().find('.user').get(0).id, function (data) {
+            var userId = view.$().find('.user').get(0).id;
+            //console.log("view.$().find('.user').get(0).id : ", view.$().find('.user').get(0).id);
+            //socket.emit('redmine::getUserIssues', view.$().find('.user').get(0).id, function (data) {
+            socket.emit('redmine::getUserIssues', userId, function (data) {
                 console.log(data);
                 //console.log(data[0].description);
-                test = data;
+                //test = data;
                 //var issue = App.issue.create(data);
-                //App.issueController.loadIssue(issue);
                 var issues = data;
+                App.userController.loadIssues(userId, issues);
                 view.$().find('.issues').addClass('loaded');
+
+                console.log("userId : ", userId);
+                userId = userId.split('_')[1];
+                console.log("userId : ", userId);
+                E_issues = App.issueController.filterProperty('assignedToId', userId);
+                console.log("E_issues : ", E_issues);
+                //this.set('issues', issues)
+
                 view.set('issues', issues);
                 //view.set('description', issue.description);
                 //view.set('tracker', issue.tracker);
@@ -110,7 +159,7 @@ App.User = Em.View.extend({
          */
     },
     didInsertElement: function(){
-        console.log("didInsertElement : ");
+        //console.log("didInsertElement : ");
         //console.log("this : ", this);
         //console.log("this.$() : ", this.$());
         this.$().find('.issues, .info').slideUp();
@@ -158,7 +207,7 @@ App.Issue = Em.View.extend({
         }
     },
     didInsertElement: function(){
-        console.log("didInsertElement : ");
+        //console.log("didInsertElement : ");
         //console.log("this.$() : ", this.$());
         this.$().find('.issueContent, .journal').slideUp('fast', function() {
             App.$content.isotope();
@@ -231,7 +280,7 @@ App.IssueContent = Em.View.extend({
         }
     },
     didInsertElement: function(){
-        console.log("didInsertElement : ");
+        //console.log("didInsertElement : ");
         testInsert = this;
         //console.log("this.$() : ", this.$());
         this.$().find('.issueContent, .journal').slideUp('fast', function() {
@@ -314,7 +363,7 @@ socket.on('redmine::connect', function(data){
             user.set('currentName', data.issueName);
             user.set('currentStatus', data.issueStatus);
             user.set('currentTime', data.issueTime);
-            user.set('currentUrl', data.issueUrl);
+            //user.set('currentUrl', data.issueUrl);
             App.$content.isotope();
         }
     });
