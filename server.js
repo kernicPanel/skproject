@@ -47,6 +47,7 @@ server.listen( port, host);
 
 //Setup Socket.IO
 var io = io.listen(server);
+io.set('log level', 1);
 global.io = io;
 io.sockets.on('connection', function(socket){
     global.socket = socket;
