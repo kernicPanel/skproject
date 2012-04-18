@@ -308,9 +308,14 @@ socket.on('redmine::connect', function(data){
 
     socket.on('updateCurrentIssue::response', function(data){
         //console.log("updateCurrentIssue data : ", data);
-        var user = App.userController.findProperty('login', data.user);
+        var user = App.userController.findProperty('login', data.login);
         if (!!user) {
-            user.set('current', data.issue);
+            user.set('currentId', data.issueId);
+            user.set('currentName', data.issueName);
+            user.set('currentStatus', data.issueStatus);
+            user.set('currentTime', data.issueTime);
+            user.set('currentUrl', data.issueUrl);
+            App.$content.isotope();
         }
     });
 
