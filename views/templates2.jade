@@ -65,8 +65,11 @@ script(type="text/x-handlebars", data-template-name="user")
   //a.expand
     i.icon-resize-full
   h1.name  {{content.name}}
-  p  Tâche en cours : 
-      span.current  {{content.current}}
+  p  Tâche {{content.currentStatus}} :
+      span.current  {{content.currentId}}
+      span.current  {{content.currentTime}}
+  p  {{content.currentName}}
+  //p  {{content.currentUrl}}
   p 
     | <a {{action "showIssues" on="click"}}>Tâches assignées </a>
     span.count.badge  {{content.redmine.issuesCount}}
@@ -85,7 +88,7 @@ script(type="text/x-handlebars", data-template-name="issue")
 
 script(type="text/x-handlebars", data-template-name="issueContent")
   | <span {{bindAttr class="content.priority.name"}}>{{content.priority.name}}</span>
-  | <a  {{action "showIssue"}}>{{content.project.name}}  : {{content.subject}}</a>
+  | <a  {{action "showIssue"}}>{{content.id}} {{content.project.name}}  : {{content.subject}}</a>
   .issueContent
     .info
       span.tracker {{content.tracker.name}}
