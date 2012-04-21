@@ -98,7 +98,7 @@ server.get('/', function(req,res){
           global.push = false;
       });
   });
-  res.render('index.jade', {
+  res.render('index-' + config.clientFramework+ '.jade', {
     locals : {
               title : 'Your Page Title',
               description: 'Your Page Description',
@@ -138,3 +138,4 @@ function NotFound(msg){
 
 
 console.log('Listening on '+ host + ':' + port );
+console.log('Using client framework ' + config.clientFramework );

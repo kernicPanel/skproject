@@ -1,0 +1,157 @@
+//script(type="text/x-handlebars", data-template-name="loop")
+  | <span {{action "test" on="click"}}>test</span>
+  {{#each App.userController}}
+  .user.well.span4
+    {{#view Ember.Button target="App.userController" action="test"}}
+    Load Books
+    {{/view}}
+
+    a.expand
+      i.icon-resize-full
+    h1.name  {{name}}
+    p  Tâche en cours : 
+        span.current  {{current}}
+    p 
+      a Tâches assignées
+        span.count.badge  {{redmine.issues.length}}
+        i.icon-chevron-down
+    ul.issues.collapse
+      {{#each redmine.issues}}
+      li.issue
+        a {{this.project.name}} : {{this.subject}}
+        pre.desc {{this.description}}
+      {{/each}}
+  {{/each}}
+
+//script(type="text/x-handlebars")
+  {{#view  App.LoopingView id="looping-view"}}
+  | <span {{action "test" on="click"}}>test</span>
+  {{#each App.userController}}
+  .user.well.span4
+    {{#view Ember.Button target="App.userController" action="test"}}
+    Load Books
+    {{/view}}
+
+    | <span {{action "test" on="click"}}>test</span>
+    a.expand
+      i.icon-resize-full
+    h1.name  {{name}}
+    p  Tâche en cours : 
+        span.current  {{current}}
+    p 
+      a Tâches assignées
+        span.count.badge  {{redmine.issues.length}}
+        i.icon-chevron-down
+    ul.issues.collapse
+      {{#each redmine.issues}}
+      li.issue
+        a {{this.project.name}} : {{this.subject}}
+        pre.desc {{this.description}}
+      {{/each}}
+  {{/each}}
+  {{/view}}
+
+script(type="text/x-handlebars", data-template-name="team")
+  {{#each App.userController}}
+  {{view App.User contentBinding="this"}}
+  {{/each}}
+
+script(type="text/x-handlebars", data-template-name="user")
+  //.user.well.span4
+  | <div class="user well span4" {{bindAttr id="content.type_id"}}>
+  //{{#view Ember.Button target="App.userController" action="test"}}
+  //Load Books
+  //{{/view}}
+  //a.expand
+    i.icon-resize-full
+  h1.name  {{content.name}}
+  p  Tâche {{content.currentStatus}} :
+      span.current  {{content.currentId}}
+      span.current  {{content.currentTime}}
+  p  {{content.currentName}}
+  //p  {{content.currentUrl}}
+  p 
+    | <a {{action "showIssues" on="click"}}>Tâches assignées </a>
+    span.count.badge  {{content.redmine.issuesCount}}
+    i.icon-chevron-down
+  ul.issues
+    {{view App.Issue contentBinding="this"}}
+  | </div>
+
+script(type="text/x-handlebars", data-template-name="issue")
+  {{#each content.issues}}
+  //li.issue
+  | <li class="issue" {{bindAttr id="type_id"}}>
+  {{view App.IssueContent contentBinding="this"}}
+  | </li>
+  {{/each}}
+
+script(type="text/x-handlebars", data-template-name="issueContent")
+  | <span {{bindAttr class="content.priority.name"}}>{{content.priority.name}}</span>
+  | <a  {{action "showIssue"}}>{{content.id}} {{content.project.name}}  : {{content.subject}}</a>
+  .issueContent
+    .info
+      span.tracker {{content.tracker.name}}
+      span.status {{content.status.name}}
+    pre {{description}}
+    .action
+    | <a {{action "loadMore"}}>load more</a>
+    .journal
+      {{view App.IssueJournal contentBinding="this"}}
+
+script(type="text/x-handlebars", data-template-name="issueJournal")
+  {{#each content.journal}}
+  {{#if notes}}
+  p {{user.name}} - {{created_on}} :
+    pre {{notes}}
+  {{/if}}}
+  {{/each}}
+
+//script(type="text/x-handlebars")
+  {{#collection contentBinding="App.userController" tagName="div"}}
+  .user.well.span4
+    {{#view Ember.Button target="App.userController" action="test"}}
+    Load Books
+    {{/view}}
+
+    a.expand
+      i.icon-resize-full
+    h1.name  {{content.name}}
+    p  Tâche en cours : 
+        span.current  {{content.current}}
+    p 
+      a Tâches assignées
+        span.count.badge  {{content.redmine.issues.length}}
+        i.icon-chevron-down
+    ul.issues.collapse
+      {{#each content.redmine.issues}}
+      li.issue
+        a {{this.project.name}} : {{this.subject}}
+        pre.desc {{this.description}}
+      {{/each}}
+  {{/collection}}
+
+//script(type="text/x-handlebars")
+  {{#collection contentBinding="App.userController" tagName="div"}}
+  | <div class="user well span4" {{bindAttr id="content.userId"}}>
+  {{#view Ember.Button target="App.userController" action="test"}}
+  Load Books
+  {{/view}}
+
+  a.expand
+    i.icon-resize-full
+  h1.name  {{content.name}}
+  p  Tâche en cours : 
+      span.current  {{content.current}}
+  p 
+    a Tâches assignées
+      span.count.badge  {{content.redmine.issues.length}}
+      i.icon-chevron-down
+  | <ul class="issues collapse" {{bindAttr id="content.issuesId"}}>
+  {{#each content.redmine.issues}}
+  li.issue
+    a {{this.project.name}} : {{this.subject}}
+    pre.desc {{this.description}}
+  {{/each}}
+  {{/collection}}
+
