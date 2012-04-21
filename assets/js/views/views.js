@@ -18,6 +18,9 @@ app.Views.SkUserView = Backbone.View.extend({
     render: function() {
         return this;
     },
+    events: {
+        "click .showIssues": "showIssues"
+    },
     addUsers: function(data) {
         var loopCount = data.length;
         for (var i = 0; i < loopCount; i++) {
@@ -28,12 +31,83 @@ app.Views.SkUserView = Backbone.View.extend({
             this.addUser(skuser);
         }
         delete loopCount;
+        $('.desc').hide().slideUp();
+        $('.user .expand').on("click", function() {
+            console.log("click : ", this);
+            var $user = $(this).parents('.user');
+            if ($user.hasClass('span4')) {
+                $user.removeClass('span4').addClass('span12');
+                $(this).find('i').removeClass('icon-resize-full').addClass('icon-resize-small');
+            }
+            else if ($user.hasClass('span12')) {
+                $user.removeClass('span12').addClass('span4');
+                $(this).find('i').removeClass('icon-resize-small').addClass('icon-resize-full');
+            }
+            $('#content').isotope();
+        });
+        $(".issue").find('a').on("click", function() {
+            console.log("click : ", this);
+            var $user = $(this).parents('.user');
+            if ($user.hasClass('span4')) {
+                $user.removeClass('span4').addClass('span12');
+                $(this).find('i').removeClass('icon-resize-full').addClass('icon-resize-small');
+            }
+            else if ($user.hasClass('span12')) {
+                $user.removeClass('span12').addClass('span4');
+                $(this).find('i').removeClass('icon-resize-small').addClass('icon-resize-full');
+            }
+            $('#content').isotope();
+            console.log("click : ", this);
+            $(this)
+            .find('i')
+                .toggleClass('icon-chevron-down')
+                .toggleClass('icon-chevron-up')
+            .end()
+            .next('.desc').slideToggle('fast', function() {
+                $('#content').isotope();
+            });
+        });
+
+        var $content = $('#content');
+        $content.isotope({
+            // options
+            itemSelector : '.user',
+            //layoutMode : 'fitRows',
+            getSortData : {
+                name : function ( $elem ) {
+                    return $elem.find('.name').text();
+                },
+                count : function ( $elem ) {
+                    return parseInt($elem.find('.count').text(), 10);
+                }
+            },
+            sortBy : 'name'
+        });
+        $isotope = $content.data('isotope');
+        $('#sort-by a').click(function(){
+            // get href attribute, minus the '#'
+            var sortName = $(this).attr('href').slice(1);
+            if ($isotope.options.sortBy === sortName) {
+                $content.isotope({ sortAscending : !$isotope.options.sortAscending });
+            }
+            else {
+                $content.isotope({ sortBy : sortName });
+            }
+            return false;
+        });
+    },
+    showIssues: function(event) {
+        console.log("event : ", event);
+        console.log("this : ", this);
+        test = event;
+        $('#' + $(event.target).data('issues')).slideToggle();
+        console.log("$(event.target) : ", $(event.target));
     },
     addUser: function(skuser) {
         this.collection.add(skuser); // add skUser to collection; view is updated via event 'add'
     },
     appendUser: function(skuser){
-        console.log("skuser : ", skuser);
+        //console.log("skuser : ", skuser);
         test = skuser;
         var currentIssue = skuser.get('current') || 'init';
         var html = ich.skuser({
@@ -143,7 +217,7 @@ app.Views.SkProjectView = Backbone.View.extend({
     el: $('.nav-list'),
 
     initialize: function() {
-        _.bindAll(this, 'render', 'addProject', 'appendProject'); // remember: every function that uses 'this' as the current object should be in here
+        _.bindAll(this, 'render', 'addProjects', 'addProject', 'appendProject'); // remember: every function that uses 'this' as the current object should be in here
 
         this.collection = new app.Collections.SkProjectList();
         this.collection.bind('add', this.appendProject); // collection event binder
@@ -153,6 +227,21 @@ app.Views.SkProjectView = Backbone.View.extend({
 
     render: function() {
         return this;
+    },
+    addProjects: function(data) {
+        var loopCount = data.length;
+        for (var i = 0; i < loopCount; i++) {
+            skproject = new app.Models.SkProject();
+            //skprojectView.remove(skproject);
+            skproject.set(data[i]);
+            this.addProject(skproject);
+        }
+        delete loopCount;
+        $('.desc').hide().slideUp();
+        $(".issue").find('a').on("click", function() {
+            console.log("click : ");
+            $(this).next('.desc').slideToggle();
+        });
     },
     addProject: function(skproject) {
         this.collection.add(skproject); // add skProject to collection; view is updated via event 'add'

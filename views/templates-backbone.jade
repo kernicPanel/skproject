@@ -5,10 +5,9 @@ script(id="skuser", type="text/html")
     h1.name  {{name}}
     p  Tâche en cours : 
         span.current {{current}}
-    p 
-      a(data-toggle='collapse', data-parent='.nav-list', href='{{issuesIdTarget}}') Tâches assignées
-        span.count.badge  {{count}}
-        i.icon-chevron-down
+    a.showIssues(data-issues='{{issuesId}}') Tâches assignées
+      span.count.badge  {{count}}
+      i.icon-chevron-down
     ul.issues.collapse(id='{{issuesId}}')
 
 script(id="userIssue", type="text/html")
@@ -19,7 +18,7 @@ script(id="userIssue", type="text/html")
 script(id="skproject", type="text/html")
   li.project
     p 
-      a(data-toggle='collapse', data-parent='.nav-list', href='{{issuesIdTarget}}')
+      a.showIssue
         |  {{name}} ({{count}})
     ul.issues.collapse(id='{{issuesId}}')
 
