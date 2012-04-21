@@ -1,0 +1,38 @@
+script(id="skuser", type="text/html")
+  .user.well.span4
+    a.expand
+      i.icon-resize-full
+    h1.name  {{name}}
+    p  Tâche en cours : 
+        span.current {{current}}
+    p 
+      a(data-toggle='collapse', data-parent='.nav-list', href='{{issuesIdTarget}}') Tâches assignées
+        span.count.badge  {{count}}
+        i.icon-chevron-down
+    ul.issues.collapse(id='{{issuesId}}')
+
+script(id="userIssue", type="text/html")
+  li.issue
+    a {{project}} : {{subject}}
+    pre.desc {{description}}
+
+script(id="skproject", type="text/html")
+  li.project
+    p 
+      a(data-toggle='collapse', data-parent='.nav-list', href='{{issuesIdTarget}}')
+        |  {{name}} ({{count}})
+    ul.issues.collapse(id='{{issuesId}}')
+
+script(id="projectIssue", type="text/html")
+  li.issue
+    a {{subject}} : 
+      b {{username}}
+    pre.desc {{description}}
+
+script(id="issue", type="text/html")
+    h1 {{subject}}
+    .hero-unit
+      pre.desc {{description}}
+    p
+      a.btn.btn-primary.btn-large Learn more »
+

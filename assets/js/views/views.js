@@ -7,7 +7,7 @@ app.Views.SkUserView = Backbone.View.extend({
     el: $('#content'),
 
     initialize: function() {
-        _.bindAll(this, 'render', 'addUser', 'appendUser'); // remember: every function that uses 'this' as the current object should be in here
+        _.bindAll(this, 'render', 'addUsers', 'addUser', 'appendUser'); // remember: every function that uses 'this' as the current object should be in here
 
         this.collection = new app.Collections.SkUserList();
         this.collection.bind('add', this.appendUser); // collection event binder
@@ -18,10 +18,23 @@ app.Views.SkUserView = Backbone.View.extend({
     render: function() {
         return this;
     },
+    addUsers: function(data) {
+        var loopCount = data.length;
+        for (var i = 0; i < loopCount; i++) {
+            skuser = new app.Models.SkUser();
+            //skuserView.remove(skuser);
+            skuser.set(data[i]);
+            //skuser.set({id: data[i].login});
+            this.addUser(skuser);
+        }
+        delete loopCount;
+    },
     addUser: function(skuser) {
         this.collection.add(skuser); // add skUser to collection; view is updated via event 'add'
     },
     appendUser: function(skuser){
+        console.log("skuser : ", skuser);
+        test = skuser;
         var currentIssue = skuser.get('current') || 'init';
         var html = ich.skuser({
             name: skuser.get('name'),
@@ -30,15 +43,17 @@ app.Views.SkUserView = Backbone.View.extend({
             issuesId: 'issues-' + skuser.get('id'),
             issuesIdTarget: '#issues-' + skuser.get('id')
         });
-        var issues = skuser.get('redmine').issues;
-        _.each(issues, function(issue){ 
-            var issuesHtml = ich.userIssue({
-                project: issue.project.name,
-                subject: issue.subject,
-                description: issue.description
-            });
-            $(html).find('.issues').append(issuesHtml);
-        });
+        /*
+         *var issues = skuser.get('redmine').issues;
+         *_.each(issues, function(issue){ 
+         *    var issuesHtml = ich.userIssue({
+         *        project: issue.project.name,
+         *        subject: issue.subject,
+         *        description: issue.description
+         *    });
+         *    $(html).find('.issues').append(issuesHtml);
+         *});
+         */
 
         $(html).attr('id', 'skuser-' + skuser.get('id'));
         //$(this.el).append(html);
