@@ -1,8 +1,11 @@
 script(id="skuser", type="text/html")
   .user.well.span4
     h1.name  {{name}}
-    p  Tâche en cours : 
-        span.current {{current}}
+    p Tâche 
+      span.currentStatus {{currentStatus}} :
+      span.currentId  {{currentId}}
+      span.currentTime  {{currentTime}}
+    p.currentName  {{currentName}}
     a.showIssues(data-user='{{id}}') Tâches assignées
       span.count.badge  {{count}}
       i.icon-chevron-down
@@ -10,8 +13,20 @@ script(id="skuser", type="text/html")
 
 script(id="userIssue", type="text/html")
   li.issue
-    a {{project}} : {{subject}}
-    pre.desc {{description}}
+    a.showIssue(data-issue='{{issueId}}') {{project}} : {{subject}}
+    .issueContent(id='{{issueDivId}}')
+      {{#description}}
+      pre.desc {{description}}
+      {{/description}}
+      a.showJournal(data-issue='{{issueId}}') Voir les notes
+      .journal
+
+script(id="journal", type="text/html")
+  {{#notes}}
+  p {{name}} - {{created_on}} :
+    pre {{notes}}
+  {{/notes}}
+
 
 script(id="skproject", type="text/html")
   li.project

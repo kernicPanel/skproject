@@ -19,7 +19,9 @@ app.Views.SkUserView = Backbone.View.extend({
         return this;
     },
     events: {
-        "click .showIssues": "showIssues"
+        "click .showIssues": "showIssues",
+        "click .showIssue": "showIssue",
+        "click .showJournal": "showJournal"
     },
     addUsers: function(data) {
         var loopCount = data.length;
@@ -32,41 +34,6 @@ app.Views.SkUserView = Backbone.View.extend({
         }
         delete loopCount;
         $('.desc, .issues').hide().slideUp();
-        $('.user .expand').on("click", function() {
-            console.log("click : ", this);
-            var $user = $(this).parents('.user');
-            if ($user.hasClass('span4')) {
-                $user.removeClass('span4').addClass('span12');
-                $(this).find('i').removeClass('icon-resize-full').addClass('icon-resize-small');
-            }
-            else if ($user.hasClass('span12')) {
-                $user.removeClass('span12').addClass('span4');
-                $(this).find('i').removeClass('icon-resize-small').addClass('icon-resize-full');
-            }
-            $('#content').isotope();
-        });
-        $(".issue").find('a').on("click", function() {
-            console.log("click : ", this);
-            var $user = $(this).parents('.user');
-            if ($user.hasClass('span4')) {
-                $user.removeClass('span4').addClass('span12');
-                $(this).find('i').removeClass('icon-resize-full').addClass('icon-resize-small');
-            }
-            else if ($user.hasClass('span12')) {
-                $user.removeClass('span12').addClass('span4');
-                $(this).find('i').removeClass('icon-resize-small').addClass('icon-resize-full');
-            }
-            $('#content').isotope();
-            console.log("click : ", this);
-            $(this)
-            .find('i')
-                .toggleClass('icon-chevron-down')
-                .toggleClass('icon-chevron-up')
-            .end()
-            .next('.desc').slideToggle('fast', function() {
-                $('#content').isotope();
-            });
-        });
 
         var $content = $('#content');
         $content.isotope({
@@ -109,7 +76,10 @@ app.Views.SkUserView = Backbone.View.extend({
             test = issues;
             console.log("issues : ", issues);
             issues.each(function(issue) {
+                console.log("issue : ", issue);
                 var issuesHtml = ich.userIssue({
+                    issueId: issue.get('id'),
+                    issueDivId: 'issue-' + issue.get('id'),
                     project: issue.get('project').name,
                     subject: issue.get('subject'),
                     description: issue.get('description')
@@ -119,6 +89,7 @@ app.Views.SkUserView = Backbone.View.extend({
             });
             $issues.data('loaded', true);
             $user.toggleClass('span4 span12');
+            $('.issueContent').hide().slideUp();
             $issues.slideToggle('fast', function() {
                 $('#content').isotope({}, function() {
                     console.log("$issues : ", $issues);
@@ -134,6 +105,97 @@ app.Views.SkUserView = Backbone.View.extend({
                 });
             });
         }
+    },
+    showIssue: function(event) {
+        console.log("event.target : ", event.target);
+        console.log("this : ", this);
+        var issueId = $(event.target).data('issue');
+        var $issue = $('#issue-' + issueId);
+        $issue.slideToggle('fast', function() {
+            $('#content').isotope({}, function() {
+                //$.scrollTo($issue.offset().top - 60, 400);
+            });
+        });
+    },
+    showJournal: function(event) {
+        console.log("event.target : ", event.target);
+        console.log("this : ", this);
+        var issueId = $(event.target).data('issue');
+        var $issue= $('#issue-' + issueId);
+        $.scrollTo($issue.offset().top - 60, 400);
+        var $issueJournal = $issue.find('.journal');
+        console.log("$issueJournal : ", $issueJournal);
+
+        if (!$issueJournal.data('loaded')) {
+            socket.emit('redmine::getCompleteIssue', issueId, function (data) {
+                console.log("journals : ", data.issue.journals);
+                //view.$().find('.journal').addClass('loaded');
+                //view.set('journal', data.issue.journals);
+                var journals = data.issue.journals;
+                var loopCount = journals.length;
+                for (var i = 0; i < loopCount; i++) {
+                    var journal = journals[i];
+                    console.log("journal : ", journal);
+                    var journalHtml = ich.journal({
+                        name: journal.user.name,
+                        created_on: journal.created_on,
+                        notes: journal.notes
+                    });
+                    console.log("journalHtml : ", journalHtml);
+                    $issueJournal.append(journalHtml);
+                }
+                delete loopCount;
+                $issueJournal.data('loaded', true);
+                $issueJournal.slideDown('fast', function() {
+                    $('#content').isotope();
+                });
+
+            });
+            /*
+             *var issues = app.collections.issueList.assignedTo(userId);
+             *test = issues;
+             *console.log("issues : ", issues);
+             *issues.each(function(issue) {
+             *    console.log("issue : ", issue);
+             *    var issuesHtml = ich.userIssue({
+             *        issueId: issue.get('id'),
+             *        issueDivId: 'issue-' + issue.get('id'),
+             *        project: issue.get('project').name,
+             *        subject: issue.get('subject'),
+             *        description: issue.get('description')
+             *    });
+             *    console.log("issuesHtml : ", issuesHtml);
+             *    $issues.append(issuesHtml);
+             *});
+             *$issues.data('loaded', true);
+             *$user.toggleClass('span4 span12');
+             *$('.issueContent').hide().slideUp();
+             */
+            /*
+             *$issues.slideToggle('fast', function() {
+             *    $('#content').isotope({}, function() {
+             *        console.log("$issues : ", $issues);
+             *        $.scrollTo($issues.parents('.user').offset().top - 50, 400);
+             *    });
+             *});
+             */
+        }
+        else {
+            $issueJournal.slideToggle('fast', function() {
+                $('#content').isotope({}, function() {
+                    //$.scrollTo($issueJournal.parents('.user').offset().top - 50, 400);
+                });
+            });
+        }
+
+        /*
+         *$issueJournal.slideToggle('fast', function() {
+         *    $('#content').isotope({}, function() {
+         *        console.log("$issue : ", $issue);
+         *        $.scrollTo($issue.offset().top - 60, 400);
+         *    });
+         *});
+         */
     },
     addUser: function(skuser) {
         this.collection.add(skuser); // add skUser to collection; view is updated via event 'add'
@@ -165,7 +227,7 @@ app.Views.SkUserView = Backbone.View.extend({
         $(html).attr('id', 'skuser-' + skuser.get('id'));
         //$(this.el).append(html);
         //$('.collapse').collapse('hide');
-        $(this.el).append(html).collapse();
+        $(this.el).append(html);
         $(this.el).on('shown hidden', function (e) {
             test = e;
             console.log("e.currentTarget: ", e.currentTarget);
@@ -177,12 +239,28 @@ app.Views.SkUserView = Backbone.View.extend({
      *ul.issues.collapse(id='{{issuesId}}')
      */
     },
-    updateCurrentIssue: function(login, issue){
-        var user = this.collection.where({login:login})[0];
-        user.set({current: issue});
-        var id = user.get('id');
-        var userElem = $('#skuser-' + id);
-        $('#skuser-' + id).find('.current').html(issue);
+    updateCurrentIssue: function(data){
+        var user = this.collection.where({login:data.login})[0];
+        if (user) {
+            console.log("user update : ", user);
+            user.set({
+                currentId: data.issueId,
+                currentName: data.issueName,
+                currentStatus: data.issueStatus,
+                currentTime: data.issueTime
+            });
+            var id = user.get('id');
+            var $userElem = $('#skuser-' + id);
+            console.log("$userElem : ", $userElem);
+            //$('#skuser-' + id).find('.current').html(issue);
+            $userElem
+                .find('.currentStatus').html(user.get('currentStatus')).end()
+                .find('.currentId').html(user.get('currentId')).end()
+                .find('.currentTime').html(user.get('currentTime')).end()
+                .find('.currentName').html(user.get('currentName'));
+            $('#content').isotope();
+
+        }
     }
 });
 
@@ -301,7 +379,7 @@ app.Views.SkProjectView = Backbone.View.extend({
         });
 
         $(html).attr('id', 'skproject-' + skproject.get('id'));
-        $(this.el).append(html).collapse();
+        $(this.el).append(html);
     }
 });
 

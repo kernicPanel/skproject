@@ -38,7 +38,6 @@ var app = {
     });
 
     $('#getusers').click(function() {
-        console.log("nrst: ");
         //skuserView.remove();
         socket.emit('getUsers', function (data) {
           console.log(data);
@@ -82,7 +81,7 @@ var app = {
 
         socket.on('updateCurrentIssue::response', function(data){
             console.log("updateCurrentIssue data : ", data);
-            app.views.skuserView.updateCurrentIssue(data.user, data.issue);
+            app.views.skuserView.updateCurrentIssue(data);
         });
 
         socket.on('getSkProjects::response', function(data){
