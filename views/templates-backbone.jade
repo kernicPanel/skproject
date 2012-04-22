@@ -1,14 +1,12 @@
 script(id="skuser", type="text/html")
   .user.well.span4
-    a.expand
-      i.icon-resize-full
     h1.name  {{name}}
     p  Tâche en cours : 
         span.current {{current}}
-    a.showIssues(data-issues='{{issuesId}}') Tâches assignées
+    a.showIssues(data-user='{{id}}') Tâches assignées
       span.count.badge  {{count}}
       i.icon-chevron-down
-    ul.issues.collapse(id='{{issuesId}}')
+    ul.issues(id='{{issuesId}}')
 
 script(id="userIssue", type="text/html")
   li.issue

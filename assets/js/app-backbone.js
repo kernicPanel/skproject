@@ -18,6 +18,7 @@ var app = {
     this.socket = socket = io.connect();
 
     this.views.skuserView = new this.Views.SkUserView();
+    this.collections.issueList = new this.Collections.IssueList();
 
     this.views.skprojectView = new this.Views.SkProjectView();
 
@@ -62,12 +63,21 @@ var app = {
     socket.on('redmine::connect', function(data){
         console.log("redmine connect : ");
         socket.emit('getUsers', function (data) {
-            console.log(data); // data will be 'woot'
+            console.log(data);
+        });
+
+        socket.emit('getIssues', function (data) {
+            //console.log(data);
         });
 
         socket.on('getUsers::response', function(data){
             console.log("getUsersIssues data : ", data);
             app.views.skuserView.addUsers(data);
+        });
+
+        socket.on('getIssues::response', function(data){
+            //console.log("getIssues data : ", data);
+            app.collections.issueList.addIssues(data);
         });
 
         socket.on('updateCurrentIssue::response', function(data){

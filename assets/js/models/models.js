@@ -20,7 +20,19 @@ app.Models.Issue = Backbone.Model.extend({
 });
 
 app.Collections.IssueList = Backbone.Collection.extend({
-    model: app.Models.Issue
+    model: app.Models.Issue,
+    addIssues: function(data) {
+        this.add(data);
+    },
+    assignedTo : function(id){
+        if(id === "") {
+            return this;
+        }
+
+        return _(this.filter(function(data) {
+            return data.get('assigned_to').id === id;
+        }));
+    }
 });
 
 

@@ -31,7 +31,7 @@ app.Views.SkUserView = Backbone.View.extend({
             this.addUser(skuser);
         }
         delete loopCount;
-        $('.desc').hide().slideUp();
+        $('.desc, .issues').hide().slideUp();
         $('.user .expand').on("click", function() {
             console.log("click : ", this);
             var $user = $(this).parents('.user');
@@ -100,8 +100,40 @@ app.Views.SkUserView = Backbone.View.extend({
         console.log("event : ", event);
         console.log("this : ", this);
         test = event;
-        $('#' + $(event.target).data('issues')).slideToggle();
-        console.log("$(event.target) : ", $(event.target));
+        var userId = $(event.target).data('user');
+        var $issues = $('#issues-' + userId);
+        var $user = $issues.parents('.user');
+        console.log("userId : ", userId);
+        if (!$issues.data('loaded')) {
+            var issues = app.collections.issueList.assignedTo(userId);
+            test = issues;
+            console.log("issues : ", issues);
+            issues.each(function(issue) {
+                var issuesHtml = ich.userIssue({
+                    project: issue.get('project').name,
+                    subject: issue.get('subject'),
+                    description: issue.get('description')
+                });
+                console.log("issuesHtml : ", issuesHtml);
+                $issues.append(issuesHtml);
+            });
+            $issues.data('loaded', true);
+            $user.toggleClass('span4 span12');
+            $issues.slideToggle('fast', function() {
+                $('#content').isotope({}, function() {
+                    console.log("$issues : ", $issues);
+                    $.scrollTo($issues.parents('.user').offset().top - 50, 400);
+                });
+            });
+        }
+        else {
+            $user.toggleClass('span4 span12');
+            $issues.slideToggle('fast', function() {
+                $('#content').isotope({}, function() {
+                    $.scrollTo($issues.parents('.user').offset().top - 50, 400);
+                });
+            });
+        }
     },
     addUser: function(skuser) {
         this.collection.add(skuser); // add skUser to collection; view is updated via event 'add'
@@ -112,6 +144,7 @@ app.Views.SkUserView = Backbone.View.extend({
         var currentIssue = skuser.get('current') || 'init';
         var html = ich.skuser({
             name: skuser.get('name'),
+            id: skuser.get('id'),
             current: currentIssue,
             count: skuser.get('redmine').issues.length,
             issuesId: 'issues-' + skuser.get('id'),
