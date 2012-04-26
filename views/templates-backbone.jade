@@ -1,9 +1,11 @@
 script(id="skuser", type="text/html")
   .user.well.span4
     h1.name  {{name}}
+    .current
+      span.currentId  {{currentId}}
+      span.currentPriority  {{currentPriority}}
     p Tâche 
       span.currentStatus {{currentStatus}} :
-      span.currentId  {{currentId}}
       span.currentTime  {{currentTime}}
     p.currentName  {{currentName}}
     a.showIssues(data-user='{{id}}') Tâches assignées
@@ -13,8 +15,14 @@ script(id="skuser", type="text/html")
 
 script(id="userIssue", type="text/html")
   li.issue
-    a.showIssue(data-issue='{{issueId}}') {{project}} : {{subject}}
+    span(class='{{priority}}') {{priority}}
+    a.showIssue(data-issue='{{issueId}}')
+      span.badge{{issueId}}
+      {{project}} : {{subject}}
     .issueContent(id='{{issueDivId}}')
+      .info
+        span.tracker {{tracker}}
+        span.status {{status}}
       {{#description}}
       pre.desc {{description}}
       {{/description}}

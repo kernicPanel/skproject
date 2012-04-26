@@ -81,7 +81,10 @@ app.Views.SkUserView = Backbone.View.extend({
                     issueId: issue.get('id'),
                     issueDivId: 'issue-' + issue.get('id'),
                     project: issue.get('project').name,
+                    priority: issue.get('priority').name,
                     subject: issue.get('subject'),
+                    tracker: issue.get('tracker').name,
+                    status: issue.get('status').name,
                     description: issue.get('description')
                 });
                 console.log("issuesHtml : ", issuesHtml);
@@ -241,23 +244,39 @@ app.Views.SkUserView = Backbone.View.extend({
     },
     updateCurrentIssue: function(data){
         var user = this.collection.where({login:data.login})[0];
+        var issue = app.collections.issueList.get(data.issueId);
+        console.log("issue : ", issue);
+        var priority = '';
+        var currentIdClass = 'currentId';
+        if (issue) {
+            priority = issue.get('priority').name;
+            console.log("priority : ", priority);
+            currentIdClass = currentIdClass + ' badge';
+        }
         if (user) {
-            console.log("user update : ", user);
+            //console.log("user update : ", user);
             user.set({
                 currentId: data.issueId,
                 currentName: data.issueName,
                 currentStatus: data.issueStatus,
+                currentPriority: priority,
                 currentTime: data.issueTime
             });
             var id = user.get('id');
             var $userElem = $('#skuser-' + id);
-            console.log("$userElem : ", $userElem);
             //$('#skuser-' + id).find('.current').html(issue);
             $userElem
                 .find('.currentStatus').html(user.get('currentStatus')).end()
-                .find('.currentId').html(user.get('currentId')).end()
+                .find('.currentPriority')
+                    .attr('class', user.get('currentPriority') + ' currentPriority')
+                    //.removeClass().addClass(user.get('currentPriority') + ' currentPriority')
+                    .html(user.get('currentPriority')).end()
+                .find('.currentId')
+                    .attr('class', currentIdClass)
+                    .html(user.get('currentId')).end()
                 .find('.currentTime').html(user.get('currentTime')).end()
                 .find('.currentName').html(user.get('currentName'));
+            console.log("$userElem : ", $userElem);
             $('#content').isotope();
 
         }

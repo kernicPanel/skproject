@@ -288,6 +288,10 @@ ul.nav {
     line-height: 20px;
 }
 
+.user .current {
+    
+}
+
 .user .expand {
     float: right;
 }
@@ -323,7 +327,12 @@ ul.nav {
     margin-bottom: 4px;
 }
 
-.issues span {
+.issues span,
+.currentPriority.Bas,
+.currentPriority.Normal,
+.currentPriority.Haut,
+.currentPriority.Urgent,
+.currentPriority.Immédiat {
   padding: 1px 9px 2px;
   font-size: 12.025px;
   font-weight: bold;
@@ -335,23 +344,23 @@ ul.nav {
   border-radius: 9px;
 }
 
-.issues span.Bas {
+.Bas {
     background-color: #468847;
 }
 
-.issues span.Normal {
+.Normal {
     background-color: #2D6987;
 }
 
-.issues span.Haut {
+.Haut {
     background-color: #F89406;
 }
 
-.issues span.Urgent {
+.Urgent {
     background-color: #953B39;
 }
 
-.issues span.Immédiat {
+.Immédiat {
     background-color: #1A1A1A;
 }
 

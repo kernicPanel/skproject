@@ -70,7 +70,7 @@ var app = {
         });
 
         socket.on('getUsers::response', function(data){
-            console.log("getUsersIssues data : ", data);
+            //console.log("getUsersIssues data : ", data);
             app.views.skuserView.addUsers(data);
         });
 
@@ -80,7 +80,7 @@ var app = {
         });
 
         socket.on('updateCurrentIssue::response', function(data){
-            console.log("updateCurrentIssue data : ", data);
+            //console.log("updateCurrentIssue data : ", data);
             app.views.skuserView.updateCurrentIssue(data);
         });
 

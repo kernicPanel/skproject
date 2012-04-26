@@ -32,6 +32,9 @@ app.Collections.IssueList = Backbone.Collection.extend({
         return _(this.filter(function(data) {
             return data.get('assigned_to').id === id;
         }));
+    },
+    comparator : function(issue) {
+          return - issue.get('priority').id;
     }
 });
 
