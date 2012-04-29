@@ -12,6 +12,15 @@ var connect = require('connect'),
 
 //global.db = mongoose.connect(config.mongo.host);
 
+//sick socket default :/
+global.socket = {};
+global.socket.on = function(type, data) {
+    console.log(type, data);
+};
+global.socket.emit = function(type, data) {
+    console.log(type, data);
+};
+
 //Setup Express
 var server = express.createServer();
 server.configure(function(){
