@@ -24,6 +24,14 @@ app.Collections.IssueList = Backbone.Collection.extend({
     addIssues: function(data) {
         this.add(data);
     },
+    updateIssue: function(data) {
+        var issue = this.get(data.id);
+        //console.log("issue.get('assigned_to').name : ", issue.get('assigned_to').name);
+        issue.clear();
+        issue.set(data);
+        //console.log("issue.get('assigned_to').name : ", issue.get('assigned_to').name);
+        //this.trigger('change', this.get(data.id));
+    },
     assignedTo : function(id){
         if(id === "") {
             return this;

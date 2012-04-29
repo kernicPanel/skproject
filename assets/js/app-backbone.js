@@ -89,9 +89,20 @@ var app = {
             app.views.skprojectView.addProjects(data);
         });
 
+        socket.on('updateIssue', function (issue) {
+            //console.log('updateIssue : ', issue);
+            //app.collections.issueList.updateIssue(issue);
+            app.views.skuserView.updateIssue(issue);
+        });
+
+        socket.on('createIssue', function (data) {
+            console.log('createIssue : ', data);
+        });
+
         socket.on('log', function(data){
             console.log("data : ", data);
         });
+
     });
   }
 };
@@ -101,3 +112,6 @@ $(function() {
     app.init();
 
 });
+var updateIssue = function() {
+    socket.emit('syncIssues');
+};

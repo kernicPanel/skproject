@@ -327,7 +327,9 @@ ul.nav {
     margin-bottom: 4px;
 }
 
-.issues span,
+.issues span.priority,
+.issues span.tracker,
+.issues span.status,
 .currentPriority.Bas,
 .currentPriority.Normal,
 .currentPriority.Haut,
@@ -344,23 +346,23 @@ ul.nav {
   border-radius: 9px;
 }
 
-.Bas {
+span.priority.Bas {
     background-color: #468847;
 }
 
-.Normal {
+span.priority.Normal {
     background-color: #2D6987;
 }
 
-.Haut {
+span.priority.Haut {
     background-color: #F89406;
 }
 
-.Urgent {
+span.priority.Urgent {
     background-color: #953B39;
 }
 
-.Immédiat {
+span.priority.Immédiat {
     background-color: #1A1A1A;
 }
 

@@ -15,10 +15,11 @@ script(id="skuser", type="text/html")
 
 script(id="userIssue", type="text/html")
   li.issue
-    span(class='{{priority}}') {{priority}}
+    span(class='{{priority}} priority') {{priority}}
     a.showIssue(data-issue='{{issueId}}')
       span.badge{{issueId}}
-      {{project}} : {{subject}}
+      span.project{{project}} :
+        span.subject{{subject}}
     .issueContent(id='{{issueDivId}}')
       .info
         span.tracker {{tracker}}
