@@ -21,7 +21,7 @@
 	"should": "*"
   },
   "scripts": {
-    "test": "make test"
+    "test": "mocha"
   },
   "engine": "node >= 0.6.6"
 }
