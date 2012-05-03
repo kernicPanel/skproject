@@ -1,5 +1,4 @@
 [![Build Status](http://travis-ci.org/kernicPanel/skproject.png)](http://travis-ci.org/kernicPanel/skproject)
-"!http://travis-ci.org/kernicPanel/skproject.png!":http://travis-ci.org/kernicPanel/skproject
 
 run "npm install" in root to install modules dependencies.
 
