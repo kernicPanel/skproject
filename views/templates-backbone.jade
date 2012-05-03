@@ -1,0 +1,59 @@
+script(id="skuser", type="text/html")
+  .user.well.span4
+    h1.name  {{name}}
+    .current
+      span.currentId  {{currentId}}
+      span.currentPriority  {{currentPriority}}
+    p Tâche 
+      span.currentStatus {{currentStatus}} :
+      span.currentTime  {{currentTime}}
+    p.currentName  {{currentName}}
+    a.showIssues(data-user='{{id}}') Tâches assignées
+      span.count.badge  {{count}}
+      i.icon-chevron-down
+    ul.issues(id='{{issuesId}}')
+
+script(id="userIssue", type="text/html")
+  li.issue
+    span(class='{{priority}} priority') {{priority}}
+    a.showIssue(data-issue='{{issueId}}')
+      span.badge{{issueId}}
+      span.project{{project}} :
+        span.subject{{subject}}
+    .issueContent(id='{{issueDivId}}')
+      .info
+        span.tracker {{tracker}}
+        span.status {{status}}
+      {{#description}}
+      pre.desc {{description}}
+      {{/description}}
+      a.showJournal(data-issue='{{issueId}}') Voir les notes
+      .journal
+
+script(id="journal", type="text/html")
+  {{#notes}}
+  p {{name}} - {{created_on}} :
+    pre {{notes}}
+  {{/notes}}
+
+
+script(id="skproject", type="text/html")
+  li.project
+    p 
+      a.showIssue
+        |  {{name}} ({{count}})
+    ul.issues.collapse(id='{{issuesId}}')
+
+script(id="projectIssue", type="text/html")
+  li.issue
+    a {{subject}} : 
+      b {{username}}
+    pre.desc {{description}}
+
+script(id="issue", type="text/html")
+    h1 {{subject}}
+    .hero-unit
+      pre.desc {{description}}
+    p
+      a.btn.btn-primary.btn-large Learn more »
+
