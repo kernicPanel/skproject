@@ -24,6 +24,7 @@ app.Views.SkUserView = Backbone.View.extend({
         "click .showJournal": "showJournal"
     },
     addUsers: function(data) {
+        console.log("data : ", data);
         var loopCount = data.length;
         for (var i = 0; i < loopCount; i++) {
             skuser = new app.Models.SkUser();
@@ -168,10 +169,30 @@ app.Views.SkUserView = Backbone.View.extend({
         //console.log("skuser : ", skuser);
         test = skuser;
         var currentIssue = skuser.get('current') || 'init';
+        var issue = app.collections.issueList.get(skuser.get('issueId'));
+        var priority = '';
+        if (issue) {
+            priority = issue.get('priority').name;
+            //console.log("priority : ", priority);
+            //currentIdClass = currentIdClass + ' badge';
+        }
+        console.groupCollapsed(skuser.get('name'), skuser);
+            console.log("skuser.get('id') : ", skuser.get('id'));
+            console.log("skuser.get('issueId') : ", skuser.get('issueId'));
+            console.log("skuser.get('issueName') : ", skuser.get('issueName'));
+            console.log("skuser.get('issueStatus') : ", skuser.get('issueStatus'));
+            console.log("priority : ", priority);
+            console.log("skuser.get('issueTime') : ", skuser.get('issueTime'));
+        console.groupEnd();
         var html = ich.skuser({
             name: skuser.get('name'),
             id: skuser.get('id'),
-            current: currentIssue,
+            //current: currentIssue,
+            currentId: skuser.get('issueId'),
+            currentName: skuser.get('issueName'),
+            currentStatus: skuser.get('issueStatus'),
+            currentPriority: priority,
+            currentTime: skuser.get('issueTime'),
             count: skuser.get('redmine').issues.length,
             issuesId: 'issues-' + skuser.get('id'),
             issuesIdTarget: '#issues-' + skuser.get('id')
