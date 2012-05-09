@@ -188,12 +188,12 @@ app.Views.SkUserView = Backbone.View.extend({
     updateCurrentIssue: function(data){
         var user = this.collection.where({login:data.login})[0];
         var issue = app.collections.issueList.get(data.issueId);
-        console.log("issue : ", issue);
+        //console.log("issue : ", issue);
         var priority = '';
         var currentIdClass = 'currentId';
         if (issue) {
             priority = issue.get('priority').name;
-            console.log("priority : ", priority);
+            //console.log("priority : ", priority);
             currentIdClass = currentIdClass + ' badge';
         }
         if (user) {
@@ -219,7 +219,7 @@ app.Views.SkUserView = Backbone.View.extend({
                     .html(user.get('currentId')).end()
                 .find('.currentTime').html(user.get('currentTime')).end()
                 .find('.currentName').html(user.get('currentName'));
-            console.log("$userElem : ", $userElem);
+            //console.log("$userElem : ", $userElem);
             $('#content').isotope();
 
         }
