@@ -10,17 +10,6 @@ var connect = require('connect'),
     host = (process.env.HOST || config.server.host),
     test = require('./lib/test.js');
 
-//global.db = mongoose.connect(config.mongo.host);
-
-//sick socket default :/
-global.socket = {};
-global.socket.on = function(type, data) {
-    console.log(type, data);
-};
-global.socket.emit = function(type, data) {
-    console.log(type, data);
-};
-
 //Setup Express
 var server = express.createServer();
 server.configure(function(){
@@ -57,40 +46,22 @@ server.listen( port, host);
 //Setup Socket.IO
 var io = io.listen(server);
 io.set('log level', 1);
-global.io = io;
-io.sockets.on('connection', function(socket){
-    global.socket = socket;
-  console.log('Client Connected');
-  socket.on('message', function(data){
-    socket.broadcast.emit('server_message',data);
-    socket.emit('server_message',data);
-    socket.emit('server_message',test.echo());
-    socket.emit('server_message','ECHO TOTO');
-  });
-  socket.on('disconnect', function(){
-    console.log('Client Disconnected.');
-  });
-});
-
 
 //init lib modules
 var redmine = require('./lib/redmine.js');
-/*
- *var redmine = require('./lib/redmine.js'),
- *    mongo = require('./lib/mongo.js');
- */
-/*
- *redmine.sync(null, function(){
- *    mongo.initObjects( null, function(){} );
- *});
- */
-
 redmine.init();
-
-//mongo.initObjects( null, function(){} );
 
 var irc = require('./lib/irc.js');
 irc.init();
+
+io.sockets.on('connection', function(socket){
+    redmine.io(socket);
+    irc.io(socket);
+
+    socket.on('disconnect', function(){
+        console.log('Client Disconnected.');
+    });
+});
 
 ///////////////////////////////////////////
 //              Routes                   //
