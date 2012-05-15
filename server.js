@@ -70,17 +70,9 @@ io.sockets.on('connection', function(socket){
 /////// ADD ALL YOUR ROUTES HERE  /////////
 
 server.get('/', function(req,res){
-  io.sockets.on('connection', function(socket){
-      global.push = true;
-      global.socket = socket;
-      socket.on('disconnect', function(){
-          console.log('Client Disconnected.');
-          global.push = false;
-      });
-  });
   res.render('index-' + config.clientFramework+ '.jade', {
     locals : {
-              title : 'Your Page Title',
+              title : host + ':' + port + ' | skProject | ' + config.clientFramework ,
               description: 'Your Page Description',
               author: 'Your Name',
               analyticssiteid: 'XXXXXXX'
