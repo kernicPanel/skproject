@@ -8,7 +8,7 @@ var connect = require('connect'),
 
 //Setup Express
 global.server = express.createServer();
-server.config = require('./lib/config');
+server.config = require('./lib/config.js');
 server.port = (process.env.PORT || server.config.server.port);
 server.host = (process.env.HOST || server.config.server.host);
 server.configure(function(){
