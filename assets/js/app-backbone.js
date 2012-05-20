@@ -32,8 +32,8 @@ var app = {
     });
 
     $('#setusers').click(function() {
-        socket.emit('setUsersIssues', function (data) {
-          console.log(data);
+        socket.emit('setUsersIssues', function (err, data) {
+          console.log('setUsers click', data);
         });
     });
 
