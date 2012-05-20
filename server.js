@@ -51,10 +51,10 @@ server.listen( server.port, server.host);
 //var ioManager = require('.lib/ioManager.js');
 //ioManager.init();
 
-var eventsManager = require('./lib/eventsManager.js');
+server.eventsManager = require('./lib/eventsManager.js');
 
-var redmine = require('./lib/redmine.js');
-redmine.init();
+server.redmine = require('./lib/redmine.js');
+server.redmine.init();
 
 //var irc = require('./lib/irc.js');
 //irc.init();
