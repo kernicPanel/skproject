@@ -3,7 +3,6 @@
 //setup Dependencies
 var connect = require('connect'),
     express = require('express'),
-    //io = require('socket.io'),
     mongoose = require('mongoose'),
     test = require('./lib/test.js');
 
@@ -43,14 +42,6 @@ server.error(function(err, req, res, next){
 });
 server.listen( server.port, server.host);
 
-////Setup Socket.IO
-//var io = io.listen(server);
-//io.set('log level', 1);
-
-//init lib modules
-//var ioManager = require('.lib/ioManager.js');
-//ioManager.init();
-
 server.eventsManager = require('./lib/eventsManager.js');
 
 server.redmine = require('./lib/redmine.js');
@@ -59,17 +50,6 @@ server.redmine.init();
 server.irc = require('./lib/irc.js');
 server.irc.init();
 
-/*
- *io.sockets.on('connection', function(socket){
- *    eventsManager.connect(socket);
- *    //redmine.io(socket);
- *    //irc.io(socket);
- *
- *    socket.on('disconnect', function(){
- *        console.log('Client Disconnected.');
- *    });
- *});
- */
 
 ///////////////////////////////////////////
 //              Routes                   //

@@ -1,4 +1,6 @@
 language: node_js
 node_js:
    - 0.6
-before_script: node server.js
+before_script:
+   - node server.js
+   - ln -s ./lib/config.js ./lib/config.example.js
