@@ -1,17 +1,17 @@
-global.config = require('./lib/config');
 //console.log("config : ", config);
 
 //setup Dependencies
 var connect = require('connect'),
     express = require('express'),
-    io = require('socket.io'),
+    //io = require('socket.io'),
     mongoose = require('mongoose'),
-    port = (process.env.PORT || config.server.port),
-    host = (process.env.HOST || config.server.host),
     test = require('./lib/test.js');
 
 //Setup Express
-var server = express.createServer();
+global.server = express.createServer();
+server.config = require('./lib/config');
+server.port = (process.env.PORT || server.config.server.port);
+server.host = (process.env.HOST || server.config.server.host);
 server.configure(function(){
     server.set('views', __dirname + '/views');
     server.set('view options', { layout: false });
@@ -41,11 +41,11 @@ server.error(function(err, req, res, next){
                 },status: 500 });
     }
 });
-server.listen( port, host);
+server.listen( server.port, server.host);
 
-//Setup Socket.IO
-var io = io.listen(server);
-io.set('log level', 1);
+////Setup Socket.IO
+//var io = io.listen(server);
+//io.set('log level', 1);
 
 //init lib modules
 //var ioManager = require('.lib/ioManager.js');
@@ -59,15 +59,17 @@ redmine.init();
 //var irc = require('./lib/irc.js');
 //irc.init();
 
-io.sockets.on('connection', function(socket){
-    eventsManager.connect(socket);
-    //redmine.io(socket);
-    //irc.io(socket);
-
-    socket.on('disconnect', function(){
-        console.log('Client Disconnected.');
-    });
-});
+/*
+ *io.sockets.on('connection', function(socket){
+ *    eventsManager.connect(socket);
+ *    //redmine.io(socket);
+ *    //irc.io(socket);
+ *
+ *    socket.on('disconnect', function(){
+ *        console.log('Client Disconnected.');
+ *    });
+ *});
+ */
 
 ///////////////////////////////////////////
 //              Routes                   //
@@ -76,9 +78,9 @@ io.sockets.on('connection', function(socket){
 /////// ADD ALL YOUR ROUTES HERE  /////////
 
 server.get('/', function(req,res){
-  res.render('index-' + config.clientFramework+ '.jade', {
+  res.render('index-' + server.config.clientFramework+ '.jade', {
     locals : {
-              title : host + ':' + port + ' | skProject | ' + config.clientFramework ,
+              title : server.host + ':' + server.port + ' | skProject | ' + server.config.clientFramework ,
               description: 'Your Page Description',
               author: 'Your Name',
               analyticssiteid: 'XXXXXXX'
@@ -115,5 +117,5 @@ function NotFound(msg){
 }
 
 
-console.log('Listening on '+ host + ':' + port );
-console.log('Using client framework ' + config.clientFramework );
+console.log('Listening on '+ server.host + ':' + server.port );
+console.log('Using client framework ' + server.config.clientFramework );
