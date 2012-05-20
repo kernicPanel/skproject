@@ -54,18 +54,17 @@ describe('eventsManager', function(){
             client.disconnect();
         });
 
-        /*
-         *it('should emit "getUsers::response" socket.io event on "getUsers" socket.io event', function(done) {
-         *    var client = ioClient.connect(socketUrl, options);
-         *    client.on('redmine::connect', function() {
-         *    //client.on('connect', function(data) {
-         *        //client.on('getUsers::response', done);
-         *        client.emit('getUsers');
-         *        eventsManager.on('getUsers', done);
-         *    });
-         *    client.disconnect();
-         *});
-         */
+        it('should emit "getUsers::response" socket.io event on "getUsers" socket.io event', function(done) {
+            var client = ioClient.connect(socketUrl, options);
+            //client.on('redmine::connect', function() {
+            //client.on('connection', function() {
+            //client.on('connect', function(data) {
+                //client.on('getUsers::response', done);
+                client.emit('getUsers');
+                eventsManager.on('getUsers', done);
+            //});
+            client.disconnect();
+        });
     //});
 
 });

@@ -131,8 +131,8 @@ app.Views.SkUserView = Backbone.View.extend({
         console.log("$issueJournal : ", $issueJournal);
 
         if (!$issueJournal.data('loaded')) {
-            socket.emit('redmine::getCompleteIssue', issueId, function (data) {
-                console.log("journals : ", data.issue.journals);
+            socket.emit('redmine::getCompleteIssue', issueId, function (err, data) {
+                //console.log("journals : ", data.issue.journals);
                 var journals = data.issue.journals;
                 var loopCount = journals.length;
                 for (var i = 0; i < loopCount; i++) {
