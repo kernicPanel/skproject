@@ -48,15 +48,21 @@ var io = io.listen(server);
 io.set('log level', 1);
 
 //init lib modules
+//var ioManager = require('.lib/ioManager.js');
+//ioManager.init();
+
+var eventsManager = require('./lib/eventsManager.js');
+
 var redmine = require('./lib/redmine.js');
 redmine.init();
 
-var irc = require('./lib/irc.js');
-irc.init();
+//var irc = require('./lib/irc.js');
+//irc.init();
 
 io.sockets.on('connection', function(socket){
-    redmine.io(socket);
-    irc.io(socket);
+    eventsManager.connect(socket);
+    //redmine.io(socket);
+    //irc.io(socket);
 
     socket.on('disconnect', function(){
         console.log('Client Disconnected.');

@@ -10,6 +10,7 @@
     "connect-assets": "=2.1.6",
     "irc": "git://github.com/martynsmith/node-irc.git",
     "socket.io": "0.9.2",
+    "socket.io-client": "0.9.6",
     "mongoose": "2.5.10",
     "cron": "git://github.com/ncb000gt/node-cron.git",
     "bcrypt": "=0.5.0",

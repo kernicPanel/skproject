@@ -62,16 +62,16 @@ var app = {
     socket.on('redmine::connect', function(data){
         console.log("redmine connect : ");
         socket.emit('getUsers', function (data) {
-            console.log(data);
-        });
-
-        socket.emit('getIssues', function (data) {
             //console.log(data);
         });
 
         socket.on('getUsers::response', function(data){
             //console.log("getUsersIssues data : ", data);
             app.views.skuserView.addUsers(data);
+        });
+
+        socket.emit('getIssues', function (data) {
+            //console.log(data);
         });
 
         socket.on('getIssues::response', function(data){
