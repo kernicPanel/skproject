@@ -80,7 +80,7 @@ var app = {
         });
 
         socket.on('updateCurrentIssue::response', function(data){
-            //console.log("updateCurrentIssue data : ", data);
+            console.log("updateCurrentIssue data : ", data);
             app.views.skuserView.updateCurrentIssue(data);
         });
 

@@ -56,8 +56,8 @@ server.eventsManager = require('./lib/eventsManager.js');
 server.redmine = require('./lib/redmine.js');
 server.redmine.init();
 
-//var irc = require('./lib/irc.js');
-//irc.init();
+server.irc = require('./lib/irc.js');
+server.irc.init();
 
 /*
  *io.sockets.on('connection', function(socket){
