@@ -3,4 +3,3 @@ node_js:
    - 0.6
 before_script:
    - ln -s ./config.example.js ./lib/config.js
-   - node server.js
