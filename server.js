@@ -43,6 +43,7 @@ server.error(function(err, req, res, next){
 server.listen( server.port, server.host);
 
 server.eventsManager = require('./lib/eventsManager.js');
+server.eventsManager.init(server);
 
 server.redmine = require('./lib/redmine.js');
 server.redmine.init();
