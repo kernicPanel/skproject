@@ -8,40 +8,25 @@ var basedir = path.join(__dirname, '..');
 var libdir = path.join(basedir, 'lib');
 
 //var server = require(path.join(basedir, 'server.js'));
-var config = require(path.join(libdir, 'config.js'));
+var config = require(path.join(libdir, 'config.example.js'));
 var host = (process.env.HOST || config.server.host);
-var port = (process.env.PORT || config.server.port);
+//var port = (process.env.PORT || config.server.port);
+var port = Math.floor(Math.random() * 10000);
 var socketUrl = 'http://' + host + ':' + port;
 var options ={
     transports: ['websocket'],
     'force new connection': true
 };
 
-console.log("socketUrl : ", socketUrl);
 var eventsManager = require(path.join(libdir, 'eventsManager.js'));
 eventsManager.init(port);
+var client = ioClient.connect(socketUrl, options);
 
-/*
- *eventsManager.on('*', function(err, data) {
- *    console.log("data : ", data);
- *    console.log("err : ", err);
- *});
- */
-
-eventsManager.emit('log', 'test emitter!!!!');
+console.log("mocha running : ");
 
 describe('eventsManager', function(){
 
     console.log("in describe ");
-    //describe('connect', function(){
-
-        var client = ioClient.connect(socketUrl, options);
-
-        /*
-         *after(function(done){
-         *    client.disconnect();
-         *});
-         */
 
         it('should be an object', function() {
             eventsManager.should.be.a('object');
@@ -104,8 +89,5 @@ describe('eventsManager', function(){
                 client.emit('getUsers', function(err, data) {
                 });
         });
-
-         //client.disconnect();
-    //});
 
 });
