@@ -9,7 +9,7 @@ var libdir = path.join(basedir, 'lib');
 var config = require(path.join(libdir, 'config.example.js'));
 var host = (process.env.HOST || config.server.host);
 //var port = (process.env.PORT || config.server.port);
-var port = Math.floor(Math.random() * 10000);
+var port = Math.floor(Math.random() * 1000 + 8000);
 var socketUrl = 'http://' + host + ':' + port;
 var options ={
     transports: ['websocket'],
