@@ -43,6 +43,27 @@ describe('eventsManager', function(){
         client.on('redmine::connect', done);
     });
 
+    it('should emit redmine::sync event on redmire::sync socket.io event', function(done) {
+        eventsManager.on('redmine::sync', function() {
+            done();
+        });
+        client.emit('redmine::sync', null);
+    });
+
+    it('should emit getDatabaseState event on getDatabaseState socket.io event', function(done) {
+        eventsManager.on('getDatabaseState', function() {
+            done();
+        });
+        client.emit('getDatabaseState', null);
+    });
+
+    it('should emit databaseState socket.io event on databaseState event', function(done) {
+        client.on('databaseState', function() {
+            done();
+        });
+        eventsManager.emit('databaseState', null);
+    });
+
     it('should emit "getUsers" event on "getUsers" socket.io event', function(done) {
         eventsManager.on('getUsers', function() {
             done();
