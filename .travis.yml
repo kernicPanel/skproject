@@ -4,4 +4,8 @@ node_js:
 before_script:
    - ln -s ./config.example.js ./lib/config.js
 notifications:
-  irc: "irc.freenode.net#kernicpanel"
+  irc:
+    channels:
+      - "irc.freenode.net#kernicpanel"
+    use_notice: true
+    skip_join: true
