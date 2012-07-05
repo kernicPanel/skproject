@@ -48,8 +48,11 @@ server.eventsManager.init(server);
 server.redmine = require('./lib/redmine.js');
 server.redmine.init();
 
-server.irc = require('./lib/irc.js');
-server.irc.init();
+server.redmineExtract = require('./lib/redmineExtract.js');
+server.redmineExtract.init();
+
+//server.irc = require('./lib/irc.js');
+//server.irc.init();
 
 
 ///////////////////////////////////////////
@@ -57,6 +60,17 @@ server.irc.init();
 ///////////////////////////////////////////
 
 /////// ADD ALL YOUR ROUTES HERE  /////////
+
+server.get('/extract/', function(req,res){
+  res.render('extract.jade', {
+    locals : {
+              title : server.host + ':' + server.port + ' | skProject | ' + server.config.clientFramework ,
+              description: 'Your Page Description',
+              author: 'Your Name',
+              analyticssiteid: 'XXXXXXX'
+            }
+  });
+});
 
 server.get('/', function(req,res){
   res.render('index-' + server.config.clientFramework+ '.jade', {
