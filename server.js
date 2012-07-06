@@ -61,7 +61,7 @@ server.redmineExtract.init();
 
 /////// ADD ALL YOUR ROUTES HERE  /////////
 
-server.get('/extract/', function(req,res){
+server.get('/extract', function(req,res){
   res.render('extract.jade', {
     locals : {
               title : server.host + ':' + server.port + ' | skProject | ' + server.config.clientFramework ,
