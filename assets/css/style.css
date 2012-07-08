@@ -465,6 +465,15 @@ span.priority.Immédiat {
   width: 6.382978723%;
 }
 
+th {
+    text-align: center;
+}
+
+th,
+td {
+    border: solid 1px #AAA;
+    padding: 3px 0.5em;
+}
 
 /* ==|== media queries ======================================================
    EXAMPLE Media Query for Responsive Design.
