@@ -23,8 +23,17 @@ var app = {
         console.log("redmine connect : ");
 
         $('#syncIssues').click(function() {
-            socket.emit('redmineExtract::sync', function (data) {
-              console.log(data);
+            socket.emit('redmineExtract::sync', function (err, data) {
+                console.log("err : ", err);
+                console.log("data : ", data);
+            });
+        });
+
+        $('#buildStats').click(function() {
+            socket.emit('redmineExtract::buildStats', function (err, data) {
+                console.log("err : ", err);
+                console.log("data : ", data);
+                console.log("stats builded !");
             });
         });
 
@@ -47,7 +56,7 @@ var app = {
             socket.emit('redmineExtract::getIssues', function(err, datas) {
                 $('#dialog-message').html('');
                 //console.log("err : ", err);
-                //console.log("datas[0] : ", datas[0]);
+                console.log("datas[0] : ", datas[0]);
                 display.init(datas);
             });
         });
@@ -107,7 +116,7 @@ var display = (function () {
         }
         delete loopCount;
         totalTime = Math.round(totalTime * 100) / 100;
-        return totalTime;
+        return totalTime.toString().replace('.', ',');
     };
 
     var firstStatus = function(data, type) {
@@ -178,7 +187,7 @@ var display = (function () {
              *console.log("refDate : ", refDate);
              *console.groupEnd();
              */
-            return diffRound;
+            return diffRound.toString().replace('.', ',');
         }
         else {
             return '';
