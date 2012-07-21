@@ -221,28 +221,29 @@ var display = (function () {
         delete loopCount;
     };
 
-    publicAccess.issue = function (data) {
+    publicAccess.issue = function (issue) {
         var $extract = $('#extract tbody');
         //var loopCount = datas.length;
         moment.lang('fr');
-        var dateDemande = formatMoment(data.created_on);
-        //var refDate = new Date(data.created_on);
+        var dateDemande = formatMoment(issue.created_on);
+        //var refDate = new Date(issue.created_on);
 
-        var refMoment = moment(data.created_on);
+        var refMoment = moment(issue.created_on);
         //var refMoment = dateDemande;
 
-        //var dateFirstPost = new Date (firstJournalDate(data));
-        var momentFirstPost = setMoment(firstJournalDate(data));
-        var momentAValider = setMoment(firstStatus(data, 'aValider'));
-        var momentLivre = setMoment(firstStatus(data, 'livre'));
-        var momentALivrer = setMoment(firstStatus(data, 'aLivrer'));
-        var momentFerme = setMoment(firstStatus(data, 'ferme'));
+        //var dateFirstPost = new Date (firstJournalDate(issue));
+        var momentFirstPost = setMoment(firstJournalDate(issue));
+        var momentAValider = setMoment(firstStatus(issue, 'aValider'));
+        var momentLivre = setMoment(firstStatus(issue, 'livre'));
+        var momentALivrer = setMoment(firstStatus(issue, 'aLivrer'));
+        var momentFerme = setMoment(firstStatus(issue, 'ferme'));
 
-        var dateFirstPost = formatMoment(firstJournalDate(data));
-        var dateAValider = formatMoment(firstStatus(data, 'aValider'));
-        var dateLivre = formatMoment(firstStatus(data, 'livre'));
-        var dateALivrer = formatMoment(firstStatus(data, 'aLivrer'));
-        var dateFerme = formatMoment(firstStatus(data, 'ferme'));
+        var dateFirstPost = formatMoment(firstJournalDate(issue));
+        var dateFirstPostServ = formatMoment(issue.stats.dateFirstPost);
+        var dateAValider = formatMoment(firstStatus(issue, 'aValider'));
+        var dateLivre = formatMoment(firstStatus(issue, 'livre'));
+        var dateALivrer = formatMoment(firstStatus(issue, 'aLivrer'));
+        var dateFerme = formatMoment(firstStatus(issue, 'ferme'));
 
         //var delaiDemande = diffMoment(dateDemande, refDate);
         var delaiFirstPost = diffMoment(momentFirstPost, refMoment);
@@ -252,14 +253,16 @@ var display = (function () {
         var delaiFerme = diffMoment(momentFerme, refMoment);
 
         var issueHtml = ich.issue({
-            nomSousProjet: data.project.name,
-            numTache: data.id,
-            nomTache: data.subject,
-            userDateDemande: data.author.name,
-            userDateFirstPost: firstJournalUser(data),
+            nomSousProjet: issue.project.name,
+            numTache: issue.id,
+            nomTache: issue.subject,
+            userDateDemande: issue.author.name,
+            userDateFirstPost: firstJournalUser(issue),
+            userDateFirstPostServ: issue.stats.userFirstPost,
 
             dateDemande: dateDemande,
             dateFirstPost: dateFirstPost,
+            dateFirstPostServ: dateFirstPostServ,
             dateAValider: dateAValider,
             dateLivre: dateLivre,
             dateALivrer: dateALivrer,
@@ -267,11 +270,12 @@ var display = (function () {
 
             //delaiDemande: delaiDemande,
             delaiFirstPost: delaiFirstPost,
+            delaiFirstPostServ: Math.ceil( moment.duration(issue.stats.delaiFirstPost).asHours() * 100 ) / 100,
             delaiAValider: delaiAValider,
             delaiLivre: delaiLivre,
             delaiALivrer: delaiALivrer,
             delaiFerme: delaiFerme,
-            time: sumTimeEntry(data)
+            time: sumTimeEntry(issue)
         });
         $extract.append($(issueHtml));
     };
