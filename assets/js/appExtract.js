@@ -231,7 +231,6 @@ var display = (function () {
         var refMoment = moment(issue.created_on);
         //var refMoment = dateDemande;
 
-        //var dateFirstPost = new Date (firstJournalDate(issue));
         var momentFirstPost = setMoment(firstJournalDate(issue));
         var momentAValider = setMoment(firstStatus(issue, 'aValider'));
         var momentLivre = setMoment(firstStatus(issue, 'livre'));
@@ -239,15 +238,10 @@ var display = (function () {
         var momentFerme = setMoment(firstStatus(issue, 'ferme'));
 
         var dateFirstPost = formatMoment(firstJournalDate(issue));
-        var dateFirstPostServ = issue.stats.dateFirstPost ? formatMoment(issue.stats.dateFirstPost): '';
         var dateAValider = formatMoment(firstStatus(issue, 'aValider'));
-        var dateAValiderServ = issue.stats.dateAValider ? formatMoment(issue.stats.dateAValider): '';
         var dateLivre = formatMoment(firstStatus(issue, 'livre'));
-        var dateLivreServ = issue.stats.dateLivre ? formatMoment(issue.stats.dateLivre): '';
         var dateALivrer = formatMoment(firstStatus(issue, 'aLivrer'));
-        var dateALivrerServ = issue.stats.dateALivrer ? formatMoment(issue.stats.dateALivrer): '';
         var dateFerme = formatMoment(firstStatus(issue, 'ferme'));
-        var dateFermeServ = issue.stats.dateFerme ? formatMoment(issue.stats.dateFerme): '';
 
         if (dateFirstPost != dateFirstPostServ ||
             dateAValider  != dateAValiderServ ||
@@ -256,43 +250,50 @@ var display = (function () {
             dateFerme     != dateFermeServ) {
             console.log("issue error : ", issue.id, issue);
         }
-        //var delaiDemande = diffMoment(dateDemande, refDate);
+
         var delaiFirstPost = diffMoment(momentFirstPost, refMoment);
         var delaiAValider = diffMoment(momentAValider, refMoment);
         var delaiLivre = diffMoment(momentLivre, refMoment);
         var delaiALivrer = diffMoment(momentALivrer, refMoment);
         var delaiFerme = diffMoment(momentFerme, refMoment);
 
+        var dateFirstPostServ = issue.stats.dateFirstPost ? formatMoment(issue.stats.dateFirstPost): '';
+        var dateAValiderServ = issue.stats.dateAValider ? formatMoment(issue.stats.dateAValider): '';
+        var dateLivreServ = issue.stats.dateLivre ? formatMoment(issue.stats.dateLivre): '';
+        var dateALivrerServ = issue.stats.dateALivrer ? formatMoment(issue.stats.dateALivrer): '';
+        var dateFermeServ = issue.stats.dateFerme ? formatMoment(issue.stats.dateFerme): '';
+
         var issueHtml = ich.issue({
             nomSousProjet: issue.project.name,
             numTache: issue.id,
             nomTache: issue.subject,
-            userDateDemande: issue.author.name,
-            userDateFirstPost: firstJournalUser(issue),
-            userDateFirstPostServ: issue.stats.userFirstPost,
-
             dateDemande: dateDemande,
+            userDateDemande: issue.author.name,
+
+            userDateFirstPost: firstJournalUser(issue),
             dateFirstPost: dateFirstPost,
-            dateFirstPostServ: dateFirstPostServ,
             dateAValider: dateAValider,
-            dateAValiderServ: dateAValiderServ,
             dateLivre: dateLivre,
-            dateLivreServ: dateLivreServ,
             dateALivrer: dateALivrer,
-            dateALivrerServ: dateALivrerServ,
             dateFerme: dateFerme,
+
+            delaiFirstPost: delaiFirstPost,
+            delaiAValider: delaiAValider,
+            delaiLivre: delaiLivre,
+            delaiALivrer: delaiALivrer,
+            delaiFerme: delaiFerme,
+
+            userDateFirstPostServ: issue.stats.userFirstPost,
+            dateFirstPostServ: dateFirstPostServ,
+            dateAValiderServ: dateAValiderServ,
+            dateLivreServ: dateLivreServ,
+            dateALivrerServ: dateALivrerServ,
             dateFermeServ: dateFermeServ,
 
-            //delaiDemande: delaiDemande,
-            delaiFirstPost: delaiFirstPost,
             delaiFirstPostServ: issue.stats.delaiFirstPost ? Math.round( moment.duration(issue.stats.delaiFirstPost).asHours() * 100 ) / 100 : null,
-            delaiAValider: delaiAValider,
             delaiAValiderServ: issue.stats.delaiAValider ? Math.round( moment.duration(issue.stats.delaiAValider).asHours() * 100 ) / 100 : null,
-            delaiLivre: delaiLivre,
             delaiLivreServ: issue.stats.delaiLivre ? Math.round( moment.duration(issue.stats.delaiLivre).asHours() * 100 ) / 100 : null,
-            delaiALivrer: delaiALivrer,
             delaiALivrerServ: issue.stats.delaiALivrer ? Math.round( moment.duration(issue.stats.delaiALivrer).asHours() * 100 ) / 100 : null,
-            delaiFerme: delaiFerme,
             delaiFermeServ: issue.stats.delaiFerme ? Math.round( moment.duration(issue.stats.delaiFerme).asHours() * 100 ) / 100 : null,
             time: sumTimeEntry(issue)
         });
