@@ -61,11 +61,11 @@ var app = {
             });
         });
 
-        socket.on('redmineExtract::getIssues::response', function(data) {
+        socket.on('redmineExtract::getIssues::response', function(issue) {
             $('#dialog-message').html('');
             //console.log("err : ", err);
-            console.log("data : ", data);
-            display.issue(data);
+            //console.log("issue : ", issue.id, issue);
+            display.issue(issue);
         });
 
         socket.on('log', function(data){
@@ -239,12 +239,23 @@ var display = (function () {
         var momentFerme = setMoment(firstStatus(issue, 'ferme'));
 
         var dateFirstPost = formatMoment(firstJournalDate(issue));
-        var dateFirstPostServ = formatMoment(issue.stats.dateFirstPost);
+        var dateFirstPostServ = issue.stats.dateFirstPost ? formatMoment(issue.stats.dateFirstPost): '';
         var dateAValider = formatMoment(firstStatus(issue, 'aValider'));
+        var dateAValiderServ = issue.stats.dateAValider ? formatMoment(issue.stats.dateAValider): '';
         var dateLivre = formatMoment(firstStatus(issue, 'livre'));
+        var dateLivreServ = issue.stats.dateLivre ? formatMoment(issue.stats.dateLivre): '';
         var dateALivrer = formatMoment(firstStatus(issue, 'aLivrer'));
+        var dateALivrerServ = issue.stats.dateALivrer ? formatMoment(issue.stats.dateALivrer): '';
         var dateFerme = formatMoment(firstStatus(issue, 'ferme'));
+        var dateFermeServ = issue.stats.dateFerme ? formatMoment(issue.stats.dateFerme): '';
 
+        if (dateFirstPost != dateFirstPostServ ||
+            dateAValider  != dateAValiderServ ||
+            dateLivre     != dateLivreServ ||
+            dateALivrer   != dateALivrerServ ||
+            dateFerme     != dateFermeServ) {
+            console.log("issue error : ", issue.id, issue);
+        }
         //var delaiDemande = diffMoment(dateDemande, refDate);
         var delaiFirstPost = diffMoment(momentFirstPost, refMoment);
         var delaiAValider = diffMoment(momentAValider, refMoment);
@@ -264,17 +275,25 @@ var display = (function () {
             dateFirstPost: dateFirstPost,
             dateFirstPostServ: dateFirstPostServ,
             dateAValider: dateAValider,
+            dateAValiderServ: dateAValiderServ,
             dateLivre: dateLivre,
+            dateLivreServ: dateLivreServ,
             dateALivrer: dateALivrer,
+            dateALivrerServ: dateALivrerServ,
             dateFerme: dateFerme,
+            dateFermeServ: dateFermeServ,
 
             //delaiDemande: delaiDemande,
             delaiFirstPost: delaiFirstPost,
-            delaiFirstPostServ: Math.ceil( moment.duration(issue.stats.delaiFirstPost).asHours() * 100 ) / 100,
+            delaiFirstPostServ: issue.stats.delaiFirstPost ? Math.round( moment.duration(issue.stats.delaiFirstPost).asHours() * 100 ) / 100 : null,
             delaiAValider: delaiAValider,
+            delaiAValiderServ: issue.stats.delaiAValider ? Math.round( moment.duration(issue.stats.delaiAValider).asHours() * 100 ) / 100 : null,
             delaiLivre: delaiLivre,
+            delaiLivreServ: issue.stats.delaiLivre ? Math.round( moment.duration(issue.stats.delaiLivre).asHours() * 100 ) / 100 : null,
             delaiALivrer: delaiALivrer,
+            delaiALivrerServ: issue.stats.delaiALivrer ? Math.round( moment.duration(issue.stats.delaiALivrer).asHours() * 100 ) / 100 : null,
             delaiFerme: delaiFerme,
+            delaiFermeServ: issue.stats.delaiFerme ? Math.round( moment.duration(issue.stats.delaiFerme).asHours() * 100 ) / 100 : null,
             time: sumTimeEntry(issue)
         });
         $extract.append($(issueHtml));
