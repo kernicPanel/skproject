@@ -64,7 +64,7 @@ var app = {
         socket.on('redmineExtract::getIssues::response', function(issue) {
             $('#dialog-message').html('');
             //console.log("err : ", err);
-            //console.log("issue : ", issue.id, issue);
+            console.log("issue : ", issue.id, issue);
             display.issue(issue);
         });
 
@@ -265,12 +265,16 @@ var display = (function () {
         var dateALivrerServ = issue.stats.dateALivrer ? formatMoment(issue.stats.dateALivrer): '';
         var dateFermeServ = issue.stats.dateFerme ? formatMoment(issue.stats.dateFerme): '';
 
-        var delaiFirstPostServ = issue.stats.delaiFirstPost ? Math.round( moment.duration(issue.stats.delaiFirstPost).asHours() * 100 ) / 100 : null;
+        //var delaiFirstPostServ = issue.stats.delaiFirstPost ? Math.round( moment.duration(issue.stats.delaiFirstPost).asHours() * 100 ) / 100 : null;
+        var delaiFirstPostServ = issue.stats.delaiFirstPost;
         var delaiAValiderServ = issue.stats.delaiAValider ? Math.round( moment.duration(issue.stats.delaiAValider).asHours() * 100 ) / 100 : null;
         var delaiLivreServ = issue.stats.delaiLivre ? Math.round( moment.duration(issue.stats.delaiLivre).asHours() * 100 ) / 100 : null;
         var delaiALivrerServ = issue.stats.delaiALivrer ? Math.round( moment.duration(issue.stats.delaiALivrer).asHours() * 100 ) / 100 : null;
-        var delaiFermeServ = issue.stats.delaiFerme ? Math.round( moment.duration(issue.stats.delaiFerme).asHours() * 100 ) / 100 : null;
+        //var delaiFermeServ = issue.stats.delaiFerme ? Math.round( moment.duration(issue.stats.delaiFerme).asHours() * 100 ) / 100 : null;
+        var delaiFermeServ = issue.stats.delaiFerme;
 
+        console.log("delaiFirstPostServ : ", delaiFirstPostServ);
+        console.log("delaiFirstPost : ", delaiFirstPost);
         console.log("issue.stats.delaiFerme : ", issue.stats.delaiFerme);
         console.log("momentFerme : ", firstStatus(issue, 'ferme'));
 
