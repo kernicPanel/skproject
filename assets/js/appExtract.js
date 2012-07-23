@@ -243,13 +243,15 @@ var display = (function () {
         var dateALivrer = formatMoment(firstStatus(issue, 'aLivrer'));
         var dateFerme = formatMoment(firstStatus(issue, 'ferme'));
 
-        if (dateFirstPost != dateFirstPostServ ||
-            dateAValider  != dateAValiderServ ||
-            dateLivre     != dateLivreServ ||
-            dateALivrer   != dateALivrerServ ||
-            dateFerme     != dateFermeServ) {
-            console.log("issue error : ", issue.id, issue);
-        }
+        /*
+         *if (dateFirstPost != dateFirstPostServ ||
+         *    dateAValider  != dateAValiderServ ||
+         *    dateLivre     != dateLivreServ ||
+         *    dateALivrer   != dateALivrerServ ||
+         *    dateFerme     != dateFermeServ) {
+         *    console.log("issue error : ", issue.id, issue);
+         *}
+         */
 
         var delaiFirstPost = diffMoment(momentFirstPost, refMoment);
         var delaiAValider = diffMoment(momentAValider, refMoment);
@@ -262,6 +264,15 @@ var display = (function () {
         var dateLivreServ = issue.stats.dateLivre ? formatMoment(issue.stats.dateLivre): '';
         var dateALivrerServ = issue.stats.dateALivrer ? formatMoment(issue.stats.dateALivrer): '';
         var dateFermeServ = issue.stats.dateFerme ? formatMoment(issue.stats.dateFerme): '';
+
+        var delaiFirstPostServ = issue.stats.delaiFirstPost ? Math.round( moment.duration(issue.stats.delaiFirstPost).asHours() * 100 ) / 100 : null;
+        var delaiAValiderServ = issue.stats.delaiAValider ? Math.round( moment.duration(issue.stats.delaiAValider).asHours() * 100 ) / 100 : null;
+        var delaiLivreServ = issue.stats.delaiLivre ? Math.round( moment.duration(issue.stats.delaiLivre).asHours() * 100 ) / 100 : null;
+        var delaiALivrerServ = issue.stats.delaiALivrer ? Math.round( moment.duration(issue.stats.delaiALivrer).asHours() * 100 ) / 100 : null;
+        var delaiFermeServ = issue.stats.delaiFerme ? Math.round( moment.duration(issue.stats.delaiFerme).asHours() * 100 ) / 100 : null;
+
+        console.log("issue.stats.delaiFerme : ", issue.stats.delaiFerme);
+        console.log("momentFerme : ", firstStatus(issue, 'ferme'));
 
         var issueHtml = ich.issue({
             nomSousProjet: issue.project.name,
@@ -290,11 +301,20 @@ var display = (function () {
             dateALivrerServ: dateALivrerServ,
             dateFermeServ: dateFermeServ,
 
-            delaiFirstPostServ: issue.stats.delaiFirstPost ? Math.round( moment.duration(issue.stats.delaiFirstPost).asHours() * 100 ) / 100 : null,
-            delaiAValiderServ: issue.stats.delaiAValider ? Math.round( moment.duration(issue.stats.delaiAValider).asHours() * 100 ) / 100 : null,
-            delaiLivreServ: issue.stats.delaiLivre ? Math.round( moment.duration(issue.stats.delaiLivre).asHours() * 100 ) / 100 : null,
-            delaiALivrerServ: issue.stats.delaiALivrer ? Math.round( moment.duration(issue.stats.delaiALivrer).asHours() * 100 ) / 100 : null,
-            delaiFermeServ: issue.stats.delaiFerme ? Math.round( moment.duration(issue.stats.delaiFerme).asHours() * 100 ) / 100 : null,
+            /*
+             *delaiFirstPostServ: issue.stats.delaiFirstPost ? Math.round( moment.duration(issue.stats.delaiFirstPost).asHours() * 100 ) / 100 : null,
+             *delaiAValiderServ: issue.stats.delaiAValider ? Math.round( moment.duration(issue.stats.delaiAValider).asHours() * 100 ) / 100 : null,
+             *delaiLivreServ: issue.stats.delaiLivre ? Math.round( moment.duration(issue.stats.delaiLivre).asHours() * 100 ) / 100 : null,
+             *delaiALivrerServ: issue.stats.delaiALivrer ? Math.round( moment.duration(issue.stats.delaiALivrer).asHours() * 100 ) / 100 : null,
+             *delaiFermeServ: issue.stats.delaiFerme ? Math.round( moment.duration(issue.stats.delaiFerme).asHours() * 100 ) / 100 : null,
+             */
+
+            delaiFirstPostServ: delaiFirstPostServ,
+            delaiAValiderServ: delaiAValiderServ,
+            delaiLivreServ: delaiLivreServ,
+            delaiALivrerServ: delaiALivrerServ,
+            delaiFermeServ: delaiFermeServ,
+
             time: sumTimeEntry(issue)
         });
         $extract.append($(issueHtml));
