@@ -268,6 +268,7 @@ var display = (function () {
 
         //var delaiFirstPostServ = issue.stats.delaiFirstPost ? Math.round( moment.duration(issue.stats.delaiFirstPost).asHours() * 100 ) / 100 : null;
         var delaiFirstPostServ = issue.stats.delaiFirstPost;
+        var delaiFirstPostServJourOuvre = issue.stats.delaiFirstPostJourOuvre;
         //var delaiAValiderServ = issue.stats.delaiAValider ? Math.round( moment.duration(issue.stats.delaiAValider).asHours() * 100 ) / 100 : null;
         var delaiAValiderServ = issue.stats.delaiAValider;
         //var delaiLivreServ = issue.stats.delaiLivre ? Math.round( moment.duration(issue.stats.delaiLivre).asHours() * 100 ) / 100 : null;
@@ -385,6 +386,7 @@ var display = (function () {
              */
 
             delaiFirstPostServ: delaiFirstPostServ,
+            delaiFirstPostServJourOuvre: delaiFirstPostServJourOuvre,
             delaiAValiderServ: delaiAValiderServ,
             delaiLivreServ: delaiLivreServ,
             delaiALivrerServ: delaiALivrerServ,
