@@ -64,7 +64,7 @@ var app = {
         socket.on('redmineExtract::getIssues::response', function(issue) {
             $('#dialog-message').html('');
             //console.log("err : ", err);
-            console.log("issue : ", issue.id, issue);
+            //console.log("issue : ", issue.id, issue);
             display.issue(issue);
         });
 
@@ -194,10 +194,11 @@ var display = (function () {
              *console.log("refDate : ", refDate);
              *console.groupEnd();
              */
-            return diffRound.toString().replace('.', ',');
+            //return diffRound.toString().replace('.', ',');
+            return diffRound;
         }
         else {
-            return '';
+            return null;
         }
     };
 
@@ -267,16 +268,86 @@ var display = (function () {
 
         //var delaiFirstPostServ = issue.stats.delaiFirstPost ? Math.round( moment.duration(issue.stats.delaiFirstPost).asHours() * 100 ) / 100 : null;
         var delaiFirstPostServ = issue.stats.delaiFirstPost;
-        var delaiAValiderServ = issue.stats.delaiAValider ? Math.round( moment.duration(issue.stats.delaiAValider).asHours() * 100 ) / 100 : null;
-        var delaiLivreServ = issue.stats.delaiLivre ? Math.round( moment.duration(issue.stats.delaiLivre).asHours() * 100 ) / 100 : null;
-        var delaiALivrerServ = issue.stats.delaiALivrer ? Math.round( moment.duration(issue.stats.delaiALivrer).asHours() * 100 ) / 100 : null;
+        //var delaiAValiderServ = issue.stats.delaiAValider ? Math.round( moment.duration(issue.stats.delaiAValider).asHours() * 100 ) / 100 : null;
+        var delaiAValiderServ = issue.stats.delaiAValider;
+        //var delaiLivreServ = issue.stats.delaiLivre ? Math.round( moment.duration(issue.stats.delaiLivre).asHours() * 100 ) / 100 : null;
+        var delaiLivreServ = issue.stats.delaiLivre;
+        //var delaiALivrerServ = issue.stats.delaiALivrer ? Math.round( moment.duration(issue.stats.delaiALivrer).asHours() * 100 ) / 100 : null;
+        var delaiALivrerServ = issue.stats.delaiALivrer;
         //var delaiFermeServ = issue.stats.delaiFerme ? Math.round( moment.duration(issue.stats.delaiFerme).asHours() * 100 ) / 100 : null;
         var delaiFermeServ = issue.stats.delaiFerme;
 
-        console.log("delaiFirstPostServ : ", delaiFirstPostServ);
-        console.log("delaiFirstPost : ", delaiFirstPost);
-        console.log("issue.stats.delaiFerme : ", issue.stats.delaiFerme);
-        console.log("momentFerme : ", firstStatus(issue, 'ferme'));
+        /*
+         *console.log("delaiFirstPostServ : ", delaiFirstPostServ);
+         *console.log("delaiFirstPost : ", delaiFirstPost);
+         *console.log("issue.stats.delaiFerme : ", issue.stats.delaiFerme);
+         *console.log("momentFerme : ", firstStatus(issue, 'ferme'));
+         */
+
+        /*
+         *if (dateFirstPost != dateFirstPostServ ||
+         *    dateAValider  != dateAValiderServ ||
+         *    dateLivre     != dateLivreServ ||
+         *    dateALivrer   != dateALivrerServ ||
+         *    dateFerme     != dateFermeServ) {
+         *    console.error("issue error : ", issue.id, issue);
+         *    console.log("dateFirstPost : ", dateFirstPost, "dateFirstPostServ : ", dateFirstPostServ);
+         *    console.log("dateAValider : ", dateAValider, "dateAValiderServ : ", dateAValiderServ);
+         *    console.log("dateLivre : ", dateLivre, "dateLivreServ : ", dateLivreServ);
+         *    console.log("dateALivrer : ", dateALivrer, "dateALivrerServ : ", dateALivrerServ);
+         *    console.log("dateFerme : ", dateFerme, "dateFermeServ : ", dateFermeServ);
+         *}
+         */
+
+        if (dateFirstPost != dateFirstPostServ) {
+            console.error("issue error : ", issue.id, issue);
+            console.log("dateFirstPost : ", dateFirstPost, "dateFirstPostServ : ", dateFirstPostServ);
+        }
+
+        if ( dateAValider  != dateAValiderServ) {
+            console.error("issue error : ", issue.id, issue);
+            console.log("dateAValider : ", dateAValider, "dateAValiderServ : ", dateAValiderServ);
+        }
+
+        if (dateLivre     != dateLivreServ) {
+            console.error("issue error : ", issue.id, issue);
+            console.log("dateLivre : ", dateLivre, "dateLivreServ : ", dateLivreServ);
+        }
+
+        if (dateALivrer   != dateALivrerServ) {
+            console.error("issue error : ", issue.id, issue);
+            console.log("dateALivrer : ", dateALivrer, "dateALivrerServ : ", dateALivrerServ);
+        }
+
+        if (dateFerme     != dateFermeServ) {
+            console.error("issue error : ", issue.id, issue);
+            console.log("dateFerme : ", dateFerme, "dateFermeServ : ", dateFermeServ);
+        }
+
+        if (delaiFirstPost != delaiFirstPostServ) {
+            console.error("issue error : ", issue.id, issue);
+            console.log("delaiFirstPost : ", delaiFirstPost, "delaiFirstPostServ : ", delaiFirstPostServ);
+        }
+
+        if ( delaiAValider  != delaiAValiderServ) {
+            console.error("issue error : ", issue.id, issue);
+            console.log("delaiAValider : ", delaiAValider, "delaiAValiderServ : ", delaiAValiderServ);
+        }
+
+        if (delaiLivre     != delaiLivreServ) {
+            console.error("issue error : ", issue.id, issue);
+            console.log("delaiLivre : ", delaiLivre, "delaiLivreServ : ", delaiLivreServ);
+        }
+
+        if (delaiALivrer   != delaiALivrerServ) {
+            console.error("issue error : ", issue.id, issue);
+            console.log("delaiALivrer : ", delaiALivrer, "delaiALivrerServ : ", delaiALivrerServ);
+        }
+
+        if (delaiFerme     != delaiFermeServ) {
+            console.error("issue error : ", issue.id, issue);
+            console.log("delaiFerme : ", delaiFerme, "delaiFermeServ : ", delaiFermeServ);
+        }
 
         var issueHtml = ich.issue({
             nomSousProjet: issue.project.name,
