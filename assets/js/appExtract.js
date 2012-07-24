@@ -170,8 +170,9 @@ var display = (function () {
 
     var formatMoment = function(date) {
         if (date !== '') {
-            //return moment(date).format("D MMMM YYYY, hh:mm");
-            return moment(date).format("YY/MM/DD ddd HH:mm");
+            return moment(date).format("D MMMM YYYY ddd, HH:mm");
+            //return moment(date).format("YY/MM/DD ddd HH:mm");
+            //return moment(date).format("DD/MM/YY ddd HH:mm");
             //return new Date(date);
         }
         else {
@@ -238,11 +239,13 @@ var display = (function () {
         var momentALivrer = setMoment(firstStatus(issue, 'aLivrer'));
         var momentFerme = setMoment(firstStatus(issue, 'ferme'));
 
-        var dateFirstPost = formatMoment(firstJournalDate(issue));
-        var dateAValider = formatMoment(firstStatus(issue, 'aValider'));
-        var dateLivre = formatMoment(firstStatus(issue, 'livre'));
-        var dateALivrer = formatMoment(firstStatus(issue, 'aLivrer'));
-        var dateFerme = formatMoment(firstStatus(issue, 'ferme'));
+        /*
+         *var dateFirstPost = formatMoment(firstJournalDate(issue));
+         *var dateAValider = formatMoment(firstStatus(issue, 'aValider'));
+         *var dateLivre = formatMoment(firstStatus(issue, 'livre'));
+         *var dateALivrer = formatMoment(firstStatus(issue, 'aLivrer'));
+         *var dateFerme = formatMoment(firstStatus(issue, 'ferme'));
+         */
 
         /*
          *if (dateFirstPost != dateFirstPostServ ||
@@ -254,11 +257,13 @@ var display = (function () {
          *}
          */
 
-        var delaiFirstPost = diffMoment(momentFirstPost, refMoment);
-        var delaiAValider = diffMoment(momentAValider, refMoment);
-        var delaiLivre = diffMoment(momentLivre, refMoment);
-        var delaiALivrer = diffMoment(momentALivrer, refMoment);
-        var delaiFerme = diffMoment(momentFerme, refMoment);
+        /*
+         *var delaiFirstPost = diffMoment(momentFirstPost, refMoment);
+         *var delaiAValider = diffMoment(momentAValider, refMoment);
+         *var delaiLivre = diffMoment(momentLivre, refMoment);
+         *var delaiALivrer = diffMoment(momentALivrer, refMoment);
+         *var delaiFerme = diffMoment(momentFerme, refMoment);
+         */
 
         var dateFirstPostServ = issue.stats.dateFirstPost ? formatMoment(issue.stats.dateFirstPost): '';
         var dateAValiderServ = issue.stats.dateAValider ? formatMoment(issue.stats.dateAValider): '';
@@ -271,12 +276,16 @@ var display = (function () {
         var delaiFirstPostServJourOuvre = issue.stats.delaiFirstPostJourOuvre;
         //var delaiAValiderServ = issue.stats.delaiAValider ? Math.round( moment.duration(issue.stats.delaiAValider).asHours() * 100 ) / 100 : null;
         var delaiAValiderServ = issue.stats.delaiAValider;
+        var delaiAValiderServJourOuvre = issue.stats.delaiAValiderJourOuvre;
         //var delaiLivreServ = issue.stats.delaiLivre ? Math.round( moment.duration(issue.stats.delaiLivre).asHours() * 100 ) / 100 : null;
         var delaiLivreServ = issue.stats.delaiLivre;
+        var delaiLivreServJourOuvre = issue.stats.delaiLivreJourOuvre;
         //var delaiALivrerServ = issue.stats.delaiALivrer ? Math.round( moment.duration(issue.stats.delaiALivrer).asHours() * 100 ) / 100 : null;
         var delaiALivrerServ = issue.stats.delaiALivrer;
+        var delaiALivrerServJourOuvre = issue.stats.delaiALivrerJourOuvre;
         //var delaiFermeServ = issue.stats.delaiFerme ? Math.round( moment.duration(issue.stats.delaiFerme).asHours() * 100 ) / 100 : null;
         var delaiFermeServ = issue.stats.delaiFerme;
+        var delaiFermeServJourOuvre = issue.stats.delaiFermeJourOuvre;
 
         /*
          *console.log("delaiFirstPostServ : ", delaiFirstPostServ);
@@ -300,55 +309,57 @@ var display = (function () {
          *}
          */
 
-        if (dateFirstPost != dateFirstPostServ) {
-            console.error("issue error : ", issue.id, issue);
-            console.log("dateFirstPost : ", dateFirstPost, "dateFirstPostServ : ", dateFirstPostServ);
-        }
-
-        if ( dateAValider  != dateAValiderServ) {
-            console.error("issue error : ", issue.id, issue);
-            console.log("dateAValider : ", dateAValider, "dateAValiderServ : ", dateAValiderServ);
-        }
-
-        if (dateLivre     != dateLivreServ) {
-            console.error("issue error : ", issue.id, issue);
-            console.log("dateLivre : ", dateLivre, "dateLivreServ : ", dateLivreServ);
-        }
-
-        if (dateALivrer   != dateALivrerServ) {
-            console.error("issue error : ", issue.id, issue);
-            console.log("dateALivrer : ", dateALivrer, "dateALivrerServ : ", dateALivrerServ);
-        }
-
-        if (dateFerme     != dateFermeServ) {
-            console.error("issue error : ", issue.id, issue);
-            console.log("dateFerme : ", dateFerme, "dateFermeServ : ", dateFermeServ);
-        }
-
-        if (delaiFirstPost != delaiFirstPostServ) {
-            console.error("issue error : ", issue.id, issue);
-            console.log("delaiFirstPost : ", delaiFirstPost, "delaiFirstPostServ : ", delaiFirstPostServ);
-        }
-
-        if ( delaiAValider  != delaiAValiderServ) {
-            console.error("issue error : ", issue.id, issue);
-            console.log("delaiAValider : ", delaiAValider, "delaiAValiderServ : ", delaiAValiderServ);
-        }
-
-        if (delaiLivre     != delaiLivreServ) {
-            console.error("issue error : ", issue.id, issue);
-            console.log("delaiLivre : ", delaiLivre, "delaiLivreServ : ", delaiLivreServ);
-        }
-
-        if (delaiALivrer   != delaiALivrerServ) {
-            console.error("issue error : ", issue.id, issue);
-            console.log("delaiALivrer : ", delaiALivrer, "delaiALivrerServ : ", delaiALivrerServ);
-        }
-
-        if (delaiFerme     != delaiFermeServ) {
-            console.error("issue error : ", issue.id, issue);
-            console.log("delaiFerme : ", delaiFerme, "delaiFermeServ : ", delaiFermeServ);
-        }
+/*
+ *        if (dateFirstPost != dateFirstPostServ) {
+ *            console.error("issue error : ", issue.id, issue);
+ *            console.log("dateFirstPost : ", dateFirstPost, "dateFirstPostServ : ", dateFirstPostServ);
+ *        }
+ *
+ *        if ( dateAValider  != dateAValiderServ) {
+ *            console.error("issue error : ", issue.id, issue);
+ *            console.log("dateAValider : ", dateAValider, "dateAValiderServ : ", dateAValiderServ);
+ *        }
+ *
+ *        if (dateLivre     != dateLivreServ) {
+ *            console.error("issue error : ", issue.id, issue);
+ *            console.log("dateLivre : ", dateLivre, "dateLivreServ : ", dateLivreServ);
+ *        }
+ *
+ *        if (dateALivrer   != dateALivrerServ) {
+ *            console.error("issue error : ", issue.id, issue);
+ *            console.log("dateALivrer : ", dateALivrer, "dateALivrerServ : ", dateALivrerServ);
+ *        }
+ *
+ *        if (dateFerme     != dateFermeServ) {
+ *            console.error("issue error : ", issue.id, issue);
+ *            console.log("dateFerme : ", dateFerme, "dateFermeServ : ", dateFermeServ);
+ *        }
+ *
+ *        if (delaiFirstPost != delaiFirstPostServ) {
+ *            console.error("issue error : ", issue.id, issue);
+ *            console.log("delaiFirstPost : ", delaiFirstPost, "delaiFirstPostServ : ", delaiFirstPostServ);
+ *        }
+ *
+ *        if ( delaiAValider  != delaiAValiderServ) {
+ *            console.error("issue error : ", issue.id, issue);
+ *            console.log("delaiAValider : ", delaiAValider, "delaiAValiderServ : ", delaiAValiderServ);
+ *        }
+ *
+ *        if (delaiLivre     != delaiLivreServ) {
+ *            console.error("issue error : ", issue.id, issue);
+ *            console.log("delaiLivre : ", delaiLivre, "delaiLivreServ : ", delaiLivreServ);
+ *        }
+ *
+ *        if (delaiALivrer   != delaiALivrerServ) {
+ *            console.error("issue error : ", issue.id, issue);
+ *            console.log("delaiALivrer : ", delaiALivrer, "delaiALivrerServ : ", delaiALivrerServ);
+ *        }
+ *
+ *        if (delaiFerme     != delaiFermeServ) {
+ *            console.error("issue error : ", issue.id, issue);
+ *            console.log("delaiFerme : ", delaiFerme, "delaiFermeServ : ", delaiFermeServ);
+ *        }
+ */
 
         var issueHtml = ich.issue({
             nomSousProjet: issue.project.name,
@@ -357,18 +368,20 @@ var display = (function () {
             dateDemande: dateDemande,
             userDateDemande: issue.author.name,
 
-            userDateFirstPost: firstJournalUser(issue),
-            dateFirstPost: dateFirstPost,
-            dateAValider: dateAValider,
-            dateLivre: dateLivre,
-            dateALivrer: dateALivrer,
-            dateFerme: dateFerme,
-
-            delaiFirstPost: delaiFirstPost,
-            delaiAValider: delaiAValider,
-            delaiLivre: delaiLivre,
-            delaiALivrer: delaiALivrer,
-            delaiFerme: delaiFerme,
+/*
+ *            userDateFirstPost: firstJournalUser(issue),
+ *            dateFirstPost: dateFirstPost,
+ *            dateAValider: dateAValider,
+ *            dateLivre: dateLivre,
+ *            dateALivrer: dateALivrer,
+ *            dateFerme: dateFerme,
+ *
+ *            delaiFirstPost: delaiFirstPost,
+ *            delaiAValider: delaiAValider,
+ *            delaiLivre: delaiLivre,
+ *            delaiALivrer: delaiALivrer,
+ *            delaiFerme: delaiFerme,
+ */
 
             userDateFirstPostServ: issue.stats.userFirstPost,
             dateFirstPostServ: dateFirstPostServ,
@@ -386,14 +399,27 @@ var display = (function () {
              */
 
             delaiFirstPostServ: delaiFirstPostServ,
-            delaiFirstPostServJourOuvre: delaiFirstPostServJourOuvre,
             delaiAValiderServ: delaiAValiderServ,
             delaiLivreServ: delaiLivreServ,
             delaiALivrerServ: delaiALivrerServ,
             delaiFermeServ: delaiFermeServ,
 
+            delaiFirstPostServJourOuvre: delaiFirstPostServJourOuvre,
+            delaiFirstPostServJourOuvre: delaiFirstPostServJourOuvre,
+            delaiAValiderServJourOuvre: delaiAValiderServJourOuvre,
+            delaiLivreServJourOuvre: delaiLivreServJourOuvre,
+            delaiALivrerServJourOuvre: delaiALivrerServJourOuvre,
+            delaiFermeServJourOuvre: delaiFermeServJourOuvre,
+
             time: sumTimeEntry(issue)
         });
+        if (delaiFirstPostServJourOuvre === 0) {
+            $(issueHtml).addClass('excluded');
+        }
+        if (dateFirstPostServ === dateFermeServ) {
+            //console.log("directClose : ", issue.id, issue);
+            $(issueHtml).addClass('excluded directClose');
+        }
         $extract.append($(issueHtml));
     };
 
