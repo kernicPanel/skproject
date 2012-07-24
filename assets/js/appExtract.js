@@ -125,6 +125,10 @@ var display = (function () {
         return totalTime.toString().replace('.', ',');
     };
 
+    var sumTimeEntry2 = function(total) {
+        return Math.round(total * 100) / 100;
+    };
+
     var firstStatus = function(data, type) {
         var journals = data.journals;
         //var iLoopCount = journals.length -1;
@@ -225,6 +229,7 @@ var display = (function () {
 
     publicAccess.issue = function (issue) {
         var $extract = $('#extract tbody');
+        //console.log("issue : ", issue);
         //var loopCount = datas.length;
         moment.lang('fr');
         var dateDemande = formatMoment(issue.created_on);
@@ -413,7 +418,8 @@ var display = (function () {
             delaiALivrerServJourOuvre: delaiALivrerServJourOuvre,
             delaiFermeServJourOuvre: delaiFermeServJourOuvre,
 
-            time: sumTimeEntry(issue)
+            //time: sumTimeEntry(issue)
+            time: sumTimeEntry2(issue.time_entriesTotal)
         });
         if (delaiFirstPostServJourOuvre === 0) {
             $(issueHtml).addClass('excluded');
