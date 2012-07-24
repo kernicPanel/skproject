@@ -230,14 +230,16 @@ var display = (function () {
         var dateDemande = formatMoment(issue.created_on);
         //var refDate = new Date(issue.created_on);
 
-        var refMoment = moment(issue.created_on);
+        //var refMoment = moment(issue.created_on);
         //var refMoment = dateDemande;
 
-        var momentFirstPost = setMoment(firstJournalDate(issue));
-        var momentAValider = setMoment(firstStatus(issue, 'aValider'));
-        var momentLivre = setMoment(firstStatus(issue, 'livre'));
-        var momentALivrer = setMoment(firstStatus(issue, 'aLivrer'));
-        var momentFerme = setMoment(firstStatus(issue, 'ferme'));
+        /*
+         *var momentFirstPost = setMoment(firstJournalDate(issue));
+         *var momentAValider = setMoment(firstStatus(issue, 'aValider'));
+         *var momentLivre = setMoment(firstStatus(issue, 'livre'));
+         *var momentALivrer = setMoment(firstStatus(issue, 'aLivrer'));
+         *var momentFerme = setMoment(firstStatus(issue, 'ferme'));
+         */
 
         /*
          *var dateFirstPost = formatMoment(firstJournalDate(issue));
