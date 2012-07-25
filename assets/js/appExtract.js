@@ -428,6 +428,10 @@ var display = (function () {
             //console.log("directClose : ", issue.id, issue);
             $(issueHtml).addClass('excluded directClose');
         }
+        if (issue.stats.userFirstPost === issue.author.name) {
+            //console.log("directClose : ", issue.id, issue);
+            $(issueHtml).addClass('sameUser');
+        }
         $extract.append($(issueHtml));
     };
 
