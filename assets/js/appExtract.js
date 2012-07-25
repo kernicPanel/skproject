@@ -277,6 +277,7 @@ var display = (function () {
         var dateLivreServ = issue.stats.dateLivre ? formatMoment(issue.stats.dateLivre): '';
         var dateALivrerServ = issue.stats.dateALivrer ? formatMoment(issue.stats.dateALivrer): '';
         var dateFermeServ = issue.stats.dateFerme ? formatMoment(issue.stats.dateFerme): '';
+        var dateRejeteServ = issue.stats.dateRejete ? formatMoment(issue.stats.dateRejete): '';
 
         //var delaiFirstPostServ = issue.stats.delaiFirstPost ? Math.round( moment.duration(issue.stats.delaiFirstPost).asHours() * 100 ) / 100 : null;
         var delaiFirstPostServ = issue.stats.delaiFirstPost;
@@ -293,6 +294,8 @@ var display = (function () {
         //var delaiFermeServ = issue.stats.delaiFerme ? Math.round( moment.duration(issue.stats.delaiFerme).asHours() * 100 ) / 100 : null;
         var delaiFermeServ = issue.stats.delaiFerme;
         var delaiFermeServJourOuvre = issue.stats.delaiFermeJourOuvre;
+        var delaiRejeteServ = issue.stats.delaiRejete;
+        var delaiRejeteServJourOuvre = issue.stats.delaiRejeteJourOuvre;
 
         /*
          *console.log("delaiFirstPostServ : ", delaiFirstPostServ);
@@ -396,6 +399,7 @@ var display = (function () {
             dateLivreServ: dateLivreServ,
             dateALivrerServ: dateALivrerServ,
             dateFermeServ: dateFermeServ,
+            dateRejeteServ: dateRejeteServ,
 
             /*
              *delaiFirstPostServ: issue.stats.delaiFirstPost ? Math.round( moment.duration(issue.stats.delaiFirstPost).asHours() * 100 ) / 100 : null,
@@ -410,13 +414,14 @@ var display = (function () {
             delaiLivreServ: delaiLivreServ,
             delaiALivrerServ: delaiALivrerServ,
             delaiFermeServ: delaiFermeServ,
+            delaiRejeteServ: delaiRejeteServ,
 
-            delaiFirstPostServJourOuvre: delaiFirstPostServJourOuvre,
             delaiFirstPostServJourOuvre: delaiFirstPostServJourOuvre,
             delaiAValiderServJourOuvre: delaiAValiderServJourOuvre,
             delaiLivreServJourOuvre: delaiLivreServJourOuvre,
             delaiALivrerServJourOuvre: delaiALivrerServJourOuvre,
             delaiFermeServJourOuvre: delaiFermeServJourOuvre,
+            delaiRejeteServJourOuvre: delaiRejeteServJourOuvre,
 
             //time: sumTimeEntry(issue)
             time: sumTimeEntry2(issue.time_entriesTotal)
@@ -424,7 +429,7 @@ var display = (function () {
         if (delaiFirstPostServJourOuvre === 0) {
             $(issueHtml).addClass('excluded');
         }
-        if (dateFirstPostServ === dateFermeServ) {
+        if (dateFirstPostServ === dateFermeServ || dateFirstPostServ === dateRejeteServ) {
             //console.log("directClose : ", issue.id, issue);
             $(issueHtml).addClass('excluded directClose');
         }
