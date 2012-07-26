@@ -78,6 +78,7 @@ var app = {
 
 
 $(function() {
+    $('html').removeClass('no-js').addClass('js');
     app.init();
 
 });
