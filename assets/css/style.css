@@ -488,6 +488,14 @@ tr.sameUser {
     color: #03F;
 }
 
+#content {
+    margin-top: 200px;
+}
+
+#statsReport {
+    position: fixed;
+}
+
 
 /* ==|== media queries ======================================================
    EXAMPLE Media Query for Responsive Design.
