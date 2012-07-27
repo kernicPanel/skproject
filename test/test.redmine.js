@@ -32,5 +32,11 @@
  *        });
  *    });
  *
+ *    describe('redmineRest', function(){
+ *        it('should be a function', function() {
+ *            redmineRest.should.be.a('function');
+ *        });
+ *    });
+ *
  *});
  */

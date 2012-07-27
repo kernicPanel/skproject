@@ -48,8 +48,8 @@ server.eventsManager.init(server);
 server.redmine = require('./lib/redmine.js');
 server.redmine.init();
 
-server.irc = require('./lib/irc.js');
-server.irc.init();
+//server.irc = require('./lib/irc.js');
+//server.irc.init();
 
 
 ///////////////////////////////////////////

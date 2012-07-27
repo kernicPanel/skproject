@@ -18,11 +18,26 @@ var options ={
 
 var eventsManager = require(path.join(libdir, 'eventsManager.js'));
 eventsManager.init(port);
+//eventsManager.setMaxListeners(500);
 var client = ioClient.connect(socketUrl, options);
+//var client = {};
 
 console.log("testing eventsManager on port " + port);
 
 describe('eventsManager', function(){
+/*
+ *    beforeEach(function(done){
+ *        client = ioClient.connect(socketUrl, options);
+ *        done();
+ *    });
+ *
+ *    afterEach(function(done){
+ *        client.disconnect();
+ *        client = {};
+ *        done();
+ *    });
+ */
+
     it('should be an object', function() {
         eventsManager.should.be.a('object');
     });
