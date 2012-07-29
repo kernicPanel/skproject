@@ -1,0 +1,7 @@
+p You need to be logged in, bastard!
+if error
+  p Erreur : #{error}
+
+form(method="post")
+  input(type="text", name="username", placeholder="Login", autofocus, required, value="#{username}")
+  input(type="submit")

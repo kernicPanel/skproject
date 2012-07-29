@@ -465,6 +465,37 @@ span.priority.Immédiat {
   width: 6.382978723%;
 }
 
+th {
+    text-align: center;
+}
+
+th,
+td {
+    border: solid 1px #AAA;
+    padding: 3px 0.5em;
+}
+
+tr.excluded {
+    background-color: #FD9C9C;
+}
+
+tr.excluded.directClose {
+    background-color: #f00;
+    font-weight: bold;
+}
+
+tr.sameUser {
+    color: #03F;
+}
+
+#content {
+    margin-top: 200px;
+}
+
+#statsReport {
+    position: fixed;
+}
+
 
 /* ==|== media queries ======================================================
    EXAMPLE Media Query for Responsive Design.

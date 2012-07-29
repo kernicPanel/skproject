@@ -1,7 +1,7 @@
 //
 //Users
 //
-app.Views.SkUserView = Backbone.View.extend({
+app.Views.TeamMemberView = Backbone.View.extend({
 
     //el: $('.nav-list'),
     el: $('#content'),
@@ -9,7 +9,7 @@ app.Views.SkUserView = Backbone.View.extend({
     initialize: function() {
         _.bindAll(this, 'render', 'addUsers', 'addUser', 'appendUser'); // remember: every function that uses 'this' as the current object should be in here
 
-        this.collection = new app.Collections.SkUserList();
+        this.collection = new app.Collections.TeamMemberList();
         this.collection.bind('add', this.appendUser); // collection event binder
 
         this.render();
@@ -27,7 +27,7 @@ app.Views.SkUserView = Backbone.View.extend({
         console.log("data : ", data);
         var loopCount = data.length;
         for (var i = 0; i < loopCount; i++) {
-            skuser = new app.Models.SkUser();
+            skuser = new app.Models.TeamMember();
             //skuserView.remove(skuser);
             skuser.set(data[i]);
             //skuser.set({id: data[i].login});

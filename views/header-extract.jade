@@ -1,0 +1,38 @@
+block header
+  .navbar.navbar-fixed-top
+      .navbar-inner
+          .container-fluid
+            a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+              span.icon-bar
+              span.icon-bar
+              span.icon-bar
+            a.brand(href='#') skProject
+            .nav-collapse
+              ul.nav
+                  li.dropdown
+                      a.dropdown-toggle(href='#', data-toggle='dropdown')
+                          | Admin
+                          b.caret
+                        ul.dropdown-menu
+                          li
+                              a#sync(href='#') Rebuild base
+                          li
+                              a#setusers(href='#') Create users
+                          li
+                              a#setprojects(href='#') Create projects
+                  li.divider-vertical
+                  li
+                      a#syncIssues(href='#') Sync issues
+                  li
+                      a#buildStats(href='#') Build Stats
+                  li
+                      a#getIssues(href='#') Get Issues
+                  li
+                      a#getSupport(href='#') Get Support
+                  li
+                      a#getGarantie(href='#') Get Garantie
+              p.navbar-text.pull-right
+                | Logged in as
+                a(href='#') username
+            //
+              /.nav-collapse 
