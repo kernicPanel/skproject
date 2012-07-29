@@ -4,6 +4,7 @@
 var connect = require('connect'),
     express = require('express'),
     mongoose = require('mongoose'),
+    mongoStore = require('connect-mongodb'),
     test = require('./lib/test.js');
 
 //Setup Express
@@ -12,21 +13,42 @@ server.config = require('./lib/config.js');
 server.port = (process.env.PORT || server.config.server.port);
 server.host = (process.env.HOST || server.config.server.host);
 server.configure(function(){
+    //server.use(express.logger());
+    server.use(express.logger({ format: '\x1b[1m:method\x1b[0m \x1b[33m:url\x1b[0m :response-time ms' }));
     server.set('views', __dirname + '/views');
     server.set('view options', { layout: false });
     server.use(connect.bodyParser());
     server.use(express.cookieParser());
     //server.use(express.session({ secret: "shhhhhhhhh!"}));
-    server.use(express.session({
-        // Private crypting key
-        "secret": "some private string",
-        // Internal session data storage engine, this is the default engine embedded with connect.
-        // Much more can be found as external modules (Redis, Mongo, Mysql, file...). look at "npm search connect session store"
-        "store":  new express.session.MemoryStore({ reapInterval: 60000 * 10 })
-    }));
+    /*
+     *server.use(express.session({
+     *    // Private crypting key
+     *    "secret": "some private string",
+     *    // Internal session data storage engine, this is the default engine embedded with connect.
+     *    // Much more can be found as external modules (Redis, Mongo, Mysql, file...). look at "npm search connect session store"
+     *    //"store":  new express.session.MemoryStore({ reapInterval: 60000 * 10 })
+     *    //"store":  mongoStore(server.config.mongo.host)
+     *}));
+     */
+    server.use(express.methodOverride());
     server.use(connect.static(__dirname + '/assets'));
     server.use(server.router);
 });
+
+var db = mongoose.connect(server.config.mongo.host);
+
+function mongoStoreConnectionArgs() {
+  return { dbname: db.databaseName,
+           host: db.host,
+           port: db.port,
+           username: db.username,
+           password: db.password };
+}
+
+server.use(express.session({
+  "secret": "some private string",
+  store: mongoStore(mongoStoreConnectionArgs())
+}));
 
 //setup the errors
 server.error(function(err, req, res, next){
@@ -58,8 +80,8 @@ server.redmine.init();
 server.redmineExtract = require('./lib/redmineExtract.js');
 server.redmineExtract.init();
 
-//server.irc = require('./lib/irc.js');
-//server.irc.init();
+server.irc = require('./lib/irc.js');
+server.irc.init();
 
 
 ///////////////////////////////////////////
@@ -81,8 +103,9 @@ function requireLogin (req, res, next) {
 
 /** Login form */
 server.get("/login", function (req, res) {
+    //req.session.message = 'Hello World';
     // Show form, default value = current username
-    res.render("login.jade", { "username": req.session.username, "error": null });
+    res.render("login.jade", { "username": '', "error": null });
 });
 server.post("/login", function (req, res) {
     var options = { "username": req.body.username, "error": null };
@@ -126,7 +149,8 @@ server.get('/session-index', [requireLogin], function (req, res, next) {
         locals : {
             name:  req.session.name,
         index:  req.session.index,
-        sessId: req.sessionID
+        sessId: req.sessionID,
+        message: req.session.message
         }
     });
     console.log("req.session.username : ", req.session.username);
