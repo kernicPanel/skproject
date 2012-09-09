@@ -1,12 +1,14 @@
-//console.log("config : ", config);
 
 //setup Dependencies
 var connect = require('connect'),
     express = require('express'),
     colors = require('colors'),
     mongoose = require('mongoose'),
-    mongoStore = require('connect-mongodb'),
-    test = require('./lib/test.js');
+    mongoStore = require('connect-mongodb');
+
+console.log('App start'.red.inverse );
+
+var SessionMongoose = require("session-mongoose");
 
 console.dir = require('cdir');
 
@@ -28,6 +30,12 @@ global.server = express.createServer();
 server.config = require('./lib/config.js');
 server.port = (process.env.PORT || server.config.server.port);
 server.host = (process.env.HOST || server.config.server.host);
+
+var mongooseSessionStore = new SessionMongoose({
+  url: server.config.mongo.session,
+  interval: 120000 // expiration check worker run interval in millisec (default: 60000)
+});
+
 server.configure(function(){
     //server.use(express.logger());
     server.use(express.logger({ format: '\x1b[1m:method\x1b[0m \x1b[33m:url\x1b[0m :response-time ms' }));
@@ -35,7 +43,10 @@ server.configure(function(){
     server.set('view options', { layout: false });
     server.use(connect.bodyParser());
     server.use(express.cookieParser());
-    server.use(express.session({ secret: "shhhhhhhhh!"}));
+    server.use(express.session({
+      secret: "shhhhhhhhh!",
+      store: mongooseSessionStore
+    }));
     /*
      *server.use(express.session({
      *    // Private crypting key
@@ -68,6 +79,7 @@ server.configure(function(){
  *}));
  */
 
+
 //setup the errors
 server.error(function(err, req, res, next){
     if (err instanceof NotFound) {
@@ -98,8 +110,8 @@ server.redmine.init();
 server.redmineExtract = require('./lib/redmineExtract.js');
 server.redmineExtract.init();
 
-server.irc = require('./lib/irc.js');
-server.irc.init();
+//server.irc = require('./lib/irc.js');
+//server.irc.init();
 
 
 ///////////////////////////////////////////
@@ -166,8 +178,8 @@ server.post("/redmine-key", function (req, res) {
             firstname:  user.firstname,
             lastname:  user.lastname,
             apiKey: req.body.key,
-            lastLoginOn: user.last_login_on,
-            createdOn: user.created_on,
+            last_login_on: user.last_login_on,
+            created_on: user.created_on,
             mail: user.mail,
             id: user.id
           }
@@ -183,8 +195,8 @@ server.post("/create-user", function (req, res) {
   var confirmPassword = req.body.confirmPassword;
   var firstname = req.body.firstname;
   var lastname = req.body.lastname;
-  var lastLoginOn = req.body.lastLoginOn;
-  var createdOn = req.body.createdOn;
+  var last_login_on = req.body.last_login_on;
+  var created_on = req.body.created_on;
   var mail = req.body.mail;
   var id = req.body.id;
 
@@ -195,8 +207,8 @@ server.post("/create-user", function (req, res) {
           login:  login,
           firstname:  firstname,
           lastname:  lastname,
-          lastLoginOn: lastLoginOn,
-          createdOn: createdOn,
+          last_login_on: last_login_on,
+          created_on: created_on,
           mail: mail,
           id: id
         }
@@ -227,60 +239,11 @@ server.post("/login", function (req, res) {
       res.redirect('/');
     }
   });
-    /*
-     *var options = { "username": req.body.username, "error": null };
-     *if (!req.body.username) {
-     *    options.error = "User name is required";
-     *    res.render("login.jade", options);
-     *} else if (req.body.username == req.session.username) {
-     *    // User has not changed username, accept it as-is
-     *    res.redirect("/");
-     *} else if (!req.body.username.match(/^[a-zA-Z0-9\-_]{3,}$/)) {
-     *    options.error = "User name must have at least 3 alphanumeric characters";
-     *    res.render("login.jade", options);
-     *} else {
-     *    // Validate if username is free
-     *    req.sessionStore.all(function (err, sessions) {
-     *        if (!err) {
-     *            var found = false;
-     *            for (var i=0; i<sessions.length; i++) {
-     *                var session = JSON.parse(sessions[i]); // Si les sessions sont stockées en JSON
-     *                if (session.username == req.body.username) {
-     *                    err = "User name already used by someone else";
-     *                    found = true;
-     *                    break;
-     *                }
-     *            }
-     *        }
-     *        if (err) {
-     *            options.error = ""+err;
-     *            res.render("login", options);
-     *        } else {
-     *            req.session.username = req.body.username;
-     *            res.redirect("/");
-     *        }
-     *    });
-     *}
-     */
 });
 
 server.get('/logout', function (req, res) {
   req.session.username = null;
   res.redirect('/');
-});
-
-//server.get('/session-index', [requireLogin], function (req, res, next) {
-server.get('/session-index', function (req, res, next) {
-    req.session.index = (req.session.index || 0) + 1;
-    res.render('session-index.jade', {
-        locals : {
-            name:  req.session.name,
-        index:  req.session.index,
-        sessId: req.sessionID,
-        message: req.session.message
-        }
-    });
-    console.log("req.session.username : ", req.session.username);
 });
 
 server.get('/extract', function(req,res){
@@ -296,68 +259,16 @@ server.get('/extract', function(req,res){
 
 server.get("/account", [requireLogin], function (req, res) {
   server.redmine.getAppUser(req.session.username, function(err, data) {
-    console.log("data : ", data);
-    var login = data.login;
-    var apiKey = data.key;
-    console.log("apiKey : ", apiKey);
-    var firstname = data.firstname;
-    var lastname = data.lastname;
-    var lastLoginOn = data.lastLoginOn;
-    var createdOn = data.createdOn;
-    var mail = data.mail;
-    var id = data.id;
-    data.error = null;
-    res.render('account.jade', {
-      locals : data
-      /*
-       *locals : {
-       *  error: null,
-       *  login:  login,
-       *  firstname:  firstname,
-       *  lastname:  lastname,
-       *  lastLoginOn: lastLoginOn,
-       *  createdOn: createdOn,
-       *  mail: mail,
-       *  apiKey: apiKey,
-       *  id: id
-       *}
-       */
-    });
-    /*
-     *if (err) {
-     *  res.render("login.jade", {
-     *    username: '',
-     *    error: "Api Key doesn't exists"
-     *  });
-     *}
-     *else {
-     *  var user = data.user;
-     *  console.log("user : ", user);
-     *  res.render('create-user.jade', {
-     *    locals : {
-     *      login:  user.mail.split('@')[0],
-     *      firstname:  user.firstname,
-     *      lastname:  user.lastname,
-     *      apiKey: req.body.key,
-     *      lastLoginOn: user.last_login_on,
-     *      createdOn: user.created_on,
-     *      mail: user.mail,
-     *      id: user.id
-     *    }
-     *  });
-     *}
-     */
+    if (data) {
+      data.error = null;
+      res.render('account.jade', {
+        locals : data
+      });
+    }
   });
-    /*
-     *res.render("account.jade", {
-     *  login: '',
-     *  error: null
-     *});
-     */
 });
 
 server.get('/', [requireLogin], function(req,res){
-//server.get('/', function(req,res){
   res.render('index-' + server.config.clientFramework+ '.jade', {
     locals : {
               title : server.host + ':' + server.port + ' | skProject | ' + server.config.clientFramework ,

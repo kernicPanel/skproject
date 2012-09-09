@@ -9,6 +9,7 @@
     "jade": "0.20.0",
     "connect-assets": "=2.1.6",
     "connect-mongodb": "*",
+    "session-mongoose": "0.0.3",
     "irc": "git://github.com/martynsmith/node-irc.git",
     "socket.io": "0.9.5",
     "socket.io-client": "0.9.6",
