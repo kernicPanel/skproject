@@ -27,6 +27,7 @@ block header
                       a#getprojects(href='#') Get projects
               p.navbar-text.pull-right
                 | Logged in as
-                a(href='#') username
+                a(href='/account') #{username}
+                a(href='/logout') logout
             //
               /.nav-collapse 

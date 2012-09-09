@@ -16,7 +16,9 @@
     "cron": "git://github.com/ncb000gt/node-cron.git",
     "bcrypt": "=0.5.0",
     "stextile": "0.0.8",
-    "moment": "1.6.2"
+    "moment": "1.6.2",
+    "cdir": "*",
+    "colors": "*"
   },
   "devDependencies": {
     "vows": "0.5.x",
