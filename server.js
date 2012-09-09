@@ -258,7 +258,8 @@ server.get('/extract', function(req,res){
 });
 
 server.get("/account", [requireLogin], function (req, res) {
-  server.redmine.getAppUser(req.session.username, function(err, data) {
+  var requestLogin = { login: req.session.username };
+  server.redmine.getAppUser(requestLogin, function(err, data) {
     if (data) {
       data.error = null;
       res.render('account.jade', {
