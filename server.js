@@ -98,8 +98,8 @@ server.redmine.init();
 server.redmineExtract = require('./lib/redmineExtract.js');
 server.redmineExtract.init();
 
-//server.irc = require('./lib/irc.js');
-//server.irc.init();
+server.irc = require('./lib/irc.js');
+server.irc.init();
 
 
 ///////////////////////////////////////////
