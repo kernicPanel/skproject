@@ -62,6 +62,7 @@ server.configure(function(){
     server.use(server.router);
 });
 
+server.users = {};
 /*
  *var db = mongoose.connect(server.config.mongo.host);
  *
@@ -236,12 +237,16 @@ server.post("/login", function (req, res) {
     else {
       console.log("logged in ! : ");
       req.session.username = req.body.login;
+      server.users[req.session.username] = {};
+      server.redmine.connectUser( req.session.username );
       res.redirect('/');
     }
   });
 });
 
 server.get('/logout', function (req, res) {
+  server.redmine.disconnectUser( req.session.username );
+  delete server.users[req.session.username];
   req.session.username = null;
   res.redirect('/');
 });
