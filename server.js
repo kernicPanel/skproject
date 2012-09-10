@@ -123,13 +123,9 @@ var commonLocals = {
 
 var addLocals = function( newLocals, callback ) {
   newLocals = newLocals || {};
-  console.log("newLocals : ", newLocals);
   for (var key in commonLocals) {
     newLocals[key] = commonLocals[key];
-    console.log("newLocals[key] : ",key, ' : ' , newLocals[key]);
   }
-  console.log("commonLocals : ", commonLocals);
-  console.log("newLocals : ", newLocals);
   callback(null, newLocals);
 };
 
@@ -181,7 +177,7 @@ function requireLogin (req, res, next) {
 server.get("/login", function (req, res) {
     addLocals( null, function( err, locals) {
       locals.error = null;
-      locals.login = '';
+      locals.username = '';
       locals.title = 'Login | ' + locals.title;
       console.log("locals : ", locals);
       res.render('login.jade', {
@@ -196,9 +192,13 @@ server.post("/redmine-key", function (req, res) {
     //var redmineUser = server.redmine.getUserFromKey(req.body.key);
     server.redmine.getUserFromKey(req.body.key, function(err, data) {
       if (err) {
-        res.render("login.jade", {
-          username: '',
-          error: "Api Key doesn't exists"
+        addLocals( null, function( err, locals) {
+          locals.error = "Api Key doesn't exists";
+          locals.username = '';
+          locals.title = 'Login | ' + locals.title;
+          res.render('login.jade', {
+            locals : locals
+          });
         });
       }
       else {
@@ -207,7 +207,7 @@ server.post("/redmine-key", function (req, res) {
         res.render('create-user.jade', {
           locals : {
             error: null,
-            login:  user.mail.split('@')[0],
+            username:  user.mail.split('@')[0],
             firstname:  user.firstname,
             lastname:  user.lastname,
             apiKey: req.body.key,
@@ -223,7 +223,7 @@ server.post("/redmine-key", function (req, res) {
 });
 
 server.post("/create-user", function (req, res) {
-  var login = req.body.login;
+  var username = req.body.username;
   var password = req.body.password;
   var confirmPassword = req.body.confirmPassword;
   var firstname = req.body.firstname;
@@ -234,41 +234,65 @@ server.post("/create-user", function (req, res) {
   var id = req.body.id;
 
   if (password !== confirmPassword) {
+    addLocals( req.body, function( err, locals) {
+      locals.error = "passwords must match";
+      locals.title = 'Create user | ' + locals.title;
+      console.log("locals : ", locals);
       res.render('create-user.jade', {
-        locals : {
-          error: "passwords must match",
-          login:  login,
-          firstname:  firstname,
-          lastname:  lastname,
-          last_login_on: last_login_on,
-          created_on: created_on,
-          mail: mail,
-          id: id
-        }
+        locals : locals
       });
+    });
+      /*
+       *res.render('create-user.jade', {
+       *  locals : {
+       *    error: "passwords must match",
+       *    username:  username,
+       *    firstname:  firstname,
+       *    lastname:  lastname,
+       *    last_login_on: last_login_on,
+       *    created_on: created_on,
+       *    mail: mail,
+       *    id: id
+       *  }
+       *});
+       */
   }
   else {
     delete req.body.confirmPassword;
     server.redmine.createUser(req.body);
-    res.render('login.jade', {
-      login: login,
-      error: null
+    addLocals( null, function( err, locals) {
+      locals.error = null;
+      locals.username = username;
+      locals.title = 'Login | ' + locals.title;
+      res.render('login.jade', {
+        locals : locals
+      });
     });
+    /*
+     *res.render('login.jade', {
+     *  username: username,
+     *  error: null
+     *});
+     */
   }
 });
 
 server.post("/login", function (req, res) {
-  var login = req.body.login;
-  server.redmine.getAppUser(req.body, function(err, data) {
-    if (!data) {
-      res.render('login.jade', {
-        login: login,
-        error: "Wrong login or password"
+  var username = req.body.username;
+  server.redmine.login(req.body, function(err, isAuth) {
+    if (!isAuth) {
+      addLocals( null, function( err, locals) {
+        locals.error = "Wrong login or password";
+        locals.username = username;
+        locals.title = 'Login | ' + locals.title;
+        res.render('login.jade', {
+          locals : locals
+        });
       });
     }
     else {
       console.log("logged in ! : ");
-      req.session.username = req.body.login;
+      req.session.username = req.body.username;
       server.users[req.session.username] = {};
       server.redmine.connectUser( req.session.username, function(err, data){
         res.redirect('/');
@@ -278,12 +302,13 @@ server.post("/login", function (req, res) {
 });
 
 server.get('/logout', function (req, res) {
+  console.log("req.session.username : ", req.session.username);
   server.redmine.disconnectUser( req.session.username, function(err, data){
     delete server.users[req.session.username];
     req.session.username = null;
     console.log(" server.users: ", server.users);
-    res.redirect('/');
   });
+  res.redirect('/');
 });
 
 server.get('/extract', function(req,res){
@@ -298,7 +323,7 @@ server.get('/extract', function(req,res){
 });
 
 server.get("/account", [requireLogin], function (req, res) {
-  var requestLogin = { login: req.session.username };
+  var requestLogin = { username: req.session.username };
   server.redmine.getAppUser(requestLogin, function(err, data) {
     if (data) {
       addLocals( data, function() {
