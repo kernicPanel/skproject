@@ -114,10 +114,39 @@ server.redmineExtract.init();
 //server.irc = require('./lib/irc.js');
 //server.irc.init();
 
+var commonLocals = {
+  title: 'skProject | ' + server.config.clientFramework + ' | ' + server.host + ':' + server.port,
+  description: 'Your Page Description',
+  author: 'Your Name',
+  analyticssiteid: 'XXXXXXX'
+};
+
+var addLocals = function( newLocals, callback ) {
+  newLocals = newLocals || {};
+  console.log("newLocals : ", newLocals);
+  for (var key in commonLocals) {
+    newLocals[key] = commonLocals[key];
+    console.log("newLocals[key] : ",key, ' : ' , newLocals[key]);
+  }
+  console.log("commonLocals : ", commonLocals);
+  console.log("newLocals : ", newLocals);
+  callback(null, newLocals);
+};
 
 ///////////////////////////////////////////
 //              Routes                   //
 ///////////////////////////////////////////
+
+/*
+ *server.use(function(req, res, next){
+ *  res.locals.title = server.host + ':' + server.port + ' | skProject | ' + server.config.clientFramework;
+ *  res.locals.description = 'Your Page Description';
+ *  res.locals.author = 'Your Name';
+ *  res.locals.analyticssiteid = 'XXXXXXX';
+ *  res.locals.username = req.session.username;
+ *  next();
+ *});
+ */
 
 /////// ADD ALL YOUR ROUTES HERE  /////////
 
@@ -238,27 +267,30 @@ server.post("/login", function (req, res) {
       console.log("logged in ! : ");
       req.session.username = req.body.login;
       server.users[req.session.username] = {};
-      server.redmine.connectUser( req.session.username );
-      res.redirect('/');
+      server.redmine.connectUser( req.session.username, function(err, data){
+        res.redirect('/');
+      });
     }
   });
 });
 
 server.get('/logout', function (req, res) {
-  server.redmine.disconnectUser( req.session.username );
-  delete server.users[req.session.username];
-  req.session.username = null;
-  res.redirect('/');
+  server.redmine.disconnectUser( req.session.username, function(err, data){
+    delete server.users[req.session.username];
+    req.session.username = null;
+    console.log(" server.users: ", server.users);
+    res.redirect('/');
+  });
 });
 
 server.get('/extract', function(req,res){
   res.render('extract.jade', {
     locals : {
-              title : server.host + ':' + server.port + ' | skProject | ' + server.config.clientFramework ,
-              description: 'Your Page Description',
-              author: 'Your Name',
-              analyticssiteid: 'XXXXXXX'
-            }
+      title : server.host + ':' + server.port + ' | skProject | ' + server.config.clientFramework ,
+      description: 'Your Page Description',
+      author: 'Your Name',
+      analyticssiteid: 'XXXXXXX'
+    }
   });
 });
 
@@ -266,34 +298,58 @@ server.get("/account", [requireLogin], function (req, res) {
   var requestLogin = { login: req.session.username };
   server.redmine.getAppUser(requestLogin, function(err, data) {
     if (data) {
-      data.error = null;
-      res.render('account.jade', {
-        locals : data
+      addLocals( data, function() {
+        data.error = null;
+        data.username = req.session.username;
+        data.title = 'Account | ' + data.title;
+        console.log("data : ", data);
+        res.render('account.jade', {
+          locals : data
+        });
       });
     }
   });
 });
 
 server.get('/', [requireLogin], function(req,res){
-  res.render('index-' + server.config.clientFramework+ '.jade', {
-    locals : {
-              title : server.host + ':' + server.port + ' | skProject | ' + server.config.clientFramework ,
-              description: 'Your Page Description',
-              author: 'Your Name',
-              analyticssiteid: 'XXXXXXX',
-              username: req.session.username
-            }
+  //res.render('index-' + server.config.clientFramework+ '.jade', function() {});
+  /*
+   *res.render('index-' + server.config.clientFramework+ '.jade', function(err, html){
+   *  console.log("err : ", err);
+   *  console.log("html : ", html);
+   *});
+   */
+  addLocals( null, function( err, locals ) {
+    locals.error = null;
+    locals.username = req.session.username;
+    locals.title = 'Team | ' + locals.title;
+    res.render('index-' + server.config.clientFramework+ '.jade', {
+      locals : locals
+    });
   });
+  //var locals = addLocals();
+  //res.render('index-' + server.config.clientFramework+ '.jade', locals);
+  /*
+   *res.render('index-' + server.config.clientFramework+ '.jade', {
+   *  locals : {
+   *    title : server.host + ':' + server.port + ' | skProject | ' + server.config.clientFramework ,
+   *    description: 'Your Page Description',
+   *    author: 'Your Name',
+   *    analyticssiteid: 'XXXXXXX',
+   *    username: req.session.username
+   *  }
+   *});
+   */
 });
 
 server.get('/demo', function(req,res){
   res.render('index_demo.jade', {
     locals : {
-              title : 'Your Page Title',
-              description: 'Your Page Description',
-              author: 'Your Name',
-              analyticssiteid: 'XXXXXXX'
-            }
+      title : 'Your Page Title',
+      description: 'Your Page Description',
+      author: 'Your Name',
+      analyticssiteid: 'XXXXXXX'
+    }
   });
 });
 
