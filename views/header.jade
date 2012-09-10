@@ -25,9 +25,23 @@ block header
                       a(href='/') Team
                   li
                       a(href='/dashboard') Dashboard
-              p.navbar-text.pull-right
-                | Logged in as
-                a(href='/account') #{username}
-                a(href='/logout') logout
+
+                .btn-group.pull-right
+                  a.btn.dropdown-toggle(data-toggle='dropdown', href='#')
+                    | #{username}
+                    span.caret
+                  ul.dropdown-menu
+                    li
+                      a(href='/account') account
+                    li
+                      a(href='/logout') logout
+
+            //
+              ul.nav.pull-right
+                li
+                  | Logged in as
+                  a(href='/account') #{username}
+                li
+                  a(href='/logout') logout
             //
               /.nav-collapse 

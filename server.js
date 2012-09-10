@@ -179,11 +179,14 @@ function requireLogin (req, res, next) {
 
 /** Login form */
 server.get("/login", function (req, res) {
-    //req.session.message = 'Hello World';
-    // Show form, default value = current username
-    res.render("login.jade", {
-      login: '',
-      error: null
+    addLocals( null, function( err, locals) {
+      locals.error = null;
+      locals.login = '';
+      locals.title = 'Login | ' + locals.title;
+      console.log("locals : ", locals);
+      res.render('login.jade', {
+        locals : locals
+      });
     });
 });
 
