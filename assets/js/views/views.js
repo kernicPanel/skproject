@@ -12,6 +12,7 @@ app.Views.TeamMemberView = Backbone.View.extend({
         this.collection = new app.Collections.TeamMemberList();
         this.collection.bind('add', this.appendUser); // collection event binder
 
+
         this.render();
     },
 

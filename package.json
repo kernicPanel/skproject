@@ -8,14 +8,18 @@
     "express": "2.5.2",
     "jade": "0.20.0",
     "connect-assets": "=2.1.6",
+    "connect-mongodb": "*",
+    "session-mongoose": "0.0.3",
     "irc": "git://github.com/martynsmith/node-irc.git",
     "socket.io": "0.9.5",
     "socket.io-client": "0.9.6",
     "mongoose": "2.5.10",
     "cron": "git://github.com/ncb000gt/node-cron.git",
-    "bcrypt": "=0.5.0",
+    "bcrypt": "0.7.2",
     "stextile": "0.0.8",
-    "moment": "1.6.2"
+    "moment": "1.6.2",
+    "cdir": "*",
+    "colors": "*"
   },
   "devDependencies": {
     "vows": "0.5.x",
