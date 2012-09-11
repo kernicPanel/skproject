@@ -17,7 +17,7 @@ var app = {
     //Backbone.history.start();
     this.socket = socket = io.connect();
 
-    this.views.skuserView = new this.Views.SkUserView();
+    this.views.skuserView = new this.Views.TeamMemberView();
 
     this.views.skprojectView = new this.Views.SkProjectView();
 
@@ -70,11 +70,11 @@ var app = {
             console.log("getUsersIssues data : ", data);
             var loopCount = data.length;
             for (var i = 0; i < loopCount; i++) {
-                skuser = new app.Models.SkUser();
-                //skuserView.remove(skuser);
-                skuser.set(data[i]);
-                //skuser.set({id: data[i].login});
-                app.views.skuserView.addUser(skuser);
+                teamMember = new app.Models.TeamMember();
+                //skuserView.remove(teamMember);
+                teamMember.set(data[i]);
+                //teamMember.set({id: data[i].login});
+                app.views.skuserView.addUser(teamMember);
             }
             delete loopCount;
             $('.desc').hide().slideUp();

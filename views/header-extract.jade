@@ -22,26 +22,17 @@ block header
                               a#setprojects(href='#') Create projects
                   li.divider-vertical
                   li
-                      a(href='/') Team
+                      a#syncIssues(href='#') Sync issues
                   li
-                      a(href='/dashboard') Dashboard
-
-                .btn-group.pull-right
-                  a.btn.dropdown-toggle(data-toggle='dropdown', href='#')
-                    | #{username}
-                    span.caret
-                  ul.dropdown-menu
-                    li
-                      a(href='/account') account
-                    li
-                      a(href='/logout') logout
-
-            //
-              ul.nav.pull-right
-                li
-                  | Logged in as
-                  a(href='/account') #{username}
-                li
-                  a(href='/logout') logout
+                      a#buildStats(href='#') Build Stats
+                  li
+                      a#getIssues(href='#') Get Issues
+                  li
+                      a#getSupport(href='#') Get Support
+                  li
+                      a#getGarantie(href='#') Get Garantie
+              p.navbar-text.pull-right
+                | Logged in as
+                a(href='#') username
             //
               /.nav-collapse 

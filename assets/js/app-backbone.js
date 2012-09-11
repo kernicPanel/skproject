@@ -17,10 +17,16 @@ var app = {
     //Backbone.history.start();
     this.socket = socket = io.connect();
 
-    this.views.skuserView = new this.Views.SkUserView();
+    this.views.skuserView = new this.Views.TeamMemberView();
     this.collections.issueList = new this.Collections.IssueList();
 
     this.views.skprojectView = new this.Views.SkProjectView();
+
+    var resetIsotope = function() {
+      console.log("srrstr : ");
+      $('#content').isotope();
+    };
+    window.onresize = resetIsotope;
 
     //
     //Events

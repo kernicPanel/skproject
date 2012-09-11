@@ -1,0 +1,17 @@
+p Welcome #{firstname} #{lastname}
+
+if error
+  p Error : #{error}
+
+form(method="post", action="/create-user")
+  input(type="text", name="username", placeholder="Login", autofocus, required, value="#{username}")
+  input(type="password", name="password", placeholder="Password", required, value="")
+  input(type="password", name="confirmPassword", placeholder="Confirm password", required, value="")
+  input(type="hidden", name="firstname", value="#{firstname}")
+  input(type="hidden", name="lastname", value="#{lastname}")
+  input(type="hidden", name="key", value="#{apiKey}")
+  input(type="hidden", name="last_login_on", value="#{last_login_on}")
+  input(type="hidden", name="created_on", value="#{created_on}")
+  input(type="hidden", name="mail", value="#{mail}")
+  input(type="hidden", name="id", value="#{id}")
+  input(type="submit")

@@ -1,0 +1,57 @@
+!!! 5
+//if lt IE 7
+  html.no-js.ie6.oldie(lang='en')
+//if IE 7
+  html.no-js.ie7.oldie(lang='en')
+//if IE 8
+  html.no-js.ie8.oldie(lang='en')
+//[if gt IE 8]><!
+html.no-js(lang='en')
+  //<![end if]
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
+    title=title
+    meta(name="description", content=description)
+    meta(name="author", content=author)
+    meta(name="viewport", content='width=device-width, initial-scale=1')
+
+    link(rel='stylesheet', href='/css/bootstrap.css')
+    link(rel='stylesheet', href='/css/style.css')
+    link(rel='stylesheet', href='/css/bootstrap-responsive.css')
+
+  body
+    .navbar.navbar-fixed-top
+        .navbar-inner
+            .container-fluid
+              a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+              a.brand(href='#') skProject
+
+    .container
+      .row
+        #login.span6.offset3.well
+            if error
+              p.alert Error : #{error}
+
+            .row-fluid
+              .span6
+                h1 Login
+                form(method="post", action="/login")
+                  fieldset
+                    label(for="login") Login
+                    input(type="text", id="username", name="username", placeholder="Login", autofocus, required, value="#{username}")
+                  fieldset
+                    label(for="password") Password
+                    input(type="password", id="password", name="password", placeholder="Password", required, value="")
+                  button(type="submit", class="btn  btn-primary") Submit
+
+              .span6
+                h1 Sign in
+                form(method="post", action="/redmine-key")
+                  fieldset
+                    label(for="key") Redmine API key
+                    input(type="text", id="key", name="key", placeholder="Redmine API key", required, value="")
+                  button(type="submit", class="btn  btn-primary") Register

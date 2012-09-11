@@ -1,0 +1,38 @@
+script(id="stats", type="text/html")
+  table
+    tr
+      th
+      th nombre de demandes
+      th Ratio / total
+      th moyenne (h)
+      th moyenne (j)
+    tr
+      th Moins de 1h
+      td {{nbDemandes1h}}
+      td {{ratio1h}}
+      td {{moyenneHeure1h}}
+      td {{moyenneJour1h}}
+    tr
+      th Moins de 2h
+      td {{nbDemandes2h}}
+      td {{ratio2h}}
+      td {{moyenneHeure2h}}
+      td {{moyenneJour2h}}
+    tr
+      th Moins de 3h
+      td {{nbDemandes3h}}
+      td {{ratio3h}}
+      td {{moyenneHeure3h}}
+      td {{moyenneJour3h}}
+    tr
+      th Plus de 3h
+      td {{nbDemandesMore}}
+      td {{ratioMore}}
+      td {{moyenneHeureMore}}
+      td {{moyenneJourMore}}
+    tr
+      th Total
+      td {{nbDemandesTotal}}
+      td {{ratioTotal}}
+      td {{moyenneHeureTotal}}
+      td {{moyenneJourTotal}}

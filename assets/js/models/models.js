@@ -1,13 +1,13 @@
 //
 //Users
 //
-app.Models.SkUser = Backbone.Model.extend({
+app.Models.TeamMember = Backbone.Model.extend({
     initialize: function() {
     }
 });
 
-app.Collections.SkUserList = Backbone.Collection.extend({
-    model: app.Models.SkUser
+app.Collections.TeamMemberList = Backbone.Collection.extend({
+    model: app.Models.TeamMember
 });
 
 

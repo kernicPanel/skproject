@@ -1,7 +1,7 @@
 //
 //Users
 //
-app.Views.SkUserView = Backbone.View.extend({
+app.Views.TeamMemberView = Backbone.View.extend({
 
     //el: $('.nav-list'),
     el: $('#content'),
@@ -9,8 +9,9 @@ app.Views.SkUserView = Backbone.View.extend({
     initialize: function() {
         _.bindAll(this, 'render', 'addUsers', 'addUser', 'appendUser'); // remember: every function that uses 'this' as the current object should be in here
 
-        this.collection = new app.Collections.SkUserList();
+        this.collection = new app.Collections.TeamMemberList();
         this.collection.bind('add', this.appendUser); // collection event binder
+
 
         this.render();
     },
@@ -27,11 +28,11 @@ app.Views.SkUserView = Backbone.View.extend({
         console.log("data : ", data);
         var loopCount = data.length;
         for (var i = 0; i < loopCount; i++) {
-            skuser = new app.Models.SkUser();
-            //skuserView.remove(skuser);
-            skuser.set(data[i]);
-            //skuser.set({id: data[i].login});
-            this.addUser(skuser);
+            teamMember = new app.Models.TeamMember();
+            //skuserView.remove(teamMember);
+            teamMember.set(data[i]);
+            //teamMember.set({id: data[i].login});
+            this.addUser(teamMember);
         }
         delete loopCount;
         $('.desc, .issues').hide().slideUp();
@@ -162,43 +163,43 @@ app.Views.SkUserView = Backbone.View.extend({
             });
         }
     },
-    addUser: function(skuser) {
-        this.collection.add(skuser); // add skUser to collection; view is updated via event 'add'
+    addUser: function(teamMember) {
+        this.collection.add(teamMember); // add teamMember to collection; view is updated via event 'add'
     },
-    appendUser: function(skuser){
-        //console.log("skuser : ", skuser);
-        test = skuser;
-        var currentIssue = skuser.get('current') || 'init';
-        var issue = app.collections.issueList.get(skuser.get('issueId'));
+    appendUser: function(teamMember){
+        //console.log("teamMember : ", teamMember);
+        test = teamMember;
+        var currentIssue = teamMember.get('current') || 'init';
+        var issue = app.collections.issueList.get(teamMember.get('issueId'));
         var priority = '';
         if (issue) {
             priority = issue.get('priority').name;
             //console.log("priority : ", priority);
             //currentIdClass = currentIdClass + ' badge';
         }
-        console.groupCollapsed(skuser.get('name'), skuser);
-            console.log("skuser.get('id') : ", skuser.get('id'));
-            console.log("skuser.get('issueId') : ", skuser.get('issueId'));
-            console.log("skuser.get('issueName') : ", skuser.get('issueName'));
-            console.log("skuser.get('issueStatus') : ", skuser.get('issueStatus'));
+        console.groupCollapsed(teamMember.get('name'), teamMember);
+            console.log("teamMember.get('id') : ", teamMember.get('id'));
+            console.log("teamMember.get('issueId') : ", teamMember.get('issueId'));
+            console.log("teamMember.get('issueName') : ", teamMember.get('issueName'));
+            console.log("teamMember.get('issueStatus') : ", teamMember.get('issueStatus'));
             console.log("priority : ", priority);
-            console.log("skuser.get('issueTime') : ", skuser.get('issueTime'));
+            console.log("teamMember.get('issueTime') : ", teamMember.get('issueTime'));
         console.groupEnd();
-        var html = ich.skuser({
-            name: skuser.get('name'),
-            id: skuser.get('id'),
+        var html = ich.teamMember({
+            name: teamMember.get('name'),
+            id: teamMember.get('id'),
             //current: currentIssue,
-            currentId: skuser.get('issueId'),
-            currentName: skuser.get('issueName'),
-            currentStatus: skuser.get('issueStatus'),
+            currentId: teamMember.get('issueId'),
+            currentName: teamMember.get('issueName'),
+            currentStatus: teamMember.get('issueStatus'),
             currentPriority: priority,
-            currentTime: skuser.get('issueTime'),
-            count: skuser.get('redmine').issues.length,
-            issuesId: 'issues-' + skuser.get('id'),
-            issuesIdTarget: '#issues-' + skuser.get('id')
+            currentTime: teamMember.get('issueTime'),
+            count: teamMember.get('redmine').issues.length,
+            issuesId: 'issues-' + teamMember.get('id'),
+            issuesIdTarget: '#issues-' + teamMember.get('id')
         });
 
-        $(html).attr('id', 'skuser-' + skuser.get('id'));
+        $(html).attr('id', 'teamMember-' + teamMember.get('id'));
         $(this.el).append(html);
         $(this.el).on('shown hidden', function (e) {
             test = e;
@@ -227,8 +228,8 @@ app.Views.SkUserView = Backbone.View.extend({
                 currentTime: data.issueTime
             });
             var id = user.get('id');
-            var $userElem = $('#skuser-' + id);
-            //$('#skuser-' + id).find('.current').html(issue);
+            var $userElem = $('#teamMember-' + id);
+            //$('#teamMember-' + id).find('.current').html(issue);
             $userElem
                 .find('.currentStatus').html(user.get('currentStatus')).end()
                 .find('.currentPriority')
@@ -258,7 +259,7 @@ app.Views.SkUserView = Backbone.View.extend({
             console.log("assignedTo : ", assignedTo.id);
             app.collections.issueList.updateIssue(data);
             var id = user.get('id');
-            var $userElem = $('#skuser-' + id);
+            var $userElem = $('#teamMember-' + id);
             if (wasAssignedTo.id === assignedTo.id) {
                 console.log("update issue view : ");
                 var $issueElem = $('#issue-' + issue.get('id')).parents('.issue');
@@ -332,7 +333,7 @@ app.Views.IssueView = Backbone.View.extend({
         return this;
     },
     setUser: function(userId) {
-        this.el = $('#skuser-' + userId + ' ul.issues');
+        this.el = $('#teamMember-' + userId + ' ul.issues');
     },
     addIssue: function(issue) {
         this.collection.add(issue); // add issue to collection; view is updated via event 'add'
