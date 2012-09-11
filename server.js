@@ -31,7 +31,7 @@ server.config = require('./lib/config.js');
 server.port = (process.env.PORT || server.config.server.port);
 server.host = (process.env.HOST || server.config.server.host);
 
-var mongooseSessionStore = new SessionMongoose({
+server.sessionStore = new SessionMongoose({
   url: server.config.mongo.session,
   interval: 120000 // expiration check worker run interval in millisec (default: 60000)
 });
@@ -45,7 +45,8 @@ server.configure(function(){
     server.use(express.cookieParser());
     server.use(express.session({
       secret: "shhhhhhhhh!",
-      store: mongooseSessionStore
+      key: "express.sid",
+      store: server.sessionStore
     }));
     server.use(express.methodOverride());
     server.use(connect.static(__dirname + '/assets'));
@@ -118,11 +119,24 @@ var addLocals = function( newLocals, callback ) {
  */
 
 /////// ADD ALL YOUR ROUTES HERE  /////////
+server.addUser = function addUser ( username, callback ) {
+  console.log("server.users : ", server.users);
+  if (!server.users[username]) {
+    server.users[username] = {};
+  }
+  server.redmine.connectUser( username, function(err, data){
+    //res.redirect('/');
+    callback(err, data);
+  });
+}
+
 /** Middleware for limited access */
 function requireLogin (req, res, next) {
   if (req.session.username) {
     // User is authenticated, let him in
-    next();
+    server.addUser( req.session.username, function( err, data ){
+      next();
+    });
   } else {
     // Otherwise, we redirect him to login form
     res.redirect("/login");
@@ -157,14 +171,30 @@ server.post("/login", function (req, res) {
     }
     else {
       req.session.username = req.body.username;
-      server.users[req.session.username] = {};
-      server.redmine.connectUser( req.session.username, function(err, data){
+      server.addUser( req.body.username, function( err, data ){
         res.redirect('/');
       });
+      /*
+       *req.session.username = req.body.username;
+       *server.users[req.session.username] = {};
+       *server.redmine.connectUser( req.session.username, function(err, data){
+       *  res.redirect('/');
+       *});
+       */
     }
   });
 });
 
+
+server.get('/logout', function (req, res) {
+  console.log("req.session.username : ", req.session.username);
+  server.redmine.disconnectUser( req.session.username, function(err, data){
+    delete server.users[req.session.username];
+    req.session.username = null;
+    console.log(" server.users: ", server.users);
+  });
+  res.redirect('/');
+});
 
 server.post("/redmine-key", function (req, res) {
   server.redmine.getUserFromKey(req.body.key, function(err, data) {
@@ -241,16 +271,6 @@ server.post("/create-user", function (req, res) {
       });
     });
   }
-});
-
-server.get('/logout', function (req, res) {
-  console.log("req.session.username : ", req.session.username);
-  server.redmine.disconnectUser( req.session.username, function(err, data){
-    delete server.users[req.session.username];
-    req.session.username = null;
-    console.log(" server.users: ", server.users);
-  });
-  res.redirect('/');
 });
 
 server.get('/extract', function(req,res){

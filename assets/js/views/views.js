@@ -22,7 +22,10 @@ app.Views.TeamMemberView = Backbone.View.extend({
     events: {
         "click .showIssues": "showIssues",
         "click .showIssue": "showIssue",
-        "click .showJournal": "showJournal"
+        "click .showJournal": "showJournal",
+        "click .start": "start",
+        "click .pause": "pause",
+        "click .stop": "stop"
     },
     addUsers: function(data) {
         console.log("data : ", data);
@@ -114,7 +117,7 @@ app.Views.TeamMemberView = Backbone.View.extend({
     showIssue: function(event) {
         console.log("event.target : ", event.target);
         console.log("this : ", this);
-        var issueId = $(event.target).parents('a').data('issue');
+        var issueId = $(event.target).parents('li').data('issue');
         var $issue = $('#issue-' + issueId);
         $issue.slideToggle('fast', function() {
             $('#content').isotope({}, function() {
@@ -125,7 +128,7 @@ app.Views.TeamMemberView = Backbone.View.extend({
     showJournal: function(event) {
         console.log("event.target : ", event.target);
         console.log("this : ", this);
-        var issueId = $(event.target).data('issue');
+        var issueId = $(event.target).parents('li').data('issue');
         var $issue= $('#issue-' + issueId);
         $.scrollTo($issue.offset().top - 60, 400);
         var $issueJournal = $issue.find('.journal');
@@ -162,6 +165,24 @@ app.Views.TeamMemberView = Backbone.View.extend({
                 });
             });
         }
+    },
+    start: function(event) {
+        console.log("event.target : ", event.target);
+        console.log("this : ", this);
+        var issueId = $(event.target).parents('li').data('issue');
+        socket.emit('redmine::startIssue', issueId, function (err, data) {
+          console.log("data : ", data);
+        });
+    },
+    pause: function(event) {
+        socket.emit('redmine::pauseIssue', function (err, data) {
+          console.log("data : ", data);
+        });
+    },
+    stop: function(event) {
+        socket.emit('redmine::stopIssue', function (err, data) {
+          console.log("data : ", data);
+        });
     },
     addUser: function(teamMember) {
         this.collection.add(teamMember); // add teamMember to collection; view is updated via event 'add'
