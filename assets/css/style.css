@@ -235,7 +235,7 @@ ul.nav {
 }
 
 .navbar .brand {
-    padding: 8px 10px 12px;
+    padding: 4px 10px 0px;
 }
 
 .navbar .nav {
@@ -495,34 +495,34 @@ span.priority.Immédiat {
 }
 
 th {
-    text-align: center;
+  text-align: center;
 }
 
 th,
 td {
-    border: solid 1px #AAA;
-    padding: 3px 0.5em;
+  border: solid 1px #AAA;
+  padding: 3px 0.5em;
 }
 
 tr.excluded {
-    background-color: #FD9C9C;
+  background-color: #FD9C9C;
 }
 
 tr.excluded.directClose {
-    background-color: #f00;
-    font-weight: bold;
+  background-color: #f00;
+  font-weight: bold;
 }
 
 tr.sameUser {
-    color: #03F;
+  color: #03F;
 }
 
-#content {
-    margin-top: 200px;
+#extract {
 }
 
 #statsReport {
-    position: fixed;
+  background: #fff;
+  margin-bottom: 20px;
 }
 
 

@@ -22,6 +22,12 @@ var app = {
 
     this.views.skprojectView = new this.Views.SkProjectView();
 
+    var resetIsotope = function() {
+      console.log("srrstr : ");
+      $('#content').isotope();
+    };
+    window.onresize = resetIsotope;
+
     //
     //Events
     //

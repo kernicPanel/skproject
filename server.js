@@ -201,6 +201,16 @@ server.post("/redmine-key", function (req, res) {
           });
         });
       }
+      else if (!data) {
+        addLocals( null, function( err, locals) {
+          locals.error = "Api Key already registered";
+          locals.username = '';
+          locals.title = 'Login | ' + locals.title;
+          res.render('login.jade', {
+            locals : locals
+          });
+        });
+      }
       else {
         var user = data.user;
         console.log("user : ", user);
