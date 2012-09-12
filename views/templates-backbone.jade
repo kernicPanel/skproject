@@ -14,12 +14,15 @@ script(id="teamMember", type="text/html")
     ul.issues(id='{{issuesId}}')
 
 script(id="userIssue", type="text/html")
-  li.issue
+  li.issue(data-issue='{{issueId}}')
     span(class='{{priority}} priority') {{priority}}
-    a.showIssue(data-issue='{{issueId}}')
+    a.showIssue
       span.badge{{issueId}}
       span.project{{project}} :
         span.subject{{subject}}
+    button.start.btn-mini Start
+    button.pause.btn-mini Pause
+    button.stop.btn-mini Stop
     .issueContent(id='{{issueDivId}}')
       .info
         span.tracker {{tracker}}

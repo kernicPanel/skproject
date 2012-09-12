@@ -31,7 +31,7 @@ server.config = require('./lib/config.js');
 server.port = (process.env.PORT || server.config.server.port);
 server.host = (process.env.HOST || server.config.server.host);
 
-var mongooseSessionStore = new SessionMongoose({
+server.sessionStore = new SessionMongoose({
   url: server.config.mongo.session,
   interval: 120000 // expiration check worker run interval in millisec (default: 60000)
 });
@@ -45,41 +45,15 @@ server.configure(function(){
     server.use(express.cookieParser());
     server.use(express.session({
       secret: "shhhhhhhhh!",
-      store: mongooseSessionStore
+      key: "express.sid",
+      store: server.sessionStore
     }));
-    /*
-     *server.use(express.session({
-     *    // Private crypting key
-     *    "secret": "some private string",
-     *    // Internal session data storage engine, this is the default engine embedded with connect.
-     *    // Much more can be found as external modules (Redis, Mongo, Mysql, file...). look at "npm search connect session store"
-     *    //"store":  new express.session.MemoryStore({ reapInterval: 60000 * 10 })
-     *    //"store":  mongoStore(server.config.mongo.host)
-     *}));
-     */
     server.use(express.methodOverride());
     server.use(connect.static(__dirname + '/assets'));
     server.use(server.router);
 });
 
 server.users = {};
-/*
- *var db = mongoose.connect(server.config.mongo.host);
- *
- *function mongoStoreConnectionArgs() {
- *  return { dbname: db.databaseName,
- *           host: db.host,
- *           port: db.port,
- *           username: db.username,
- *           password: db.password };
- *}
- *
- *server.use(express.session({
- *  "secret": "some private string",
- *  store: mongoStore(mongoStoreConnectionArgs())
- *}));
- */
-
 
 //setup the errors
 server.error(function(err, req, res, next){
@@ -111,8 +85,8 @@ server.redmine.init();
 server.redmineExtract = require('./lib/redmineExtract.js');
 server.redmineExtract.init();
 
-server.irc = require('./lib/irc.js');
-server.irc.init();
+//server.irc = require('./lib/irc.js');
+//server.irc.init();
 
 var commonLocals = {
   title: 'skProject | ' + server.config.clientFramework + ' | ' + server.host + ':' + server.port,
@@ -145,28 +119,24 @@ var addLocals = function( newLocals, callback ) {
  */
 
 /////// ADD ALL YOUR ROUTES HERE  /////////
-
-/*
- *server.use(function (req, res, next) {
- *  if (req.session.loggedIn) {
- *    res.local('authenticated', true);
- *    app.users.findOne({ _id: mongodb.ObjectID.createFromHexString(req.session.loggedIn) }, function (err, doc) {
- *      if (err) return next(err);
- *      res.local('me', doc);
- *      next();
- *    });
- *  } else {
- *    res.local('authenticated', false);
- *    next();
- *  }
- *});
- */
+server.addUser = function addUser ( username, callback ) {
+  //console.log("server.users : ", server.users);
+  if (!server.users[username]) {
+    server.users[username] = {};
+  }
+  server.redmine.connectUser( username, function(err, data){
+    //res.redirect('/');
+    callback(err, data);
+  });
+}
 
 /** Middleware for limited access */
 function requireLogin (req, res, next) {
   if (req.session.username) {
     // User is authenticated, let him in
-    next();
+    server.addUser( req.session.username, function( err, data ){
+      next();
+    });
   } else {
     // Otherwise, we redirect him to login form
     res.redirect("/login");
@@ -179,57 +149,89 @@ server.get("/login", function (req, res) {
       locals.error = null;
       locals.username = '';
       locals.title = 'Login | ' + locals.title;
-      console.log("locals : ", locals);
       res.render('login.jade', {
         locals : locals
       });
     });
 });
 
+server.post("/login", function (req, res) {
+  var username = req.body.username;
+  server.redmine.login(req.body, function(err, isAuth) {
+    if (!isAuth) {
+      addLocals( null, function( err, locals) {
+        locals.error = "Wrong login or password";
+        locals.username = username;
+        locals.title = 'Login | ' + locals.title;
+        res.render('login.jade', {
+          locals : locals
+        });
+      });
+    }
+    else {
+      req.session.username = req.body.username;
+      server.addUser( req.body.username, function( err, data ){
+        res.redirect('/');
+      });
+      /*
+       *req.session.username = req.body.username;
+       *server.users[req.session.username] = {};
+       *server.redmine.connectUser( req.session.username, function(err, data){
+       *  res.redirect('/');
+       *});
+       */
+    }
+  });
+});
+
+
+server.get('/logout', function (req, res) {
+  server.redmine.disconnectUser( req.session.username, function(err, data){
+    delete server.users[req.session.username];
+    req.session.username = null;
+  });
+  res.redirect('/');
+});
 
 server.post("/redmine-key", function (req, res) {
-    //console.log("key : ", req.body.key);
-    //var redmineUser = server.redmine.getUserFromKey(req.body.key);
-    server.redmine.getUserFromKey(req.body.key, function(err, data) {
-      if (err) {
-        addLocals( null, function( err, locals) {
-          locals.error = "Api Key doesn't exists";
-          locals.username = '';
-          locals.title = 'Login | ' + locals.title;
-          res.render('login.jade', {
-            locals : locals
-          });
+  server.redmine.getUserFromKey(req.body.key, function(err, data) {
+    if (err) {
+      addLocals( null, function( err, locals) {
+        locals.error = "Api Key doesn't exists";
+        locals.username = '';
+        locals.title = 'Login | ' + locals.title;
+        res.render('login.jade', {
+          locals : locals
         });
-      }
-      else if (!data) {
-        addLocals( null, function( err, locals) {
-          locals.error = "Api Key already registered";
-          locals.username = '';
-          locals.title = 'Login | ' + locals.title;
-          res.render('login.jade', {
-            locals : locals
-          });
+      });
+    }
+    else if (!data) {
+      addLocals( null, function( err, locals) {
+        locals.error = "Api Key already registered";
+        locals.username = '';
+        locals.title = 'Login | ' + locals.title;
+        res.render('login.jade', {
+          locals : locals
         });
-      }
-      else {
-        var user = data.user;
-        console.log("user : ", user);
-        res.render('create-user.jade', {
-          locals : {
-            error: null,
-            username:  user.mail.split('@')[0],
-            firstname:  user.firstname,
-            lastname:  user.lastname,
-            apiKey: req.body.key,
-            last_login_on: user.last_login_on,
-            created_on: user.created_on,
-            mail: user.mail,
-            id: user.id
-          }
-        });
-      }
-    });
-
+      });
+    }
+    else {
+      var user = data.user;
+      res.render('create-user.jade', {
+        locals : {
+          error: null,
+          username:  user.mail.split('@')[0],
+          firstname:  user.firstname,
+          lastname:  user.lastname,
+          apiKey: req.body.key,
+          last_login_on: user.last_login_on,
+          created_on: user.created_on,
+          mail: user.mail,
+          id: user.id
+        }
+      });
+    }
+  });
 });
 
 server.post("/create-user", function (req, res) {
@@ -247,25 +249,10 @@ server.post("/create-user", function (req, res) {
     addLocals( req.body, function( err, locals) {
       locals.error = "passwords must match";
       locals.title = 'Create user | ' + locals.title;
-      console.log("locals : ", locals);
       res.render('create-user.jade', {
         locals : locals
       });
     });
-      /*
-       *res.render('create-user.jade', {
-       *  locals : {
-       *    error: "passwords must match",
-       *    username:  username,
-       *    firstname:  firstname,
-       *    lastname:  lastname,
-       *    last_login_on: last_login_on,
-       *    created_on: created_on,
-       *    mail: mail,
-       *    id: id
-       *  }
-       *});
-       */
   }
   else {
     delete req.body.confirmPassword;
@@ -278,47 +265,7 @@ server.post("/create-user", function (req, res) {
         locals : locals
       });
     });
-    /*
-     *res.render('login.jade', {
-     *  username: username,
-     *  error: null
-     *});
-     */
   }
-});
-
-server.post("/login", function (req, res) {
-  var username = req.body.username;
-  server.redmine.login(req.body, function(err, isAuth) {
-    if (!isAuth) {
-      addLocals( null, function( err, locals) {
-        locals.error = "Wrong login or password";
-        locals.username = username;
-        locals.title = 'Login | ' + locals.title;
-        res.render('login.jade', {
-          locals : locals
-        });
-      });
-    }
-    else {
-      console.log("logged in ! : ");
-      req.session.username = req.body.username;
-      server.users[req.session.username] = {};
-      server.redmine.connectUser( req.session.username, function(err, data){
-        res.redirect('/');
-      });
-    }
-  });
-});
-
-server.get('/logout', function (req, res) {
-  console.log("req.session.username : ", req.session.username);
-  server.redmine.disconnectUser( req.session.username, function(err, data){
-    delete server.users[req.session.username];
-    req.session.username = null;
-    console.log(" server.users: ", server.users);
-  });
-  res.redirect('/');
 });
 
 server.get('/extract', function(req,res){
@@ -340,7 +287,6 @@ server.get("/account", [requireLogin], function (req, res) {
         data.error = null;
         data.username = req.session.username;
         data.title = 'Account | ' + data.title;
-        console.log("data : ", data);
         res.render('account.jade', {
           locals : data
         });
@@ -349,14 +295,7 @@ server.get("/account", [requireLogin], function (req, res) {
   });
 });
 
-server.get('/', [requireLogin], function(req,res){
-  //res.render('index-' + server.config.clientFramework+ '.jade', function() {});
-  /*
-   *res.render('index-' + server.config.clientFramework+ '.jade', function(err, html){
-   *  console.log("err : ", err);
-   *  console.log("html : ", html);
-   *});
-   */
+server.get('/team', [requireLogin], function(req,res){
   addLocals( null, function( err, locals ) {
     locals.error = null;
     locals.username = req.session.username;
@@ -365,32 +304,11 @@ server.get('/', [requireLogin], function(req,res){
       locals : locals
     });
   });
-  //var locals = addLocals();
-  //res.render('index-' + server.config.clientFramework+ '.jade', locals);
-  /*
-   *res.render('index-' + server.config.clientFramework+ '.jade', {
-   *  locals : {
-   *    title : server.host + ':' + server.port + ' | skProject | ' + server.config.clientFramework ,
-   *    description: 'Your Page Description',
-   *    author: 'Your Name',
-   *    analyticssiteid: 'XXXXXXX',
-   *    username: req.session.username
-   *  }
-   *});
-   */
 });
 
-server.get('/demo', function(req,res){
-  res.render('index_demo.jade', {
-    locals : {
-      title : 'Your Page Title',
-      description: 'Your Page Description',
-      author: 'Your Name',
-      analyticssiteid: 'XXXXXXX'
-    }
-  });
+server.get('/', [requireLogin], function(req,res){
+  res.redirect('/team');
 });
-
 
 //A Route for Creating a 500 Error (Useful to keep around)
 server.get('/500', function(req, res){
