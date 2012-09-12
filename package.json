@@ -13,6 +13,7 @@
     "irc": "git://github.com/martynsmith/node-irc.git",
     "socket.io": "0.9.5",
     "socket.io-client": "0.9.6",
+    "socket.io-sessions": "0.6.1",
     "mongoose": "2.5.10",
     "cron": "git://github.com/ncb000gt/node-cron.git",
     "bcrypt": "0.7.2",
