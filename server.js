@@ -120,7 +120,7 @@ var addLocals = function( newLocals, callback ) {
 
 /////// ADD ALL YOUR ROUTES HERE  /////////
 server.addUser = function addUser ( username, callback ) {
-  console.log("server.users : ", server.users);
+  //console.log("server.users : ", server.users);
   if (!server.users[username]) {
     server.users[username] = {};
   }
@@ -149,7 +149,6 @@ server.get("/login", function (req, res) {
       locals.error = null;
       locals.username = '';
       locals.title = 'Login | ' + locals.title;
-      console.log("locals : ", locals);
       res.render('login.jade', {
         locals : locals
       });
@@ -187,11 +186,9 @@ server.post("/login", function (req, res) {
 
 
 server.get('/logout', function (req, res) {
-  console.log("req.session.username : ", req.session.username);
   server.redmine.disconnectUser( req.session.username, function(err, data){
     delete server.users[req.session.username];
     req.session.username = null;
-    console.log(" server.users: ", server.users);
   });
   res.redirect('/');
 });
@@ -220,7 +217,6 @@ server.post("/redmine-key", function (req, res) {
     }
     else {
       var user = data.user;
-      console.log("user : ", user);
       res.render('create-user.jade', {
         locals : {
           error: null,
@@ -253,7 +249,6 @@ server.post("/create-user", function (req, res) {
     addLocals( req.body, function( err, locals) {
       locals.error = "passwords must match";
       locals.title = 'Create user | ' + locals.title;
-      console.log("locals : ", locals);
       res.render('create-user.jade', {
         locals : locals
       });
@@ -292,7 +287,6 @@ server.get("/account", [requireLogin], function (req, res) {
         data.error = null;
         data.username = req.session.username;
         data.title = 'Account | ' + data.title;
-        console.log("data : ", data);
         res.render('account.jade', {
           locals : data
         });
