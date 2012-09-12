@@ -171,17 +171,17 @@ app.Views.TeamMemberView = Backbone.View.extend({
         console.log("this : ", this);
         var issueId = $(event.target).parents('li').data('issue');
         socket.emit('redmine::startIssue', issueId, function (err, data) {
-          console.log("data : ", data);
+          console.log("start : ", data);
         });
     },
     pause: function(event) {
         socket.emit('redmine::pauseIssue', function (err, data) {
-          console.log("data : ", data);
+          console.log("pause : ", data);
         });
     },
     stop: function(event) {
         socket.emit('redmine::stopIssue', function (err, data) {
-          console.log("data : ", data);
+          console.log("stop : ", data);
         });
     },
     addUser: function(teamMember) {
