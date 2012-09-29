@@ -15,14 +15,8 @@ html.no-js(lang='en')
     meta(name="description", content=description)
     meta(name="author", content=author)
     meta(name="viewport", content='width=device-width, initial-scale=1')
-    //Dependances
-    //link(rel='stylesheet', href='/css/dependances/custom-theme/jquery-ui-1.8.16.custom.css')
+
     link(rel='stylesheet', href='/css/bootstrap.css')
-    //Third-party
-    //link(rel='stylesheet', href='/third-party/jQuery-UI-Date-Range-Picker/css/ui.daterangepicker.css')
-    //link(rel='stylesheet', href='/third-party/jQuery-UI-FileInput/css/enhanced.css')
-    //link(rel='stylesheet', href='/third-party/wijmo/css/jquery.wijmo-open.1.5.0.css')
-    //link(rel='stylesheet', href='/css/dependances/demo.css')
     link(rel='stylesheet', href='/css/style.css')
     link(rel='stylesheet', href='/css/bootstrap-responsive.css')
     //script(src='js/libs/modernizr-2.0.6.min.js')
@@ -40,26 +34,19 @@ html.no-js(lang='en')
             //
                 end static dialog
         //Dependances
-        //script(defer, src='/js/dependances/jquery-1.7.1.min.js')
-        //script(defer, src='/js/dependances/jquery-ui-1.8.16.custom.min.js')
-        script(defer, src='/js/libs/socket.io.js')
-        script(defer, src='/js/libs/jquery-1.7.1.min.js')
-        script(defer, src='/js/libs/jquery.scrollTo-1.4.2-min.js')
+        script(defer, src='/socket.io/socket.io.js')
+        script(defer, src='/js/libs/jquery-1.8.2.min.js')
+        script(defer, src='/js/libs/jquery.scrollTo.min.js')
         script(defer, src='/js/libs/underscore-min.js')
         script(defer, src='/js/libs/backbone-min.js')
-        //script(defer, src='/js/libs/ember-0.9.6.min.js')
-        //script(defer, src='/js/libs/ember-0.9.6.js')
         script(defer, src='/js/libs/ICanHaz.min.js')
         script(defer, src='/js/libs/jquery.isotope.min.js')
         script(defer, src='/js/libs/bootstrap.min.js')
 
         //!= js('app')
         script(defer, src='/js/app-backbone.js')
-        //script(defer, src='/js/app2.js')
 
-        //script(defer, src='/js/utils.js')
         script(defer, src='/js/models/models.js')
-        //script(defer, src='/js/collections.js')
         script(defer, src='/js/views/views.js')
         //if lt IE 7
           script(defer, src='//ajax.googleapis.com/ajax/libs/chrome-frame/1.0.3/CFInstall.min.js')
