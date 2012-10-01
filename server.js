@@ -1,3 +1,5 @@
+//require('look').start();
+var replify = require('replify');
 
 //setup Dependencies
 var connect = require('connect'),
@@ -6,6 +8,7 @@ var connect = require('connect'),
     mongoose = require('mongoose'),
     mongoStore = require('connect-mongodb');
 
+console.log();
 console.log('App start'.red.inverse );
 
 var SessionMongoose = require("session-mongoose");
@@ -30,6 +33,12 @@ global.server = express.createServer();
 server.config = require('./lib/config.js');
 server.port = (process.env.PORT || server.config.server.port);
 server.host = (process.env.HOST || server.config.server.host);
+server.name = server.config.server.name;
+
+replify(server.name, server);
+console.log("REPL".cyan.bold.inverse + " : netcat -U /tmp/repl/" + server.name + ".sock");
+console.log("  or".cyan.bold.inverse + " : socat - UNIX-CONNECT:/tmp/repl/" + server.name + ".sock");
+console.log();
 
 server.sessionStore = new SessionMongoose({
   url: server.config.mongo.session,
@@ -85,11 +94,11 @@ server.redmine.init();
 server.redmineExtract = require('./lib/redmineExtract.js');
 server.redmineExtract.init();
 
-//server.irc = require('./lib/irc.js');
-//server.irc.init();
+server.irc = require('./lib/irc.js');
+server.irc.init();
 
 var commonLocals = {
-  title: 'skProject | ' + server.config.clientFramework + ' | ' + server.host + ':' + server.port,
+  title: server.name + ' | ' + server.config.clientFramework + ' | ' + server.host + ':' + server.port,
   description: 'Your Page Description',
   author: 'Your Name',
   analyticssiteid: 'XXXXXXX'
@@ -310,6 +319,14 @@ server.get('/', [requireLogin], function(req,res){
   res.redirect('/team');
 });
 
+server.get('/health', function(req, res){
+  res.send({
+    pid: process.pid,
+    memory: process.memoryUsage(),
+    uptime: process.uptime(),
+    connections: server.connections
+  });
+});
 //A Route for Creating a 500 Error (Useful to keep around)
 server.get('/500', function(req, res){
     throw new Error('This is a 500 Error');
@@ -326,6 +343,7 @@ function NotFound(msg){
     Error.captureStackTrace(this, arguments.callee);
 }
 
-
+console.log();
 console.log('Listening on '.info + (server.host + ':' + server.port).inverse.info );
 console.log(('Using client framework ' + server.config.clientFramework).info );
+console.log();

@@ -6,7 +6,7 @@ block header
               span.icon-bar
               span.icon-bar
               span.icon-bar
-            a.brand(href='#') skProject
+            a.brand(href='#') redLive
             .nav-collapse
               ul.nav
                   li.dropdown
@@ -20,12 +20,26 @@ block header
                               a#setusers(href='#') Create users
                           li
                               a#setprojects(href='#') Create projects
+                          li
+                              a#setprojects(href='http://0.0.0.0:5959', target='_BLANK') Look Nodetime
                   li.divider-vertical
                   li
                       a(href='/team') Team
                   li
                       a(href='/dashboard') Dashboard
 
+                ul.nav.pull-right
+                  li.dropdown
+                    a.dropdown-toggle(data-toggle='dropdown', href='#')
+                      | #{username}
+                      b.caret
+                    ul.dropdown-menu
+                      li
+                        a(href='/account') account
+                      li
+                        a(href='/logout') logout
+
+//
                 .btn-group.pull-right
                   a.btn.dropdown-toggle(data-toggle='dropdown', href='#')
                     | #{username}
