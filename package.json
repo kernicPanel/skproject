@@ -20,7 +20,9 @@
     "stextile": "0.0.8",
     "moment": "1.6.2",
     "cdir": "*",
-    "colors": "*"
+    "colors": "*",
+    "look": "*",
+    "replify": "*"
   },
   "devDependencies": {
     "vows": "0.5.x",
