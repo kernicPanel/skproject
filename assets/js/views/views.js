@@ -28,7 +28,7 @@ app.Views.TeamMemberView = Backbone.View.extend({
         "click .stop": "stop"
     },
     addUsers: function(data) {
-        console.log("data : ", data);
+        console.log("TeamMemberView addUsers data : ", data);
         var loopCount = data.length;
         for (var i = 0; i < loopCount; i++) {
             teamMember = new app.Models.TeamMember();
@@ -71,14 +71,14 @@ app.Views.TeamMemberView = Backbone.View.extend({
     showIssues: function(event) {
         //console.log("event : ", event);
         //console.log("this : ", this);
-        test = event;
+        //test = event;
         var userId = $(event.target).data('user');
         var $issues = $('#issues-' + userId);
         var $user = $issues.parents('.user');
         //console.log("userId : ", userId);
         if (!$issues.data('loaded')) {
             var issues = app.collections.issueList.assignedTo(userId);
-            test = issues;
+            //test = issues;
             //console.log("issues : ", issues);
             issues.each(function(issue) {
                 //console.log("issue : ", issue);
@@ -135,7 +135,7 @@ app.Views.TeamMemberView = Backbone.View.extend({
         console.log("$issueJournal : ", $issueJournal);
 
         if (!$issueJournal.data('loaded')) {
-            socket.emit('redmine::getCompleteIssue', issueId, function (err, data) {
+            app.eventsManager.socket.emit('redmine::getCompleteIssue', issueId, function (err, data) {
                 //console.log("journals : ", data.issue.journals);
                 var journals = data.issue.journals;
                 var loopCount = journals.length;
@@ -170,9 +170,15 @@ app.Views.TeamMemberView = Backbone.View.extend({
         console.log("event.target : ", event.target);
         console.log("this : ", this);
         var issueId = $(event.target).parents('li').data('issue');
-        socket.emit('redmine::startIssue', issueId, function (err, data) {
-          console.log("start : ", data);
+        console.log("app : ", app);
+        app.eventsManager.trigger('startEvent', issueId, function(err, data){
+            console.log("start : ", data);
         });
+        /*
+         *socket.emit('redmine::startIssue', issueId, function (err, data) {
+         *  console.log("start : ", data);
+         *});
+         */
     },
     pause: function(event) {
         socket.emit('redmine::pauseIssue', function (err, data) {
@@ -188,8 +194,8 @@ app.Views.TeamMemberView = Backbone.View.extend({
         this.collection.add(teamMember); // add teamMember to collection; view is updated via event 'add'
     },
     appendUser: function(teamMember){
-        //console.log("teamMember : ", teamMember);
-        test = teamMember;
+        //console.log("TeamMemberView appendUser teamMember : ", teamMember);
+        //test = teamMember;
         var currentIssue = teamMember.get('current') || 'init';
         var issue = app.collections.issueList.get(teamMember.get('issueId'));
         var priority = '';
@@ -198,14 +204,16 @@ app.Views.TeamMemberView = Backbone.View.extend({
             //console.log("priority : ", priority);
             //currentIdClass = currentIdClass + ' badge';
         }
-        console.groupCollapsed(teamMember.get('name'), teamMember);
-            console.log("teamMember.get('id') : ", teamMember.get('id'));
-            console.log("teamMember.get('issueId') : ", teamMember.get('issueId'));
-            console.log("teamMember.get('issueName') : ", teamMember.get('issueName'));
-            console.log("teamMember.get('issueStatus') : ", teamMember.get('issueStatus'));
-            console.log("priority : ", priority);
-            console.log("teamMember.get('issueTime') : ", teamMember.get('issueTime'));
-        console.groupEnd();
+        /*
+         *console.groupCollapsed(teamMember.get('name'), teamMember);
+         *    console.log("teamMember.get('id') : ", teamMember.get('id'));
+         *    console.log("teamMember.get('issueId') : ", teamMember.get('issueId'));
+         *    console.log("teamMember.get('issueName') : ", teamMember.get('issueName'));
+         *    console.log("teamMember.get('issueStatus') : ", teamMember.get('issueStatus'));
+         *    console.log("priority : ", priority);
+         *    console.log("teamMember.get('issueTime') : ", teamMember.get('issueTime'));
+         *console.groupEnd();
+         */
         var html = ich.teamMember({
             name: teamMember.get('name'),
             id: teamMember.get('id'),
@@ -223,12 +231,17 @@ app.Views.TeamMemberView = Backbone.View.extend({
         $(html).attr('id', 'teamMember-' + teamMember.get('id'));
         $(this.el).append(html);
         $(this.el).on('shown hidden', function (e) {
-            test = e;
+            //test = e;
             console.log("e.currentTarget: ", e.currentTarget);
               $('#content').isotope();
         });
     },
-    updateCurrentIssue: function(data){
+    updateCurrentIssueThux: function(data){
+        if (data.issueTime) {
+            console.log(data.login, " updateCurrentIssueThux data : ", data);
+            test = this;
+            console.log("this : ", this);
+        }
         var user = this.collection.where({login:data.login})[0];
         var issue = app.collections.issueList.get(data.issueId);
         //console.log("issue : ", issue);

@@ -1,5 +1,6 @@
 //require('look').start();
 var replify = require('replify');
+var winston = require('winston');
 
 //setup Dependencies
 var connect = require('connect'),
@@ -10,6 +11,7 @@ var connect = require('connect'),
 
 console.log();
 console.log('App start'.red.inverse );
+winston.log('info', 'test winston');
 
 var SessionMongoose = require("session-mongoose");
 
@@ -38,6 +40,7 @@ server.name = server.config.server.name;
 replify(server.name, server);
 console.log("REPL".cyan.bold.inverse + " : netcat -U /tmp/repl/" + server.name + ".sock");
 console.log("  or".cyan.bold.inverse + " : socat - UNIX-CONNECT:/tmp/repl/" + server.name + ".sock");
+console.log("  or".cyan.bold.inverse + " : rc /tmp/repl/" + server.name + ".sock (npm install -g repl-client)");
 console.log();
 
 server.sessionStore = new SessionMongoose({
