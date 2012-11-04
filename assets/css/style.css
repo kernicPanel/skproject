@@ -399,6 +399,30 @@ span.priority.Immédiat {
     margin: 10px 0;
 }
 
+.issue .start,
+.issue .pause,
+.issue .stop {
+  display: none;
+}
+
+.issue:hover .start,
+.issue:hover .pause,
+.issue:hover .stop {
+  display: inline-block;
+}
+
+.issue .start {
+
+}
+
+.issue .pause {
+
+}
+
+.issue .stop {
+
+}
+
 .isotope,
 .isotope .isotope-item {
   /* change duration value to whatever you like */
