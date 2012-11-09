@@ -1,0 +1,54 @@
+extends layout-angular
+
+
+block content
+    .container-fluid
+        .row-fluid
+            .span12
+                #sort-by.btn-group
+                    a.btn(href='#name') name
+                    a.btn(href='#count') count
+                #content(ng-controller='AppCtrl', users)
+                    //- ul
+                    //-     li(ng-repeat='user in users', ng-click="getIssues(user)") {{user.name}} : {{user.redmine.issues.length}}
+                    //-         ul
+                    //-             li(ng-repeat='issue in user.issues') {{issue.id}}
+                    //-                 span(class='{{issue.priority.name}} priority') {{issue.priority.name}}
+                    //-                 span {{issue.subject}}
+                    .user.well.span3(user-issues, ng-repeat='user in users')
+                        h1.name  {{user.name}}
+                        .current
+                            span.currentId  {{user.currentId}}
+                            span.currentPriority  {{user.currentPriority}}
+                        p Tâche
+                            span.currentStatus {{user.currentStatus}} :
+                            span.currentTime  {{user.currentTime}}
+                        p.currentName  {{user.currentName}}
+                        //- a.showIssues(ng-click="getIssues(user)") Tâches assignées
+                        a.showIssues Tâches assignées
+                            span.count.badge  {{user.redmine.issues.length}}
+                            i.icon-chevron-down
+                        ul.issues
+                            li.issue(ng-repeat='issue in user.issues')
+                                span(class='{{issue.priority.name}} priority') {{issue.priority.name}}
+                                a.showIssue
+                                    span.badge{{issue.id}}
+                                    span.project{{issue.project.name}} :
+                                        span.subject{{issue.subject}}
+                                button.start.btn-mini Start
+                                button.pause.btn-mini Pause
+                                button.stop.btn-mini Stop
+                                .issueContent(id='{{issueDivId}}')
+                                    .info
+                                        span.tracker {{issue.tracker.name}}
+                                        span.status {{issue.status.name}}
+                                    //- {{#description}}
+                                    //- pre.desc {{issue.description}}
+                                    //- {{/description}}
+                                    a.showJournal Voir les notes
+                                    .journal
+
+    div
+      | Angular Socket.io seed app: v
+      span(app-version)
+

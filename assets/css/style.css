@@ -220,6 +220,7 @@ td { vertical-align: top; }
 body {
     padding-top: 60px;
     padding-bottom: 40px;
+    font-size: 12px;
 }
 a {
     cursor: pointer;
@@ -292,6 +293,12 @@ ul.nav {
     margin-bottom: 4px;
 }
 
+.btn-group > .btn {
+    font-size: 12px;
+    padding: 1px 6px;
+    line-height: 17px;
+}
+
 .user {
     /*width: 250px;*/
     float: left;
@@ -313,12 +320,13 @@ ul.nav {
 }
 
 .user h1 {
-    font-size: 20px;
-    line-height: 20px;
+    font-size: 1.3em;
+    line-height: 1.3em;
+    margin-top: 0;
 }
 
 .user .current {
-    
+
 }
 
 .user .expand {
