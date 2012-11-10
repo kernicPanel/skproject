@@ -43,10 +43,10 @@ angular.module('myApp.directives', []).
         console.log(this);
         var user = scope.user;
         if (!user.hasOwnProperty('issues')) {
-          socket.emit('getUserIssues', user.id, function (err, data) {
-            // console.log(err, data);
-            console.log('userIssue : ', data);
-            user.issues = data;
+          socket.emit('getUserIssues', user.id, function (err, issues) {
+            console.log(err, issues);
+            console.log('userIssue : ', issues);
+            user.issues = issues;
           });
         }
 

@@ -3,7 +3,7 @@
 /* Controllers */
 
       console.log(jQuery('#content'));
-function AppCtrl($scope, socket, ng) {
+function AppCtrl($scope, socket) {
   socket.on('send:name', function (data) {
     $scope.name = data.name;
   });
@@ -19,18 +19,7 @@ function AppCtrl($scope, socket, ng) {
       $scope.$watch($scope.users, function(){
           console.log("user changed");
           $('#content').isotope({
-            // options
             itemSelector : '.user'
-            //layoutMode : 'fitRows',
-            // getSortData : {
-            //   name : function ( $elem ) {
-            //     return $elem.find('.name').text();
-            //   },
-            //   count : function ( $elem ) {
-            //     return parseInt($elem.find('.count').text(), 10);
-            //   }
-            // },
-            // sortBy : 'name'
           });
           $isotope = $('#content').data('isotope');
           // $isotope.reLayout();
@@ -38,10 +27,14 @@ function AppCtrl($scope, socket, ng) {
     });
 
     socket.on('updateCurrentIssue::response', function(data){
-        // console.log(data.login, " updateCurrentIssueThux data : ", data);
-        // console.log("users : ", $scope.users);
-        var user = ng.$filter('filter')($scope.users, data.login);
-        console.log("user : ", user);
+      // console.log(data.login, " updateCurrentIssueThux data : ", data);
+      // console.log("users : ", $scope.users);
+      var user = $scope.users[data.login];
+      user.issueId = data.issueId;
+      user.issueName = data.issueName;
+      user.issueStatus = data.issueStatus;
+      user.issueTime = data.issueTime;
+      user.issueUrl = data.issueUrl;
     });
 
     socket.on('log', function(data){
@@ -49,20 +42,7 @@ function AppCtrl($scope, socket, ng) {
     });
   });
 
-  // $scope.getIssues = function(user) {
-  //   console.log(this);
-  //   test = this;
-  //   if (!user.hasOwnProperty('issues')) {
-  //     socket.emit('getUserIssues', user.id, function (err, data) {
-  //       // console.log(err, data);
-  //       console.log('userIssue : ', data);
-  //       user.issues = data;
-  //     });
-  //   }
-  // };
-
   console.log('$scope : ', $scope);
-
 
 }
 
