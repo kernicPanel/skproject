@@ -8,26 +8,35 @@ function AppCtrl($scope, socket) {
     $scope.name = data.name;
   });
 
-  socket.on('redlive::connect', function (data){
+  var usersLoaded = false;
 
-    socket.emit('getUsers', {}, function (err, users) {
-      console.log(err, users);
-      $scope.users = users;
-      // console.log($);
-      // console.log($('#content'));
-      // console.log($('.user'));
-      $scope.$watch($scope.users, function(){
-          console.log("user changed");
-          $('#content').isotope({
-            itemSelector : '.user'
-          });
-          $isotope = $('#content').data('isotope');
-          // $isotope.reLayout();
+  socket.on('redlive::connect', function (data){
+    console.log('redlive::connect');
+    noty({text: 'server restarted', timeout:3000});
+    // noty({text: 'noty - a jquery notification library!', layout: 'topRight'});
+    // noty({text: 'noty - a jquery notification library!', layout: 'top', type: 'alert'});
+
+    if (!usersLoaded) {
+      socket.emit('getUsers', {}, function (err, users) {
+        console.log(err, users);
+        $scope.users = users;
+        // console.log($);
+        // console.log($('#content'));
+        // console.log($('.user'));
+        $scope.$watch($scope.users, function(){
+            console.log("user changed", $scope.users);
+              $('#content').isotope({
+                itemSelector : '.user'
+              });
+              $isotope = $('#content').data('isotope');
+              // $isotope.reLayout();
+              usersLoaded = true;
+        });
       });
-    });
+    }
 
     socket.on('currentIssueUpdated', function(data){
-      console.log(data.login, " updateCurrentIssueThux data : ", data);
+      // console.log(data.login, " updateCurrentIssueThux data : ", data);
       // console.log("users : ", $scope.users);
       var user = $scope.users[data.login];
       user.issueId = data.issueId;
