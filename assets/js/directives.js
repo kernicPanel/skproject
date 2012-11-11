@@ -56,8 +56,6 @@ angular.module('myApp.directives', []).
               $.scrollTo($(element).offset().top - 50, 400);
             });
           });
-
-
       });
 
       scope.$watch(scope.user, function() {
@@ -68,5 +66,41 @@ angular.module('myApp.directives', []).
       // $(element).on('click', function(){
       //   console.log(this);
       // });
+    };
+  }).
+  directive('issue', function(socket){
+    return function(scope, element, attrs) {
+
+      // console.log('scope : ', scope);
+      // console.log('element : ', element);
+      // console.log('attrs : ', attrs);
+      var issue = scope.issue;
+
+      $(element).find('.start').on('click', function(){
+        console.log(scope);
+        noty({text: 'start issue ' + issue.id, layout: 'topRight', timeout:3000});
+        socket.emit('startIssue', issue.id, function (err, data) {
+          console.log('err : ', err);
+          console.log('data : ', data);
+        });
+      });
+
+      $(element).find('.pause').on('click', function(){
+        console.log(this);
+        noty({text: 'pause issue', timeout:3000});
+        socket.emit('pauseIssue',{} , function (err, data) {
+          console.log('err : ', err);
+          console.log('data : ', data);
+        });
+      });
+
+      $(element).find('.stop').on('click', function(){
+        console.log(this);
+        noty({text: 'stop issue', timeout:3000});
+        socket.emit('stopIssue', {}, function (err, data) {
+          console.log('err : ', err);
+          console.log('data : ', data);
+        });
+      });
     };
   });
