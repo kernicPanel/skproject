@@ -8,7 +8,7 @@ function AppCtrl($scope, socket) {
     $scope.name = data.name;
   });
 
-  socket.on('redmine::connect', function (data){
+  socket.on('redlive::connect', function (data){
 
     socket.emit('getUsers', {}, function (err, users) {
       console.log(err, users);
@@ -26,8 +26,8 @@ function AppCtrl($scope, socket) {
       });
     });
 
-    socket.on('updateCurrentIssue::response', function(data){
-      // console.log(data.login, " updateCurrentIssueThux data : ", data);
+    socket.on('currentIssueUpdated', function(data){
+      console.log(data.login, " updateCurrentIssueThux data : ", data);
       // console.log("users : ", $scope.users);
       var user = $scope.users[data.login];
       user.issueId = data.issueId;

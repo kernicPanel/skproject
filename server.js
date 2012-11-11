@@ -100,6 +100,9 @@ server.redmineExtract.init();
 server.irc = require('./lib/irc.js');
 server.irc.init();
 
+server.timer = require('./lib/timer.js');
+server.timer.init();
+
 var commonLocals = {
   title: server.name + ' | ' + server.config.clientFramework + ' | ' + server.host + ':' + server.port,
   description: 'Your Page Description',
