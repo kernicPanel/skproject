@@ -46,8 +46,10 @@ function AppCtrl($scope, socket) {
       user.issueUrl = data.issueUrl;
     });
 
-    socket.on('log', function(data){
+    socket.on('log', function(source, data){
+        console.group("source : ", source);
         console.log("data : ", data);
+        console.groupEnd();
     });
   });
 
