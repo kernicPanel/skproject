@@ -12,7 +12,7 @@ function AppCtrl($scope, socket) {
 
   socket.on('redlive::connect', function (data){
     console.log('redlive::connect');
-    noty({text: 'server restarted', timeout:3000});
+    noty({text: 'Socket Connected', timeout:3000});
     // noty({text: 'noty - a jquery notification library!', layout: 'topRight'});
     // noty({text: 'noty - a jquery notification library!', layout: 'top', type: 'alert'});
 
@@ -20,6 +20,8 @@ function AppCtrl($scope, socket) {
       socket.emit('getUsers', {}, function (err, users) {
         console.log(err, users);
         $scope.users = users;
+
+        test = users;
         // console.log($);
         // console.log($('#content'));
         // console.log($('.user'));
@@ -38,7 +40,8 @@ function AppCtrl($scope, socket) {
     socket.on('currentIssueUpdated', function(data){
       // console.log(data.login, " updateCurrentIssueThux data : ", data);
       // console.log("users : ", $scope.users);
-      var user = $scope.users[data.login];
+      // var user = $scope.users[data.login];
+      var user = search($scope.users, 'login', data.login);
       user.issueId = data.issueId;
       user.issueName = data.issueName;
       user.issueStatus = data.issueStatus;

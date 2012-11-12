@@ -11,6 +11,7 @@ angular.module('myApp.directives', []).
   }]).
   directive('users', function() {
     return function(scope, element, attrs) {
+      scope.usersOrder = 'name';
 
       // $(element).isotope({
       //   itemSelector : '.user',
@@ -37,6 +38,9 @@ angular.module('myApp.directives', []).
       // console.log('element : ', element);
       // console.log('attrs : ', attrs);
 
+      scope.issuesOrder = '-priority.id';
+      // scope.issueOrder = 'subject';
+
       $(element).find('.issues').hide();
 
       $(element).find('.showIssues').on('click', function(){
@@ -47,6 +51,8 @@ angular.module('myApp.directives', []).
             console.log(err, issues);
             console.log('userIssue : ', issues);
             user.issues = issues;
+            test = issues;
+            console.log('user.issues : ', user.issues);
           });
         }
 

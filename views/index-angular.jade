@@ -6,7 +6,7 @@ block content
         .row-fluid
             .span12
                 #content(ng-controller='AppCtrl', users)
-                    .user.well.span3(user-issues, ng-repeat='user in users')
+                    .user.well.span3(user-issues, ng-repeat='user in users | orderBy:usersOrder')
                         h1.name  {{user.name}}
                         .current
                             span.currentId  {{user.issueId}}
@@ -21,7 +21,7 @@ block content
                             span.count.badge  {{user.redmine.issues.length}}
                             i.icon-chevron-down
                         ul.issues
-                            li.issue(issue, ng-repeat='issue in user.issues')
+                            li.issue(issue, ng-repeat='issue in user.issues | orderBy:issuesOrder')
                                 span(class='{{issue.priority.name}} priority') {{issue.priority.name}}
                                 a.showIssue
                                     span.badge{{issue.id}}
