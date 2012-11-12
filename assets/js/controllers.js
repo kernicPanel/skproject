@@ -3,7 +3,7 @@
 /* Controllers */
 
       console.log(jQuery('#content'));
-function AppCtrl($scope, socket) {
+function AppCtrl($scope, socket, search) {
   socket.on('send:name', function (data) {
     $scope.name = data.name;
   });
@@ -42,6 +42,7 @@ function AppCtrl($scope, socket) {
       // console.log("users : ", $scope.users);
       // var user = $scope.users[data.login];
       var user = search($scope.users, 'login', data.login);
+      // console.log("user : ", user);
       user.issueId = data.issueId;
       user.issueName = data.issueName;
       user.issueStatus = data.issueStatus;
