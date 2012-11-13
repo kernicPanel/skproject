@@ -48,6 +48,7 @@ function AppCtrl($scope, socket, search) {
       user.issueStatus = data.issueStatus;
       user.issueTime = data.issueTime;
       user.issueUrl = data.issueUrl;
+      $isotope.reLayout();
     });
 
     socket.on('log', function(source, data){
