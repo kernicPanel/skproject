@@ -18,22 +18,26 @@ block content
                         p.currentName  {{user.issueName}}
                         //- a.showIssues(ng-click="getIssues(user)") Tâches assignées
                         a.showIssues Tâches assignées
-                            span.count.badge  {{user.redmine.issues.length}}
-                            i.icon-chevron-down
+                            span.count  {{user.redmine.issues.length}}
+                            i.icon-chevron-right.icon-white
                         ul.issues
                             li.issue(issue, ng-repeat='issue in user.issues | orderBy:issuesOrder')
                                 span(class='{{issue.priority.name}} priority') {{issue.priority.name}}
+                                span.id {{issue.id}}
+                                span.tracker {{issue.tracker.name}}
+                                span.status {{issue.status.name}}
+                                span.project {{issue.project.name}} :
                                 a.showIssue
-                                    span.badge{{issue.id}}
-                                    span.project{{issue.project.name}} :
-                                        span.subject{{issue.subject}}
-                                button.start.btn-mini Start
-                                button.pause.btn-mini Pause
-                                button.stop.btn-mini Stop
+                                    span.subject{{issue.subject}}
+                                .timer.badge(timer)
+                                    i.icon-time.icon-white
+                                    span
+                                        i.icon-play.start
+                                        i.icon-pause.pause
+                                        i.icon-stop.stop
+                                        i.icon-plus.addTime
                                 .issueContent(id='{{issueDivId}}')
-                                    .info
-                                        span.tracker {{issue.tracker.name}}
-                                        span.status {{issue.status.name}}
+                                    //- .info
                                     //- {{#description}}
                                     //- pre.desc {{issue.description}}
                                     //- {{/description}}

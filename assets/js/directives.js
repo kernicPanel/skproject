@@ -48,13 +48,15 @@ angular.module('myApp.directives', []).
         var user = scope.user;
         if (!user.hasOwnProperty('issues')) {
           socket.emit('getUserIssues', user.id, function (err, issues) {
-            console.log(err, issues);
-            console.log('userIssue : ', issues);
+            // console.log(err, issues);
+            // console.log('userIssue : ', issues);
             user.issues = issues;
-            test = issues;
-            console.log('user.issues : ', user.issues);
+            // test = issues;
+            // console.log('user.issues : ', user.issues);
           });
         }
+        $(this).toggleClass('badge')
+          .find('i').toggleClass('icon-chevron-right icon-chevron-down');
 
         $(element).toggleClass('span4 span12')
           .find('.issues').slideToggle('fast', function () {
@@ -75,6 +77,11 @@ angular.module('myApp.directives', []).
     };
   }).
   directive('issue', function(socket){
+    return function(scope, element, attrs) {
+
+    };
+  }).
+  directive('timer', function(socket){
     return function(scope, element, attrs) {
 
       // console.log('scope : ', scope);
@@ -110,3 +117,4 @@ angular.module('myApp.directives', []).
       });
     };
   });
+
