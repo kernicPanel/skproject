@@ -27,8 +27,7 @@ block content
                                 span.tracker {{issue.tracker.name}}
                                 span.status {{issue.status.name}}
                                 span.project {{issue.project.name}} :
-                                a.showIssue
-                                    span.subject{{issue.subject}}
+                                a.showIssue {{issue.subject}}
                                 .timer.badge(timer)
                                     i.icon-time.icon-white
                                     span
@@ -39,7 +38,7 @@ block content
                                 .issueContent(id='{{issueDivId}}')
                                     //- .info
                                     //- {{#description}}
-                                    //- pre.desc {{issue.description}}
+                                    .desc {{issue.description}}
                                     //- {{/description}}
                                     a.showJournal Voir les notes
                                     .journal

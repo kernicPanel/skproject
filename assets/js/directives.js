@@ -49,7 +49,14 @@ angular.module('myApp.directives', []).
         if (!user.hasOwnProperty('issues')) {
           socket.emit('getUserIssues', user.id, function (err, issues) {
             // console.log(err, issues);
-            // console.log('userIssue : ', issues);
+            // for (var i = issues.length - 1; i >= 0; i--) {
+            //   if (issues[i].description) {
+            //     issues[i].description = '<div>' + issues[i].description + '</div>';
+            //     console.log('description : ', issues[i].description);
+            //     test = issues[i].description;
+            //     issues[i].description = $(issues[i].description).html();
+            //   };
+            // }
             user.issues = issues;
             // test = issues;
             // console.log('user.issues : ', user.issues);
@@ -78,6 +85,23 @@ angular.module('myApp.directives', []).
   }).
   directive('issue', function(socket){
     return function(scope, element, attrs) {
+
+      var issue = scope.issue;
+
+      $(element).find('.showIssue').on('click', function(){
+        $(element).find('.issueContent').slideToggle('fast', function () {
+            $isotope.reLayout(function () {
+              $.scrollTo($(element).offset().top - 50, 400);
+            });
+          });
+      });
+
+      var description = $(element).find('.desc');
+
+      scope.$watch(scope.issue, function() {
+        description.html(description.text());
+        $isotope.reLayout();
+      });
 
     };
   }).

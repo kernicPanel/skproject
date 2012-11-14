@@ -50,3 +50,4 @@ angular.module('myApp.services', []).
       return result;
     };
   });
+
