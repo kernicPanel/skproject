@@ -524,6 +524,15 @@ span.priority.Immédiat {
   display: none;
 }
 
+.issueContent p {
+  margin-bottom: 10px;
+}
+
+.journal {
+  padding-bottom: 10px;
+  border-bottom: 1px solid #CCC;
+  margin-bottom: 20px;
+}
 
 .isotope,
 .isotope .isotope-item {

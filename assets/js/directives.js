@@ -48,18 +48,7 @@ angular.module('myApp.directives', []).
         var user = scope.user;
         if (!user.hasOwnProperty('issues')) {
           socket.emit('getUserIssues', user.id, function (err, issues) {
-            // console.log(err, issues);
-            // for (var i = issues.length - 1; i >= 0; i--) {
-            //   if (issues[i].description) {
-            //     issues[i].description = '<div>' + issues[i].description + '</div>';
-            //     console.log('description : ', issues[i].description);
-            //     test = issues[i].description;
-            //     issues[i].description = $(issues[i].description).html();
-            //   };
-            // }
             user.issues = issues;
-            // test = issues;
-            // console.log('user.issues : ', user.issues);
           });
         }
         $(this).toggleClass('badge')
@@ -90,10 +79,10 @@ angular.module('myApp.directives', []).
 
       $(element).find('.showIssue').on('click', function(){
         $(element).find('.issueContent').slideToggle('fast', function () {
-            $isotope.reLayout(function () {
-              $.scrollTo($(element).offset().top - 50, 400);
-            });
+          $isotope.reLayout(function () {
+            $.scrollTo($(element).offset().top - 50, 400);
           });
+        });
       });
 
       var description = $(element).find('.desc');
@@ -101,6 +90,29 @@ angular.module('myApp.directives', []).
       scope.$watch(scope.issue, function() {
         description.html(description.text());
         $isotope.reLayout();
+      });
+
+      $(element).find('.journals').hide();
+
+      $(element).find('.showJournal').on('click', function(){
+        console.log('scope.issue', scope.issue);
+        var issue = scope.issue;
+        if (!issue.hasOwnProperty('journals')) {
+          socket.emit('getCompleteIssue', issue.id, function (err, completeIssue) {
+            issue.journals = completeIssue.journals;
+            console.log('journals', completeIssue.journals);
+
+          });
+        }
+        $(element).find('.journals').slideToggle('fast', function () {
+          $isotope.reLayout(function () {
+            // $.scrollTo($(element).offset().top - 50, 400);
+          });
+        });
+
+        $(element).find('.issues').slideToggle('fast', function () {
+          $isotope.reLayout();
+        });
       });
 
     };
@@ -138,6 +150,17 @@ angular.module('myApp.directives', []).
           console.log('err : ', err);
           console.log('data : ', data);
         });
+      });
+    };
+  }).
+  directive('journal', function(socket){
+    return function(scope, element, attrs) {
+
+      var notes = $(element).find('.notes');
+
+      scope.$watch(scope.journal, function() {
+        notes.html(notes.text());
+        $isotope.reLayout();
       });
     };
   });

@@ -41,7 +41,13 @@ block content
                                     .desc {{issue.description}}
                                     //- {{/description}}
                                     a.showJournal Voir les notes
-                                    .journal
+                                    .journals
+                                        .journal(journal, ng-repeat='journal in issue.journals')
+                                            p {{journal.user.name}} - {{journal.created_on}} :
+                                            .notes(ng-show='journal.notes'){{journal.notes}}
+                                            .details(ng-show='journal.details')
+                                                .detail(ng-repeat='detail in journal.details')
+                                                    {{detail.name}} {{detail.old_value}} {{detail.new_value}}
 
     div
       | Angular Socket.io seed app: v
