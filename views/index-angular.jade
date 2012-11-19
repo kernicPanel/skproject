@@ -1,0 +1,59 @@
+extends layout-angular
+
+
+block content
+    .container-fluid(ng-controller='AppCtrl', users)
+        .row-fluid
+            //- a.span3(ng-click='testIssueUpdate()') testIssueUpdate
+            //- a.span3(ng-click='checkLastIssue()') checkLastIssue
+            .span12
+                #content
+                    .user.well.span3(user-issues, ng-repeat='user in users | orderBy:usersOrder')
+                        h1.name  {{user.name}}
+                        .current
+                            span.currentId  {{user.issueId}}
+                            span.currentPriority  {{user.issuePriority}}
+                        p Tâche
+                            span.currentStatus {{user.issueStatus}} :
+                            span.currentTime  {{user.issueTime}}
+                        a(href='{{user.issueUrl}}')
+                        p.currentName  {{user.issueName}}
+                        //- a.showIssues(ng-click="getIssues(user)") Tâches assignées
+                        a.showIssues Tâches assignées
+                            span.count  {{user.issues.length}}
+                            i.icon-chevron-right.icon-white
+                        ul.issues
+                            li.issue(issue, ng-repeat='issue in user.issues | orderBy:issuesOrder')
+                                span(class='{{issue.priority.name}} priority') {{issue.priority.name}}
+                                span.id {{issue.id}}
+                                span.tracker {{issue.tracker.name}}
+                                span.status {{issue.status.name}}
+                                span.project {{issue.project.name}} :
+                                a.showIssue {{issue.subject}}
+                                .issueContent(id='{{issueDivId}}')
+                                    .timer.badge(timer)
+                                        i.icon-time.icon-white
+                                        span
+                                            i.icon-play.start
+                                            i.icon-pause.pause
+                                            i.icon-stop.stop
+                                            i.icon-plus.addTime
+                                    //- .info
+                                    //- {{#description}}
+                                    //- select
+                                    //-     option(ng-repeat='issueUser in users', value='issueUser.id') {{issueUser.name}}
+                                    .desc(ng-bind-html-unsafe='issue.description')
+                                    //- {{/description}}
+                                    a.showJournal Voir les notes
+                                    .journals
+                                        .journal(journal, ng-repeat='journal in issue.journals')
+                                            p {{journal.user.name}} - {{journal.created_on}} :
+                                            .notes(ng-show='journal.notes'){{journal.notes}}
+                                            .details(ng-show='journal.details')
+                                                .detail(ng-repeat='detail in journal.details')
+                                                    {{detail.name}} {{detail.old_value}} {{detail.new_value}}
+
+    div
+      | Angular Socket.io seed app: v
+      span(app-version)
+
