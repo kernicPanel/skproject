@@ -108,8 +108,10 @@ function AppCtrl($scope, socket, search) {
       $scope.issues.push(updatedIssue);
 
       var newUser = search($scope.users, 'id', updatedIssue.assigned_to.id);
-      newUser.issues.push(updatedIssue);
-      // console.log('newUser', newUser.name);
+      if (!!newUser) {
+        newUser.issues.push(updatedIssue);
+        // console.log('newUser', newUser.name);
+      };
     });
 
     socket.on('createIssue', function createIssue (newIssue){
