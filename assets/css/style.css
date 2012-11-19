@@ -310,12 +310,21 @@ ul.nav {
 
 }
 
+.container-fluid {
+    padding: 0;
+}
+
+.row-fluid .span3 {
+    width: 23%;
+    /*margin: 1% !important;*/
+}
+
 .user {
     /*width: 250px;*/
+    margin: 1% !important;
     float: left;
     position: relative;
     display: block;
-    margin: 10px !important;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -473,22 +482,24 @@ span.priority.Immédiat {
 }
 
 .issue .timer {
-  display: none;
+/*  display: none;
   position: absolute;
-
+*/
   -webkit-border-radius: 9px;
   -moz-border-radius: 9px;
   border-radius: 9px;
 
-  top: -2px;
+  /*top: -2px;*/
   padding: 1px 1px 3px 3px;
-  margin-left: 5px;
+  /*margin-left: 5px;*/
+  display: inline-block;
+  margin-top: 6px;
 }
 
-.issue:hover .timer {
+/*.issue:hover .timer {
   display: inline-block;
 }
-
+*/
 
 .issue .timer span {
   -webkit-border-radius: 9px;

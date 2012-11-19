@@ -32,7 +32,8 @@ angular.module('myApp.services', []).
     };
   }).
   factory('search', function ($rootScope) {
-    return function (array, attr, val) {
+    // return function (array, attr, val) {
+    search =  function (array, attr, val) {
       var result = [];
       array.forEach(function(element, index) {
         if (element[attr] === val) {
@@ -47,7 +48,14 @@ angular.module('myApp.services', []).
       if (result.length === 1) {
         result = result[0];
       }
+      else if (result.length === 0) {
+        result = false;
+      }
       return result;
     };
+    return search;
   });
 
+root = angular.element(document.getElementById('content'));
+scope = root.scope();
+// search = root.injector().get('search');

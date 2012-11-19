@@ -48,7 +48,10 @@ angular.module('myApp.directives', []).
         var user = scope.user;
         if (!user.hasOwnProperty('issues')) {
           socket.emit('getUserIssues', user.id, function (err, issues) {
+            console.log('issues', issues);
+            console.log('scope', scope);
             user.issues = issues;
+            // scope.$parent.issues = scope.$parent.issues.concat(issues);
           });
         }
         $(this).toggleClass('badge')
@@ -85,12 +88,12 @@ angular.module('myApp.directives', []).
         });
       });
 
-      var description = $(element).find('.desc');
 
-      scope.$watch(scope.issue, function() {
-        description.html(description.text());
-        $isotope.reLayout();
-      });
+      // scope.$watch(scope.issue, function watchUserIssue() {
+      //   var description = $(element).find('.desc');
+      //   description.html(description.text());
+      //   $isotope.reLayout();
+      // });
 
       $(element).find('.journals').hide();
 
