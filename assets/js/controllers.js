@@ -2,8 +2,7 @@
 
 /* Controllers */
 
-      console.log(jQuery('#content'));
-function AppCtrl($scope, socket, search) {
+function TeamCtrl($scope, socket, search) {
   socket.on('send:name', function (data) {
     $scope.name = data.name;
   });
