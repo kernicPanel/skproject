@@ -105,8 +105,8 @@ server.timer.init();
 
 var commonLocals = {
   title: server.name + ' | ' + server.config.clientFramework + ' | ' + server.host + ':' + server.port,
-  description: 'Your Page Description',
-  author: 'Your Name',
+  description: 'Realtime Redmine client',
+  author: 'Nicolas Clerc',
   analyticssiteid: 'XXXXXXX'
 };
 
@@ -302,6 +302,8 @@ server.get("/account", [requireLogin], function (req, res) {
         data.error = null;
         data.username = req.session.username;
         data.title = 'Account | ' + data.title;
+        data.admin = true;
+      console.log('data!!!', data);
         res.render('account.jade', {
           locals : data
         });
@@ -311,14 +313,44 @@ server.get("/account", [requireLogin], function (req, res) {
 });
 
 server.get('/team', [requireLogin], function(req,res){
+  var requestLogin = req.session.username;
   addLocals( null, function( err, locals ) {
     locals.error = null;
     locals.username = req.session.username;
     locals.title = 'Team | ' + locals.title;
-    res.render('index-' + server.config.clientFramework+ '.jade', {
+    locals.admin = server.config.server.admin.indexOf(requestLogin) > -1;
+    res.render('team-' + server.config.clientFramework+ '.jade', {
       locals : locals
     });
   });
+});
+
+server.get('/admin', [requireLogin], function(req,res){
+  var requestLogin = req.session.username;
+  console.log('requestLogin', requestLogin);
+  console.log('server.config.server.admin', server.config.server.admin);
+  console.log(server.config.server.admin.indexOf(requestLogin > -1));
+  if (server.config.server.admin.indexOf(requestLogin) > -1) {
+    addLocals( null, function( err, locals) {
+      locals.error = "Wrong login or password";
+      locals.username = requestLogin;
+      locals.title = 'Admin | ' + locals.title;
+      locals.admin = true;
+      res.render('admin.jade', {
+        locals : locals
+      });
+    });
+    // res.send({
+    //   pid: process.pid,
+    //   memory: process.memoryUsage(),
+    //   uptime: process.uptime(),
+    //   connections: server.connections
+    // });
+  }
+  else {
+    res.redirect('/team');
+  }
+
 });
 
 server.get('/', [requireLogin], function(req,res){
