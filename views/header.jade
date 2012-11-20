@@ -1,51 +1,43 @@
 block header
   .navbar.navbar-fixed-top
-      .navbar-inner
-          .container-fluid
-            a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
-              span.icon-bar
-              span.icon-bar
-              span.icon-bar
-            a.brand(href='#') redLive
-            .nav-collapse
-              ul.nav
-                  li.dropdown
-                      a.dropdown-toggle(href='#', data-toggle='dropdown')
-                          | Admin
-                          b.caret
-                        ul.dropdown-menu
-                          li
-                              a#sync(href='#') Rebuild base
-                          li
-                              a#setusers(href='#') Create users
-                          li
-                              a#setprojects(href='#') Create projects
-                          li
-                              a#setprojects(href='http://0.0.0.0:5959', target='_BLANK') Look Nodetime
-                  li.divider-vertical
-                  li
-                      a(href='/team') Team
-                  li
-                      a(href='/dashboard') Dashboard
-
-                ul.nav.pull-right
-                  li.dropdown
-                    a.dropdown-toggle(data-toggle='dropdown', href='#')
-                      | #{username}
-                      b.caret
-                    ul.dropdown-menu
-                      li
-                        a(href='/account') account
-                      li
-                        a(href='/logout') logout
-
-//
-                .btn-group.pull-right
-                  a.btn.dropdown-toggle(data-toggle='dropdown', href='#')
-                    | #{username}
-                    span.caret
+    .navbar-inner
+      .container-fluid
+        a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+          span.icon-bar
+          span.icon-bar
+          span.icon-bar
+        a.brand(href='#') redLive
+        .nav-collapse
+          ul.nav
+            if admin
+              li.dropdown
+                a.dropdown-toggle(href='#', data-toggle='dropdown')
+                  | Admin
+                  b.caret
                   ul.dropdown-menu
                     li
-                      a(href='/account') account
+                      a(href='/admin') Admin
                     li
-                      a(href='/logout') logout
+                      a#sync(href='#') Rebuild base
+                    li
+                      a#setusers(href='#') Create users
+                    li
+                      a#setprojects(href='#') Create projects
+                    li
+                      a#setprojects(href='http://0.0.0.0:5959', target='_BLANK') Look Nodetime
+            li.divider-vertical
+            li
+              a(href='/team') Team
+            li
+              a(href='/dashboard') Dashboard
+
+          ul.nav.pull-right
+            li.dropdown
+              a.dropdown-toggle(data-toggle='dropdown', href='#')
+                | #{username}
+                b.caret
+              ul.dropdown-menu
+                li
+                  a(href='/account') account
+                li
+                  a(href='/logout') logout

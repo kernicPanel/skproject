@@ -1,4 +1,4 @@
-extends layout-backbone
+extends layout-angular
 
 block content
   p Account #{firstname} #{lastname}
@@ -20,3 +20,6 @@ block content
     li last login on: #{last_login_on}
     li created on: #{created_on}
     li id : #{id}
+    if admin
+      li admin
+
