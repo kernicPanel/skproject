@@ -10,22 +10,24 @@ block header
         .nav-collapse
           ul.nav
             if admin
-              li.dropdown
-                a.dropdown-toggle(href='#', data-toggle='dropdown')
-                  | Admin
-                  b.caret
-                  ul.dropdown-menu
-                    li
-                      a(href='/admin') Admin
-                    li
-                      a#sync(href='#') Rebuild base
-                    li
-                      a#setusers(href='#') Create users
-                    li
-                      a#setprojects(href='#') Create projects
-                    li
-                      a#setprojects(href='http://0.0.0.0:5959', target='_BLANK') Look Nodetime
-            li.divider-vertical
+              li
+                a(href='/admin') Admin
+              //- li.dropdown
+                //- a.dropdown-toggle(href='#', data-toggle='dropdown')
+                //-   | Admin
+                //-   b.caret
+                //-   ul.dropdown-menu
+                //-     li
+                //-       a(href='/admin') Admin
+                //-     li
+                //-       a#sync(href='#') Rebuild base
+                //-     li
+                //-       a#setusers(href='#') Create users
+                //-     li
+                //-       a#setprojects(href='#') Create projects
+                //-     li
+                //-       a#setprojects(href='http://0.0.0.0:5959', target='_BLANK') Look Nodetime
+              li.divider-vertical
             li
               a(href='/team') Team
             li
