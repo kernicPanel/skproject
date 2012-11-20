@@ -1,6 +1,6 @@
 //require('look').start();
 var replify = require('replify');
-var winston = require('winston');
+// var winston = require('winston');
 
 //setup Dependencies
 var connect = require('connect'),
@@ -11,7 +11,7 @@ var connect = require('connect'),
 
 console.log();
 console.log('App start'.red.inverse );
-winston.log('info', 'test winston');
+// winston.log('info', 'test winston');
 
 var SessionMongoose = require("session-mongoose");
 
