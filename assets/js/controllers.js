@@ -2,8 +2,7 @@
 
 /* Controllers */
 
-      console.log(jQuery('#content'));
-function AppCtrl($scope, socket, search) {
+function TeamCtrl($scope, socket, search) {
   socket.on('send:name', function (data) {
     $scope.name = data.name;
   });
@@ -153,6 +152,15 @@ function AppCtrl($scope, socket, search) {
   };
 
   console.log('$scope : ', $scope);
+
+}
+
+function AdminCtrl($scope, socket, search) {
+
+  socket.on('redlive::connect', function (data){
+    console.log('redlive::connect');
+    noty({text: 'Socket Connected', timeout:3000});
+  });
 
 }
 

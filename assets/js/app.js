@@ -1,8 +1,8 @@
-'use strict';
+// 'use strict';
 
 
 // Declare app level module which depends on filters, and services
-var app = angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives', 'ng']).
+var app = angular.module('redLive', ['redLive.filters', 'redLive.services', 'redLive.directives', 'ng']).
   config(['$routeProvider', '$locationProvider', function($routeProvider, $locationProvider) {
     $routeProvider.when('/view1', {templateUrl: 'partials/partial1', controller: MyCtrl1});
     $routeProvider.when('/view2', {templateUrl: 'partials/partial2', controller: MyCtrl2});
