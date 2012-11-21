@@ -155,6 +155,15 @@ function TeamCtrl($scope, socket, search) {
 
 }
 
+function AdminCtrl($scope, socket, search) {
+
+  socket.on('redlive::connect', function (data){
+    console.log('redlive::connect');
+    noty({text: 'Socket Connected', timeout:3000});
+  });
+
+}
+
 
 function MyCtrl1($scope, socket) {
   socket.on('send:time', function (data) {

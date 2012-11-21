@@ -1,14 +1,15 @@
 extends layout-angular
 
 block content
-  h1 Admin
+  .container-fluid(ng-controller='AdminCtrl', admin)
+    h1 Admin
 
-  ul
-    li
+    ul
+      li
         a#sync(href='#') Rebuild base
-    li
+      li
         a#setusers(href='#') Create users
-    li
+      li
         a#setprojects(href='#') Create projects
-    li
-        a#setprojects(href='http://0.0.0.0:5959', target='_BLANK') Look Nodetime
+      //- li
+      //-   a#setprojects(href='http://0.0.0.0:5959', target='_BLANK') Look Nodetime

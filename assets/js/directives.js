@@ -166,5 +166,33 @@ angular.module('redLive.directives', []).
         $isotope.reLayout();
       });
     };
+  }).
+  directive('admin', function(socket){
+    return function(scope, element, attrs) {
+
+      $(element).find('#sync').on('click', function(){
+        console.log('element', element);
+        socket.emit('sync', {}, function (err, data) {
+            console.log('redmine::sync', err);
+            console.log('redmine::sync', data);
+        });
+        return false;
+      });
+
+      $(element).find('#setusers').on('click', function(){
+        socket.emit('setUsersIssues', {}, function (err, data) {
+            console.log('setUsersIssues', err);
+            console.log('setUsersIssues', data);
+        });
+      });
+
+      $(element).find('#setprojects').on('click', function(){
+        socket.emit('setSkProjects', {}, function (err, data) {
+            console.log('setSkProjects', err);
+            console.log('setSkProjects', data);
+        });
+      });
+
+    };
   });
 
