@@ -24,6 +24,7 @@ html.no-js(lang='en', ng-app="redLive")
     include header
 
     block content
+    include common
 
     block footer
         footer
@@ -49,6 +50,7 @@ html.no-js(lang='en', ng-app="redLive")
         script(src='js/lib/noty/layouts/top.js')
         script(src='js/lib/noty/layouts/topRight.js')
         script(src='js/lib/noty/layouts/topLeft.js')
+        script(src='js/lib/noty/layouts/center.js')
         script(src='js/lib/noty/themes/redLive.js')
         script(src='/socket.io/socket.io.js')
         script(src='js/app.js')

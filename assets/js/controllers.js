@@ -164,6 +164,33 @@ function AdminCtrl($scope, socket, search) {
 
 }
 
+function CommonCtrl($scope, socket, search) {
+
+  var messages = $scope.messages = {};
+
+  socket.on('syncStart', function (message){
+    // systemNotif = noty({text: message, layout: 'center'});
+    // console.log('syncStart', message);
+    messages[message.type] = message;
+  });
+
+  socket.on('syncPending', function (message){
+    // systemNotif = noty({text: progress, layout: 'center'});
+    // console.log('syncPending', message);
+    messages[message.type] = message;
+  });
+
+  socket.on('syncDone', function (message){
+    noty({text: message.type + ' ' + message.text, layout: 'topRight', timeout:3000});
+    // console.log('syncDone', messages);
+    // $scope.message = null;
+    // console.log('messages[message.type]', messages[message.type]);
+    delete messages[message.type];
+    // console.log('messages[message.type]', messages[message.type]);
+  });
+
+}
+
 
 function MyCtrl1($scope, socket) {
   socket.on('send:time', function (data) {
