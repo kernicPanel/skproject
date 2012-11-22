@@ -16,8 +16,9 @@ block content
                         p Tâche
                             span.currentStatus {{user.issueStatus}} :
                             span.currentTime  {{user.issueTime}}
-                        a(href='{{user.issueUrl}}')
-                        p.currentName  {{user.issueName}}
+                        p
+                            a(href='{{user.issueUrl}}', target='_blank') {{user.issueName}}
+                        //- p.currentName  {{user.issueName}}
                         //- a.showIssues(ng-click="getIssues(user)") Tâches assignées
                         a.showIssues Tâches assignées
                             span.count  {{user.issues.length}}
@@ -42,6 +43,8 @@ block content
                                     //- {{#description}}
                                     //- select
                                     //-     option(ng-repeat='issueUser in users', value='issueUser.id') {{issueUser.name}}
+                                    p
+                                        a(href='{{issue.url}}', target='_blank') {{issue.url}}
                                     .desc(ng-bind-html-unsafe='issue.description')
                                     //- {{/description}}
                                     a.showJournal Voir les notes
@@ -52,8 +55,4 @@ block content
                                             .details(ng-show='journal.details')
                                                 .detail(ng-repeat='detail in journal.details')
                                                     {{detail.name}} {{detail.old_value}} {{detail.new_value}}
-
-    div
-      | Angular Socket.io seed app: v
-      span(app-version)
 
