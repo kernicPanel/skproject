@@ -3,68 +3,83 @@
 /* Controllers */
 
 function TeamCtrl($scope, socket, search) {
-  socket.on('send:name', function (data) {
-    $scope.name = data.name;
-  });
 
   var usersLoaded = false;
 
   socket.on('redlive::connect', function (data){
     console.log('redlive::connect');
     noty({text: 'Socket Connected', timeout:3000});
-    // noty({text: 'noty - a jquery notification library!', layout: 'topRight'});
-    // noty({text: 'noty - a jquery notification library!', layout: 'top', type: 'alert'});
 
     if (!usersLoaded) {
-      socket.emit('getUsers', {}, function (err, users) {
-        console.log(err, users);
-        $scope.users = users;
-        // $scope.issues = [];
+      $scope.users = [];
 
-        test = users;
-        // console.log($);
-        // console.log($('#content'));
-        // console.log($('.user'));
-        $scope.$watch($scope.users, function(){
-          console.log("user changed", $scope.users);
+      test = $scope.users;
+
+      socket.emit('getUsers', {}, function (err, done) {
+        if (done) {
+
+          usersLoaded = true;
           $('#content').isotope({
             itemSelector : '.user'
           });
           $isotope = $('#content').data('isotope');
-          // $isotope.reLayout();
-          usersLoaded = true;
           noty({text: 'Users Loaded', layout: 'topRight', timeout:3000});
-        });
 
-        socket.emit('getIssues', {}, function (err, issues) {
-          // console.log('issues', issues);
-          $scope.issues = issues;
-          for (var i = issues.length - 1; i >= 0; i--) {
-            var issue = issues[i];
-            // console.log('issue', issue);
 
-            if (issue.assigned_to.hasOwnProperty('id')) {
-              var user = search($scope.users, 'id', issue.assigned_to.id);
-              if (!!user) {
-                // console.log('user', user);
-                if (!user.hasOwnProperty('issues')) {
-                  user.issues = [];
+          socket.emit('getIssues', {}, function (err, issues) {
+            // console.log('issues', issues);
+            $scope.issues = issues;
+            for (var i = issues.length - 1; i >= 0; i--) {
+              var issue = issues[i];
+              // console.log('issue', issue);
+
+              if (issue.assigned_to.hasOwnProperty('id')) {
+                var user = search($scope.users, 'id', issue.assigned_to.id);
+                if (!!user) {
+                  // console.log('user', user);
+                  if (!user.hasOwnProperty('issues')) {
+                    user.issues = [];
+                  }
+                  user.issues.push(issue);
                 }
-                user.issues.push(issue);
               }
             }
-          }
-          // $scope.$watch($scope.issues, function(){
-          //   console.log("issues changed", $scope.issues);
-          //   $isotope.reLayout();
-          //   noty({text: 'Users Loaded', layout: 'topRight', timeout:1000});
-          // });
+            // $scope.$watch($scope.issues, function(){
+            //   console.log("issues changed", $scope.issues);
+            //   $isotope.reLayout();
+            //   noty({text: 'Users Loaded', layout: 'topRight', timeout:1000});
+            // });
 
-          noty({text: 'Issues Loaded', layout: 'topRight', timeout:3000});
-        });
+            noty({text: 'Issues Loaded', layout: 'topRight', timeout:3000});
+          });
+        }
+        else {
+          noty({text: err, layout: 'topRight', type:'error'});
+        }
+      });
+
+      socket.on('getUsers::data', function (data) {
+        // console.log('data : ', data);
+        // test = data;
+
+        var user = data.user;
+        // console.log('user : ', user);
+        var userprogress = data.progress;
+        $scope.users.push(user);
+        // $scope.issues = [];
+
+        // console.log($);
+        // console.log($('#content'));
+        // console.log($('.user'));
+        // $scope.$watch($scope.users, function(){
+        //   console.log("user changed", $scope.users);
+        //   // $isotope.reLayout();
+        //   usersLoaded = true;
+        // });
+
       });
     }
-
+/*
     socket.on('currentIssueUpdated', function(data){
       // console.log(data.login, " updateCurrentIssueThux data : ", data);
       // console.log("users : ", $scope.users);
@@ -78,7 +93,7 @@ function TeamCtrl($scope, socket, search) {
       user.issueUrl = data.issueUrl;
       $isotope.reLayout();
     });
-
+*/
     socket.on('updateIssue', function(updatedIssue){
       // console.log('updatedIssue', updatedIssue.assigned_to.name);
       console.log('updatedIssue', updatedIssue);
