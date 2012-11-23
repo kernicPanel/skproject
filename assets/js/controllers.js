@@ -54,7 +54,17 @@ function TeamCtrl($scope, socket, search) {
           $isotope = $('#content').data('isotope');
           // $isotope.reLayout();
           usersLoaded = true;
-          noty({text: 'Users Loaded', layout: 'topRight', timeout:3000});
+
+          noty({
+            text: 'Users Loaded',
+            layout: 'topRight',
+            timeout:3000,
+            callback: {
+              afterShow: function() {
+                $isotope.reLayout();
+              }
+            },
+          });
         });
 
         socket.emit('getIssues', {}, function (err, issues) {
@@ -81,7 +91,16 @@ function TeamCtrl($scope, socket, search) {
           //   noty({text: 'Users Loaded', layout: 'topRight', timeout:1000});
           // });
 
-          noty({text: 'Issues Loaded', layout: 'topRight', timeout:3000});
+            noty({
+              text: 'Issues Loaded',
+              layout: 'topRight',
+              timeout:3000,
+              callback: {
+                afterShow: function() {
+                  $isotope.reLayout();
+                }
+              },
+            });
         });
       });
     }
