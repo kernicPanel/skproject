@@ -88,7 +88,7 @@ angular.module('redLive.directives', []).
 
       scope.$watch(scope.user, function() {
         // element.isotope();
-        // $isotope.reLayout();
+        $isotope.reLayout();
       });
 
       // $(element).on('click', function(){
