@@ -97,7 +97,7 @@ function TeamCtrl($scope, socket, search) {
 
       });
     }
-/*
+
     socket.on('currentIssueUpdated', function(data){
       // console.log(data.login, " updateCurrentIssueThux data : ", data);
       // console.log("users : ", $scope.users);
@@ -111,7 +111,7 @@ function TeamCtrl($scope, socket, search) {
       user.issueUrl = data.issueUrl;
       $isotope.reLayout();
     });
-*/
+
     socket.on('updateIssue', function(updatedIssue){
       // console.log('updatedIssue', updatedIssue.assigned_to.name);
       console.log('updatedIssue', updatedIssue);
