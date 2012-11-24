@@ -103,70 +103,70 @@ function TeamCtrl($scope, socket, search) {
             });
         });
       });
+
+      socket.on('currentIssueUpdated', function(data){
+        // console.log(data.login, " updateCurrentIssueThux data : ", data);
+        // console.log("users : ", $scope.users);
+        // var user = $scope.users[data.login];
+        var user = search($scope.users, 'login', data.login);
+        // console.log("user : ", user);
+        user.issueId = data.issueId;
+        user.issueName = data.issueName;
+        user.issueStatus = data.issueStatus;
+        user.issueTime = data.issueTime;
+        user.issueUrl = data.issueUrl;
+        $isotope.reLayout();
+      });
+
+      socket.on('updateIssue', function(updatedIssue){
+        // console.log('updatedIssue', updatedIssue.assigned_to.name);
+        console.log('updatedIssue', updatedIssue);
+        test = updatedIssue;
+
+        var issue = search( $scope.issues, 'id', updatedIssue.id);
+        var issueIndex = $scope.issues.indexOf(issue);
+        // console.log('issue', issue.assigned_to.name);
+        console.log('issue', issue);
+        noty({text:'updating issue ' + updatedIssue.id, layout: 'topRight', timeout:3000});
+        noty({text:'from ' + issue.assigned_to.name, layout: 'topRight', timeout:3000});
+        noty({text:'to ' + updatedIssue.assigned_to.name, layout: 'topRight', timeout:3000});
+
+
+
+        var lastUser = search( $scope.users, 'id', issue.assigned_to.id);
+
+        if (!!lastUser) {
+          // console.log('lastUser.issues.indexOf(issue)', lastUser.issues.indexOf(issue));
+          lastUser.issues.splice(lastUser.issues.indexOf(issue), 1);
+          // console.log('lastUser', lastUser.name);
+        }
+
+        // issue = updatedIssue;
+        $scope.issues.splice(issueIndex, 1);
+        $scope.issues.push(updatedIssue);
+
+        var newUser = search($scope.users, 'id', updatedIssue.assigned_to.id);
+        if (!!newUser) {
+          newUser.issues.push(updatedIssue);
+          // console.log('newUser', newUser.name);
+        };
+      });
+
+      socket.on('createIssue', function createIssue (newIssue){
+        console.log('newIssue', newIssue);
+        $scope.issues.push(newIssue);
+        var user = search($scope.users, 'id', newIssue.assigned_to.id);
+        user.issues.push(newIssue);
+        console.log('user', user);
+      });
+
+      socket.on('log', function(source, data){
+        logData = data;
+        console.group("source : ", source);
+        console.log("data : ", data);
+        console.groupEnd();
+      });
     }
-
-    socket.on('currentIssueUpdated', function(data){
-      // console.log(data.login, " updateCurrentIssueThux data : ", data);
-      // console.log("users : ", $scope.users);
-      // var user = $scope.users[data.login];
-      var user = search($scope.users, 'login', data.login);
-      // console.log("user : ", user);
-      user.issueId = data.issueId;
-      user.issueName = data.issueName;
-      user.issueStatus = data.issueStatus;
-      user.issueTime = data.issueTime;
-      user.issueUrl = data.issueUrl;
-      $isotope.reLayout();
-    });
-
-    socket.on('updateIssue', function(updatedIssue){
-      // console.log('updatedIssue', updatedIssue.assigned_to.name);
-      console.log('updatedIssue', updatedIssue);
-      test = updatedIssue;
-
-      var issue = search( $scope.issues, 'id', updatedIssue.id);
-      var issueIndex = $scope.issues.indexOf(issue);
-      // console.log('issue', issue.assigned_to.name);
-      console.log('issue', issue);
-      noty({text:'updating issue ' + updatedIssue.id, layout: 'topRight', timeout:3000});
-      noty({text:'from ' + issue.assigned_to.name, layout: 'topRight', timeout:3000});
-      noty({text:'to ' + updatedIssue.assigned_to.name, layout: 'topRight', timeout:3000});
-
-
-
-      var lastUser = search( $scope.users, 'id', issue.assigned_to.id);
-
-      if (!!lastUser) {
-        // console.log('lastUser.issues.indexOf(issue)', lastUser.issues.indexOf(issue));
-        lastUser.issues.splice(lastUser.issues.indexOf(issue), 1);
-        // console.log('lastUser', lastUser.name);
-      }
-
-      // issue = updatedIssue;
-      $scope.issues.splice(issueIndex, 1);
-      $scope.issues.push(updatedIssue);
-
-      var newUser = search($scope.users, 'id', updatedIssue.assigned_to.id);
-      if (!!newUser) {
-        newUser.issues.push(updatedIssue);
-        // console.log('newUser', newUser.name);
-      };
-    });
-
-    socket.on('createIssue', function createIssue (newIssue){
-      console.log('newIssue', newIssue);
-      $scope.issues.push(newIssue);
-      var user = search($scope.users, 'id', newIssue.assigned_to.id);
-      user.issues.push(newIssue);
-      console.log('user', user);
-    });
-
-    socket.on('log', function(source, data){
-      logData = data;
-      console.group("source : ", source);
-      console.log("data : ", data);
-      console.groupEnd();
-    });
   });
 
   $scope.testIssueUpdate = function testIssueUpdate () {
