@@ -105,7 +105,7 @@ function TeamCtrl($scope, socket, search) {
       });
 
       socket.on('currentIssueUpdated', function(data){
-        console.log(data.login, " updateCurrentIssueThux data : ", data);
+        // console.log(data.login, " updateCurrentIssueThux data : ", data);
         // console.log("users : ", $scope.users);
         // var user = $scope.users[data.login];
         var user = search($scope.users, 'login', data.login);
@@ -115,7 +115,7 @@ function TeamCtrl($scope, socket, search) {
         // user.issueTime = data.issueTime;
         // user.issueUrl = data.issueUrl;
         user.currentTask = data;
-        console.log("user : ", user);
+        // console.log("user : ", user);
         $isotope.reLayout();
       });
 
