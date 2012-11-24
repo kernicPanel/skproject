@@ -14,8 +14,10 @@ block content
                             span.currentPriority  {{user.currentTask.issuePriority}}
                             p Tâche &nbsp;
                                 span.currentId {{user.currentTask.startedWith}} &nbsp;
-                                span.currentStatus {{user.currentTask.issueStatus}} :
+                                span.currentStatus {{user.currentTask.issueStatus}} :&nbsp;
                                 span.currentTime  {{user.currentTask.issueTime}}
+                            //- p
+                            //-     span.start  {{user.currentTask.startedAt}}
                             p
                                 a(href='{{user.currentTask.issueUrl}}', target='_blank') {{user.currentTask.issueId}} {{user.currentTask.issueName}}
                         //- p.currentName  {{user.issueName}}

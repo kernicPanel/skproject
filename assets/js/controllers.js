@@ -39,6 +39,14 @@ function TeamCtrl($scope, socket, search) {
     if (!usersLoaded) {
       socket.emit('getUsers', {}, function (err, users) {
         console.log(err, users);
+
+        // for (var i = users.length - 1; i >= 0; i--) {
+        //   user = users[i];
+        //   if (user.hasOwnProperty('currentTask')) {
+        //     console.log('user', user);
+        //     user.currentTask.issueTime = moment(user.currentTask.startedAt).fromNow();
+        //   }
+        // }
         $scope.users = users;
         // $scope.issues = [];
 
