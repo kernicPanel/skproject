@@ -105,16 +105,17 @@ function TeamCtrl($scope, socket, search) {
       });
 
       socket.on('currentIssueUpdated', function(data){
-        // console.log(data.login, " updateCurrentIssueThux data : ", data);
+        console.log(data.login, " updateCurrentIssueThux data : ", data);
         // console.log("users : ", $scope.users);
         // var user = $scope.users[data.login];
         var user = search($scope.users, 'login', data.login);
-        // console.log("user : ", user);
-        user.issueId = data.issueId;
-        user.issueName = data.issueName;
-        user.issueStatus = data.issueStatus;
-        user.issueTime = data.issueTime;
-        user.issueUrl = data.issueUrl;
+        // user.issueId = data.issueId;
+        // user.issueName = data.issueName;
+        // user.issueStatus = data.issueStatus;
+        // user.issueTime = data.issueTime;
+        // user.issueUrl = data.issueUrl;
+        user.currentTask = data;
+        console.log("user : ", user);
         $isotope.reLayout();
       });
 
