@@ -5,16 +5,16 @@ Copyright (c) 2012 Nicolas Clerc <kernicpanel@nclerc.fr>
 This file is part of redLive.
 
 redLive is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
+it under the terms of the GNU Affero General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
 redLive is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
+GNU Affero General Public License for more details.
 
-You should have received a copy of the GNU General Public License
+You should have received a copy of the GNU Affero General Public License
 along with redLive.  If not, see <http://www.gnu.org/licenses/>.
 
 */
@@ -50,10 +50,50 @@ angular.module('redLive.directives', []).
 
     };
   }).
-  directive('userIssues', function(socket){
+  directive('userIssues', function(socket, $timeout, dateFilter){
     // console.log('socket : ', socket);
 
     return function(scope, element, attrs) {
+
+      scope.timer = false;
+
+      if (!!scope.user.currentTask &&
+          scope.user.currentTask.startedAt &&
+          scope.user.currentTask.startedWith === 'redLive') {
+
+        console.log('attrs', attrs);
+        // used to update the UI
+        var updateTime = function updateTime() {
+          var now = new Date();
+          var startedDate = new Date(scope.user.currentTask.startedAt);
+          var dateDiff = (now - startedDate)-60*60*1000;
+          $(element).find('.currentTime').text(dateFilter(dateDiff, "H'h 'mm'm 'ss's'" ));
+        };
+
+        // schedule update in one second
+        var updateLater = function updateLater() {
+          // save the timeoutId for canceling
+          timeoutId = $timeout(function() {
+            updateTime(); // update DOM
+            updateLater(); // schedule another update
+          }, 1000);
+        };
+        scope.timer = true;
+        updateLater();
+      }
+
+
+      socket.on('currentIssuePause', function(updatedIssue){
+        // console.log('$timeout', $timeout);
+        // console.log('timeoutId', timeoutId);
+        if (scope.timer) {
+          $timeout.cancel(timeoutId);
+          scope.timer = false;
+        }
+        else {
+          updateLater();
+        }
+      });
 
       // console.log('scope : ', scope);
       // console.log('element : ', element);
@@ -88,7 +128,7 @@ angular.module('redLive.directives', []).
 
       scope.$watch(scope.user, function() {
         // element.isotope();
-        // $isotope.reLayout();
+        $isotope.reLayout();
       });
 
       // $(element).on('click', function(){
