@@ -380,6 +380,7 @@ server.get('/', [requireLogin], function(req,res){
 
 server.get('/log', [requireLogin], function(req,res){
   console.log('req', req);
+  server.eventsManager.emit('log', req.query);
   server.eventsManager.emit('log', req.body);
   res.send({
     query: req.query,
