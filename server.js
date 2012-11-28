@@ -378,6 +378,14 @@ server.get('/', [requireLogin], function(req,res){
   res.redirect('/team');
 });
 
+server.get('/log', [requireLogin], function(req,res){
+  console.log('req', req);
+  res.send({
+    query: req.query,
+    body: req.body
+  });
+});
+
 server.get('/health', function(req, res){
   res.send({
     pid: process.pid,
