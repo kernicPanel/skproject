@@ -2,20 +2,20 @@
 
 Copyright (c) 2012 Nicolas Clerc <kernicpanel@nclerc.fr>
 
-This file is part of redLive.
+This file is part of realTeam.
 
-redLive is free software: you can redistribute it and/or modify
+realTeam is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-redLive is distributed in the hope that it will be useful,
+realTeam is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
-along with redLive.  If not, see <http://www.gnu.org/licenses/>.
+along with realTeam.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
@@ -24,7 +24,7 @@ along with redLive.  If not, see <http://www.gnu.org/licenses/>.
 /* Directives */
 
 
-angular.module('redLive.directives', []).
+angular.module('realTeam.directives', []).
   directive('appVersion', ['version', function(version) {
     return function(scope, elm, attrs) {
       elm.text(version);
@@ -59,7 +59,7 @@ angular.module('redLive.directives', []).
 
       if (!!scope.user.currentTask &&
           scope.user.currentTask.startedAt &&
-          scope.user.currentTask.startedWith === 'redLive') {
+          scope.user.currentTask.startedWith === 'realTeam') {
 
         console.log('attrs', attrs);
         // used to update the UI
@@ -77,23 +77,11 @@ angular.module('redLive.directives', []).
             updateTime(); // update DOM
             updateLater(); // schedule another update
           }, 1000);
+          scope.timer = true;
         };
-        scope.timer = true;
         updateLater();
       }
 
-
-      socket.on('currentIssuePause', function(updatedIssue){
-        // console.log('$timeout', $timeout);
-        // console.log('timeoutId', timeoutId);
-        if (scope.timer) {
-          $timeout.cancel(timeoutId);
-          scope.timer = false;
-        }
-        else {
-          updateLater();
-        }
-      });
 
       // console.log('scope : ', scope);
       // console.log('element : ', element);
@@ -144,7 +132,7 @@ angular.module('redLive.directives', []).
       $(element).find('.showIssue').on('click', function(){
         $(element).find('.issueContent').slideToggle('fast', function () {
           $isotope.reLayout(function () {
-            $.scrollTo($(element).offset().top - 50, 400);
+            // $.scrollTo($(element).offset().top - 50, 400);
           });
         });
       });

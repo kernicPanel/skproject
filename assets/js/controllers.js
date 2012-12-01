@@ -2,20 +2,20 @@
 
 Copyright (c) 2012 Nicolas Clerc <kernicpanel@nclerc.fr>
 
-This file is part of redLive.
+This file is part of realTeam.
 
-redLive is free software: you can redistribute it and/or modify
+realTeam is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-redLive is distributed in the hope that it will be useful,
+realTeam is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
-along with redLive.  If not, see <http://www.gnu.org/licenses/>.
+along with realTeam.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
@@ -23,7 +23,7 @@ along with redLive.  If not, see <http://www.gnu.org/licenses/>.
 
 /* Controllers */
 
-function TeamCtrl($scope, socket, search) {
+function TeamCtrl($scope, socket, search, timer, $timeout) {
   socket.on('send:name', function (data) {
     $scope.name = data.name;
   });
@@ -67,11 +67,15 @@ function TeamCtrl($scope, socket, search) {
             text: 'Users Loaded',
             layout: 'topRight',
             timeout:3000,
-            callback: {
-              afterShow: function() {
-                $isotope.reLayout();
-              }
-            },
+            // callback: {
+            //   afterShow: function() {
+            //     $isotope.reLayout();
+            //   }
+            // },
+          });
+
+          $timeout(function (scope) {
+            $isotope.reLayout();
           });
         });
 
@@ -99,32 +103,81 @@ function TeamCtrl($scope, socket, search) {
           //   noty({text: 'Users Loaded', layout: 'topRight', timeout:1000});
           // });
 
-            noty({
-              text: 'Issues Loaded',
-              layout: 'topRight',
-              timeout:3000,
-              callback: {
-                afterShow: function() {
-                  $isotope.reLayout();
-                }
-              },
-            });
+          noty({
+            text: 'Issues Loaded',
+            layout: 'topRight',
+            timeout:3000,
+            // callback: {
+            //   afterShow: function() {
+            //     $isotope.reLayout();
+            //   }
+            // },
+          });
+          $timeout(function (scope) {
+            $isotope.reLayout();
+          });
         });
+      });
+
+      socket.on('irc::currentIssueUpdated', function(data){
+        // console.log("users : ", $scope.users);
+        // noty({text:data.login, layout: 'topLeft', timeout:3000});
+        var user = search($scope.users, 'login', data.login);
+        if (!user.ircCurrentTask ||
+            user.ircCurrentTask.issueId !== data.issueId ||
+            user.ircCurrentTask.issueStatus !== data.issueStatus ||
+            user.ircCurrentTask.issueTime !== data.issueTime) {
+          noty({text:data.login + ' current task updated', layout: 'topLeft', timeout:3000});
+          console.groupCollapsed(data.login);
+            console.log(" irc::currentIssueUpdated data : ", data);
+            console.log(" irc::currentIssueUpdated data : ", user.ircCurrentTask);
+          console.groupEnd();
+          user.ircCurrentTask = data;
+          if (!!user.ircCurrentTask.issueName) {
+            $timeout(function (scope) {
+              $isotope.reLayout();
+            });
+          }
+          // console.log(" Updated");
+        }
       });
 
       socket.on('currentIssueUpdated', function(data){
         // console.log(data.login, " updateCurrentIssueThux data : ", data);
         // console.log("users : ", $scope.users);
-        // var user = $scope.users[data.login];
         var user = search($scope.users, 'login', data.login);
-        // user.issueId = data.issueId;
-        // user.issueName = data.issueName;
-        // user.issueStatus = data.issueStatus;
-        // user.issueTime = data.issueTime;
-        // user.issueUrl = data.issueUrl;
         user.currentTask = data;
-        // console.log("user : ", user);
-        $isotope.reLayout();
+        // $isotope.reLayout();
+        $timeout(function (scope) {
+          $isotope.reLayout();
+        });
+      });
+
+
+
+      socket.on('pauseCurrentIssue', function(username){
+        // console.log('$timeout', $timeout);
+        // console.log('timeoutId', timeoutId);
+        var user = search($scope.users, 'login', username);
+        if (scope.timer) {
+          // console.log('stop timer');
+          // $timeout.cancel(timeoutId);
+          // scope.timer = false;
+          timer.stop(user);
+        }
+        else {
+          // console.log('start timer');
+          // updateLater();
+        }
+      });
+
+      socket.on('stopCurrentIssue', function(username){
+        var user = search($scope.users, 'login', username);
+        user.currentTask = {};
+        // $isotope.reLayout();
+        $timeout(function (scope) {
+          $isotope.reLayout();
+        });
       });
 
       socket.on('updateIssue', function(updatedIssue){
@@ -158,7 +211,7 @@ function TeamCtrl($scope, socket, search) {
         if (!!newUser) {
           newUser.issues.push(updatedIssue);
           // console.log('newUser', newUser.name);
-        };
+        }
       });
 
       socket.on('createIssue', function createIssue (newIssue){

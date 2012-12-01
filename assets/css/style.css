@@ -219,7 +219,6 @@ td { vertical-align: top; }
    ========================================================================== */
 body {
     padding-top: 60px;
-    padding-bottom: 40px;
     font-size: 12px;
 }
 a {
@@ -482,7 +481,7 @@ span.priority.Immédiat {
   margin-right: 5px;
 }
 
-.issue .timer {
+.timer {
 /*  display: none;
   position: absolute;
 */
@@ -502,7 +501,7 @@ span.priority.Immédiat {
 }
 */
 
-.issue .timer span {
+.timer span {
   -webkit-border-radius: 9px;
   -moz-border-radius: 9px;
   border-radius: 9px;
@@ -525,10 +524,10 @@ span.priority.Immédiat {
   display: inline-block;
 }*/
 
-.issue .start:hover,
-.issue .pause:hover,
-.issue .stop:hover,
-.issue .addTime:hover{
+.timer .start:hover,
+.timer .pause:hover,
+.timer .stop:hover,
+.timer .addTime:hover{
   cursor: pointer;
 }
 
@@ -670,6 +669,19 @@ tr.sameUser {
 #statsReport {
   background: #fff;
   margin-bottom: 20px;
+}
+
+footer {
+  color: #aaa;
+  padding: 20px 0;
+  margin-top: 70px;
+  border-top: 1px solid #E5E5E5;
+  background-color: whiteSmoke;
+  margin-left: -20px;
+  /*margin-right: -20px;*/
+  padding-left: 20px;
+  padding-right: 20px;
+  text-align: right;
 }
 
 

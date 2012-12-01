@@ -2,20 +2,20 @@
 
 Copyright (c) 2012 Nicolas Clerc <kernicpanel@nclerc.fr>
 
-This file is part of redLive.
+This file is part of realTeam.
 
-redLive is free software: you can redistribute it and/or modify
+realTeam is free software: you can redistribute it and/or modify
 it under the terms of the GNU Affero General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
 (at your option) any later version.
 
-redLive is distributed in the hope that it will be useful,
+realTeam is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
-along with redLive.  If not, see <http://www.gnu.org/licenses/>.
+along with realTeam.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
@@ -26,7 +26,7 @@ along with redLive.  If not, see <http://www.gnu.org/licenses/>.
 
 // Demonstrate how to register services
 // In this case it is a simple value service.
-angular.module('redLive.services', []).
+angular.module('realTeam.services', []).
   value('version', '0.1').
   factory('socket', function ($rootScope) {
     var socket = io.connect();
@@ -75,6 +75,16 @@ angular.module('redLive.services', []).
       return result;
     };
     return search;
+  }).
+  factory('timer', function ($rootScope) {
+    return {
+      start: function (user) {
+      },
+      pause: function (user) {
+      },
+      stop: function (user) {
+      }
+    };
   });
 
 root = angular.element(document.getElementById('content'));
