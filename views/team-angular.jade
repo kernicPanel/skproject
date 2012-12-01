@@ -10,6 +10,16 @@ block content
                 #content
                     .user.well.span3(user-issues, ng-repeat='user in users | orderBy:usersOrder')
                         h1.name  {{user.name}}
+                        .current(ng-show='user.ircCurrentTask.issueName')
+                            span.currentPriority  {{user.ircCurrentTask.issuePriority}}
+                            p Tâche irc &nbsp;
+                                span.currentId {{user.ircCurrentTask.startedWith}} &nbsp;
+                                span.currentStatus {{user.ircCurrentTask.issueStatus}} :&nbsp;
+                                span.currentTime  {{user.ircCurrentTask.issueTime}}
+                            //- p
+                            //-     span.start  {{user.currentTask.startedAt}}
+                            p
+                                a(href='{{user.ircCurrentTask.issueUrl}}', target='_blank') {{user.ircCurrentTask.issueId}} {{user.ircCurrentTask.issueName}}
                         .current(ng-show='user.currentTask.issueName')
                             span.currentPriority  {{user.currentTask.issuePriority}}
                             p Tâche &nbsp;
@@ -18,6 +28,12 @@ block content
                                 span.currentTime  {{user.currentTask.issueTime}}
                             //- p
                             //-     span.start  {{user.currentTask.startedAt}}
+                            .timer.badge(timer)
+                                i.icon-time.icon-white
+                                span
+                                    i.icon-pause.pause
+                                    i.icon-stop.stop
+                                    i.icon-plus.addTime
                             p
                                 a(href='{{user.currentTask.issueUrl}}', target='_blank') {{user.currentTask.issueId}} {{user.currentTask.issueName}}
                         //- p.currentName  {{user.issueName}}
@@ -38,8 +54,8 @@ block content
                                         i.icon-time.icon-white
                                         span
                                             i.icon-play.start
-                                            i.icon-pause.pause
-                                            i.icon-stop.stop
+                                            //- i.icon-pause.pause
+                                            //- i.icon-stop.stop
                                             i.icon-plus.addTime
                                     //- .info
                                     //- {{#description}}

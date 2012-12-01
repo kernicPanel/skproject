@@ -3,14 +3,14 @@
 	$.noty.layouts.topLeft = {
 		name: 'topLeft',
 		options: { // overrides options
-			
+
 		},
 		container: {
 			object: '<ul id="noty_topLeft_layout_container" />',
 			selector: 'ul#noty_topLeft_layout_container',
 			style: function() {
 				$(this).css({
-					top: 20,
+					top: 60,
 					left: 20,
 					position: 'fixed',
 					width: '310px',

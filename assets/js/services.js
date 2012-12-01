@@ -75,6 +75,16 @@ angular.module('realTeam.services', []).
       return result;
     };
     return search;
+  }).
+  factory('timer', function ($rootScope) {
+    return {
+      start: function (user) {
+      },
+      pause: function (user) {
+      },
+      stop: function (user) {
+      }
+    };
   });
 
 root = angular.element(document.getElementById('content'));

@@ -77,23 +77,11 @@ angular.module('realTeam.directives', []).
             updateTime(); // update DOM
             updateLater(); // schedule another update
           }, 1000);
+          scope.timer = true;
         };
-        scope.timer = true;
         updateLater();
       }
 
-
-      socket.on('currentIssuePause', function(updatedIssue){
-        // console.log('$timeout', $timeout);
-        // console.log('timeoutId', timeoutId);
-        if (scope.timer) {
-          $timeout.cancel(timeoutId);
-          scope.timer = false;
-        }
-        else {
-          updateLater();
-        }
-      });
 
       // console.log('scope : ', scope);
       // console.log('element : ', element);
@@ -144,7 +132,7 @@ angular.module('realTeam.directives', []).
       $(element).find('.showIssue').on('click', function(){
         $(element).find('.issueContent').slideToggle('fast', function () {
           $isotope.reLayout(function () {
-            $.scrollTo($(element).offset().top - 50, 400);
+            // $.scrollTo($(element).offset().top - 50, 400);
           });
         });
       });
