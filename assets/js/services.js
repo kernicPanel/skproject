@@ -76,13 +76,73 @@ angular.module('realTeam.services', []).
     };
     return search;
   }).
-  factory('timer', function ($rootScope) {
+  factory('timer', function ($rootScope, $timeout, dateFilter) {
+    var timeoutId = false;
+    var pendingTime = 0;
+    var pendingTimeCounter = 0;
+    // var updateTime = function updateTime(user, pendingTimeCounter) {
+    var updateTime = function updateTime(user) {
+      // // console.log('pendingTimeCounter', pendingTimeCounter);
+      // pendingTimeCounter = pendingTimeCounter || pendingTime;
+      // // console.log('pendingTimeCounter default', pendingTimeCounter);
+      // // console.log('updateTime', user.currentTask);
+      // var now = new Date();
+      // var startedDate = new Date(user.currentTask.startedAt);
+      // var dateDiff = (now - startedDate)-60*60*1000;
+      // // console.log('updateTime', dateDiff);
+      // dateDiff += pendingTimeCounter;
+      // // console.log('updateTime', pendingTimeCounter);
+      // // console.log('updateTime', dateDiff);
+      // // var dateDiff = user.currentTask.timeCounter;
+      // // user.currentTask.timeCounter = dateFilter(dateDiff, "H'h 'mm'm 'ss's'" ) + dateDiff;
+      user.currentTask.timeCounter = dateFilter((pendingTimeCounter - 60 *60 * 1000), "H'h 'mm'm 'ss's'" ) + ' (' + pendingTimeCounter +' ms)' + ' (' + pendingTimeCounter / 1000 / 60 / 60 + ' h)';
+    };
+
+    // schedule update in one second
+    var updateLater = function updateLater(user) {
+      // save the timeoutId for canceling
+      timeoutId = $timeout(function() {
+        pendingTimeCounter += 1000;
+        updateTime(user); // update DOM
+        updateLater(user); // schedule another update
+      }, 1000);
+    };
+
+
     return {
+      init: function (user) {
+        // console.log('timer init', user);
+        pendingTimeCounter = user.currentTask.pendingTimeCounter;
+        if (user.currentTask.paused) {
+          updateTime(user);
+        }
+        else {
+          updateLater(user);
+        }
+      },
       start: function (user) {
+        // console.log('timer start', user);
+        $timeout.cancel(timeoutId);
+        pendingTimeCounter = 0;
+        updateLater(user);
       },
       pause: function (user) {
+        // console.log('timer pause', user, timeoutId);
+        if (!!timeoutId) {
+          // user.currentTask.issueStatus = 'en pause';
+          $timeout.cancel(timeoutId);
+          timeoutId = false;
+          updateTime(user);
+        }
+        else {
+          // user.currentTask.issueStatus = 'en cours';
+          updateLater(user);
+        }
       },
       stop: function (user) {
+        pendingTimeCounter = 0;
+        $timeout.cancel(timeoutId);
+        // console.log('timer stop', user);
       }
     };
   });

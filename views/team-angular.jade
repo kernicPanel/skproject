@@ -25,7 +25,7 @@ block content
                             p Tâche &nbsp;
                                 span.currentId {{user.currentTask.startedWith}} &nbsp;
                                 span.currentStatus {{user.currentTask.issueStatus}} :&nbsp;
-                                span.currentTime  {{user.currentTask.issueTime}}
+                                span.currentTime.timeCounter  {{user.currentTask.timeCounter}}
                             //- p
                             //-     span.start  {{user.currentTask.startedAt}}
                             .timer.badge(timer)

@@ -55,32 +55,32 @@ angular.module('realTeam.directives', []).
 
     return function(scope, element, attrs) {
 
-      scope.timer = false;
+      // scope.timer = false;
 
-      if (!!scope.user.currentTask &&
-          scope.user.currentTask.startedAt &&
-          scope.user.currentTask.startedWith === 'realTeam') {
+      // if (!!scope.user.currentTask &&
+      //     scope.user.currentTask.startedAt &&
+      //     scope.user.currentTask.startedWith === 'realTeam') {
 
-        console.log('attrs', attrs);
-        // used to update the UI
-        var updateTime = function updateTime() {
-          var now = new Date();
-          var startedDate = new Date(scope.user.currentTask.startedAt);
-          var dateDiff = (now - startedDate)-60*60*1000;
-          $(element).find('.currentTime').text(dateFilter(dateDiff, "H'h 'mm'm 'ss's'" ));
-        };
+      //   console.log('attrs', attrs);
+      //   // used to update the UI
+      //   var updateTime = function updateTime() {
+      //     var now = new Date();
+      //     var startedDate = new Date(scope.user.currentTask.startedAt);
+      //     var dateDiff = (now - startedDate)-60*60*1000;
+      //     $(element).find('.timeCounter').text(dateFilter(dateDiff, "H'h 'mm'm 'ss's'" ));
+      //   };
 
-        // schedule update in one second
-        var updateLater = function updateLater() {
-          // save the timeoutId for canceling
-          timeoutId = $timeout(function() {
-            updateTime(); // update DOM
-            updateLater(); // schedule another update
-          }, 1000);
-          scope.timer = true;
-        };
-        updateLater();
-      }
+      //   // schedule update in one second
+      //   var updateLater = function updateLater() {
+      //     // save the timeoutId for canceling
+      //     timeoutId = $timeout(function() {
+      //       updateTime(); // update DOM
+      //       updateLater(); // schedule another update
+      //     }, 1000);
+      //     scope.timer = true;
+      //   };
+      //   updateLater();
+      // }
 
 
       // console.log('scope : ', scope);
@@ -93,12 +93,12 @@ angular.module('realTeam.directives', []).
       $(element).find('.issues').hide();
 
       $(element).find('.showIssues').on('click', function(){
-        console.log(this);
+        // console.log(this);
         var user = scope.user;
         if (!user.hasOwnProperty('issues')) {
           socket.emit('getUserIssues', user.id, function (err, issues) {
-            console.log('issues', issues);
-            console.log('scope', scope);
+            // console.log('issues', issues);
+            // console.log('scope', scope);
             user.issues = issues;
             // scope.$parent.issues = scope.$parent.issues.concat(issues);
           });
@@ -147,12 +147,12 @@ angular.module('realTeam.directives', []).
       $(element).find('.journals').hide();
 
       $(element).find('.showJournal').on('click', function(){
-        console.log('scope.issue', scope.issue);
+        // console.log('scope.issue', scope.issue);
         var issue = scope.issue;
         if (!issue.hasOwnProperty('journals')) {
           socket.emit('getCompleteIssue', issue.id, function (err, completeIssue) {
             issue.journals = completeIssue.journals;
-            console.log('journals', completeIssue.journals);
+            // console.log('journals', completeIssue.journals);
 
           });
         }
@@ -178,29 +178,29 @@ angular.module('realTeam.directives', []).
       var issue = scope.issue;
 
       $(element).find('.start').on('click', function(){
-        console.log(scope);
+        // console.log(scope);
         noty({text: 'start issue ' + issue.id, layout: 'topRight', timeout:3000});
         socket.emit('startIssue', issue.id, function (err, data) {
-          console.log('err : ', err);
-          console.log('data : ', data);
+          // console.log('err : ', err);
+          // console.log('data : ', data);
         });
       });
 
       $(element).find('.pause').on('click', function(){
-        console.log(this);
+        // console.log(this);
         noty({text: 'pause issue', timeout:3000});
         socket.emit('pauseIssue',{} , function (err, data) {
-          console.log('err : ', err);
-          console.log('data : ', data);
+          // console.log('err : ', err);
+          // console.log('data : ', data);
         });
       });
 
       $(element).find('.stop').on('click', function(){
-        console.log(this);
+        // console.log(this);
         noty({text: 'stop issue', timeout:3000});
         socket.emit('stopIssue', {}, function (err, data) {
-          console.log('err : ', err);
-          console.log('data : ', data);
+          // console.log('err : ', err);
+          // console.log('data : ', data);
         });
       });
     };
@@ -220,25 +220,25 @@ angular.module('realTeam.directives', []).
     return function(scope, element, attrs) {
 
       $(element).find('#sync').on('click', function(){
-        console.log('element', element);
+        // console.log('element', element);
         socket.emit('sync', {}, function (err, data) {
-            console.log('redmine::sync', err);
-            console.log('redmine::sync', data);
+            // console.log('redmine::sync', err);
+            // console.log('redmine::sync', data);
         });
         return false;
       });
 
       $(element).find('#setusers').on('click', function(){
         socket.emit('setUsersIssues', {}, function (err, data) {
-            console.log('setUsersIssues', err);
-            console.log('setUsersIssues', data);
+            // console.log('setUsersIssues', err);
+            // console.log('setUsersIssues', data);
         });
       });
 
       $(element).find('#setprojects').on('click', function(){
         socket.emit('setSkProjects', {}, function (err, data) {
-            console.log('setSkProjects', err);
-            console.log('setSkProjects', data);
+            // console.log('setSkProjects', err);
+            // console.log('setSkProjects', data);
         });
       });
 
