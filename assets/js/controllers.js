@@ -38,7 +38,7 @@ function TeamCtrl($scope, socket, search, timer, $timeout) {
 
     if (!usersLoaded) {
       socket.emit('getUsers', {}, function (err, users) {
-        console.log(err, users);
+        // console.log(err, users);
 
         // for (var i = users.length - 1; i >= 0; i--) {
         //   user = users[i];
@@ -55,7 +55,7 @@ function TeamCtrl($scope, socket, search, timer, $timeout) {
         // console.log($('#content'));
         // console.log($('.user'));
         $scope.$watch($scope.users, function(){
-          console.log("user changed", $scope.users);
+          // console.log("user changed", $scope.users);
           $('#content').isotope({
             itemSelector : '.user'
           });
@@ -77,6 +77,21 @@ function TeamCtrl($scope, socket, search, timer, $timeout) {
           $timeout(function (scope) {
             $isotope.reLayout();
           });
+        });
+
+        socket.emit('getCurrentIssues', {}, function (err, issues) {
+          // console.log('getCurrentIssues', issues);
+        });
+
+        socket.on('getCurrentIssues::response', function (issue) {
+          // console.log('getCurrentIssues::response', issue);
+          // console.log('$scope.users', $scope.users);
+
+          var user = search($scope.users, 'login', issue.username);
+          user.currentTask = issue.currentTask;
+          // console.log('user', user);
+          timer.init(user);
+
         });
 
         socket.emit('getIssues', {}, function (err, issues) {
@@ -127,11 +142,11 @@ function TeamCtrl($scope, socket, search, timer, $timeout) {
             user.ircCurrentTask.issueId !== data.issueId ||
             user.ircCurrentTask.issueStatus !== data.issueStatus ||
             user.ircCurrentTask.issueTime !== data.issueTime) {
-          noty({text:data.login + ' current task updated', layout: 'topLeft', timeout:3000});
-          console.groupCollapsed(data.login);
-            console.log(" irc::currentIssueUpdated data : ", data);
-            console.log(" irc::currentIssueUpdated data : ", user.ircCurrentTask);
-          console.groupEnd();
+          // noty({text:data.login + ' current irc task updated', layout: 'topLeft', timeout:3000});
+          // console.groupCollapsed(data.login);
+          //   console.log(" irc::currentIssueUpdated data : ", data);
+          //   console.log(" irc::currentIssueUpdated data : ", user.ircCurrentTask);
+          // console.groupEnd();
           user.ircCurrentTask = data;
           if (!!user.ircCurrentTask.issueName) {
             $timeout(function (scope) {
@@ -142,38 +157,46 @@ function TeamCtrl($scope, socket, search, timer, $timeout) {
         }
       });
 
-      socket.on('currentIssueUpdated', function(data){
-        // console.log(data.login, " updateCurrentIssueThux data : ", data);
+      socket.on('startCurrentIssue', function(currentTask){
+        // console.log(currentTask.login, " updateCurrentIssueThux currentTask : ", currentTask);
         // console.log("users : ", $scope.users);
-        var user = search($scope.users, 'login', data.login);
-        user.currentTask = data;
+        var user = search($scope.users, 'login', currentTask.login);
+        // console.log("user : ", user);
+        user.currentTask = currentTask;
         // $isotope.reLayout();
         $timeout(function (scope) {
           $isotope.reLayout();
+          timer.start(user);
         });
       });
 
 
 
-      socket.on('pauseCurrentIssue', function(username){
+      socket.on('pauseCurrentIssue', function(currentTask){
         // console.log('$timeout', $timeout);
         // console.log('timeoutId', timeoutId);
-        var user = search($scope.users, 'login', username);
-        if (scope.timer) {
-          // console.log('stop timer');
-          // $timeout.cancel(timeoutId);
-          // scope.timer = false;
-          timer.stop(user);
-        }
-        else {
-          // console.log('start timer');
-          // updateLater();
-        }
+        // var user = search($scope.users, 'login', username);
+        // if (scope.timer) {
+        //   // console.log('stop timer');
+        //   // $timeout.cancel(timeoutId);
+        //   // scope.timer = false;
+        //   timer.stop(user);
+        // }
+        // else {
+        //   // console.log('start timer');
+        //   // updateLater();
+        // }
+        // console.log("currentTask pause : ", currentTask);
+        var user = search($scope.users, 'login', currentTask.login);
+        user.currentTask = currentTask;
+        // console.log("user pause : ", user);
+        timer.pause(user, currentTask.pendingTimeCounter);
       });
 
       socket.on('stopCurrentIssue', function(username){
         var user = search($scope.users, 'login', username);
         user.currentTask = {};
+        timer.stop(user);
         // $isotope.reLayout();
         $timeout(function (scope) {
           $isotope.reLayout();
@@ -182,13 +205,13 @@ function TeamCtrl($scope, socket, search, timer, $timeout) {
 
       socket.on('updateIssue', function(updatedIssue){
         // console.log('updatedIssue', updatedIssue.assigned_to.name);
-        console.log('updatedIssue', updatedIssue);
+        // console.log('updatedIssue', updatedIssue);
         test = updatedIssue;
 
         var issue = search( $scope.issues, 'id', updatedIssue.id);
         var issueIndex = $scope.issues.indexOf(issue);
         // console.log('issue', issue.assigned_to.name);
-        console.log('issue', issue);
+        // console.log('issue', issue);
         noty({text:'updating issue ' + updatedIssue.id, layout: 'topRight', timeout:3000});
         noty({text:'from ' + issue.assigned_to.name, layout: 'topRight', timeout:3000});
         noty({text:'to ' + updatedIssue.assigned_to.name, layout: 'topRight', timeout:3000});
@@ -215,11 +238,11 @@ function TeamCtrl($scope, socket, search, timer, $timeout) {
       });
 
       socket.on('createIssue', function createIssue (newIssue){
-        console.log('newIssue', newIssue);
+        // console.log('newIssue', newIssue);
         $scope.issues.push(newIssue);
         var user = search($scope.users, 'id', newIssue.assigned_to.id);
         user.issues.push(newIssue);
-        console.log('user', user);
+        // console.log('user', user);
       });
 
       socket.on('log', function(source, data){
@@ -232,28 +255,28 @@ function TeamCtrl($scope, socket, search, timer, $timeout) {
   });
 
   $scope.testIssueUpdate = function testIssueUpdate () {
-    console.log('start testIssueUpdate');
+    // console.log('start testIssueUpdate');
     issue = search(root.scope().issues, 'id', 7922);
 
 
     noty({text:'updating issue ' + issue.id, layout: 'topLeft', timeout:3000});
     noty({text:'from ' + issue.assigned_to.name, layout: 'topLeft', timeout:3000});
 
-    console.log('testIssueUpdate issue : ', issue);
+    // console.log('testIssueUpdate issue : ', issue);
     socket.emit('testIssueUpdate', issue.assigned_to, function(){
-      console.log('stop testIssueUpdate');
+      // console.log('stop testIssueUpdate');
     });
   };
 
   $scope.checkLastIssue = function checkLastIssue () {
-    console.log('start checkLastIssue');
+    // console.log('start checkLastIssue');
 
     socket.emit('checkLastIssue', {}, function(){
-      console.log('stop checkLastIssue');
+      // console.log('stop checkLastIssue');
     });
   };
 
-  console.log('$scope : ', $scope);
+  // console.log('$scope : ', $scope);
 
 }
 
