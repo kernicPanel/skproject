@@ -24,8 +24,6 @@ along with realTeam.  If not, see <http://www.gnu.org/licenses/>.
 /* Services */
 
 
-// Demonstrate how to register services
-// In this case it is a simple value service.
 angular.module('realTeam.services', []).
   value('version', '0.1').
   factory('socket', function ($rootScope) {
@@ -58,12 +56,7 @@ angular.module('realTeam.services', []).
       var result = [];
       array.forEach(function(element, index) {
         if (element[attr] === val) {
-          // console.log('array[index]', array[index]);
-          // console.log('element[attr]', element[attr]);
-          // console.log('array', array);
-
           result.push(element);
-          // return array[index];
         }
       });
       if (result.length === 1) {
@@ -80,38 +73,20 @@ angular.module('realTeam.services', []).
     var timeoutId = false;
     var pendingTime = 0;
     var pendingTimeCounter = 0;
-    // var updateTime = function updateTime(user, pendingTimeCounter) {
     var updateTime = function updateTime(user) {
-      // // console.log('pendingTimeCounter', pendingTimeCounter);
-      // pendingTimeCounter = pendingTimeCounter || pendingTime;
-      // // console.log('pendingTimeCounter default', pendingTimeCounter);
-      // // console.log('updateTime', user.currentTask);
-      // var now = new Date();
-      // var startedDate = new Date(user.currentTask.startedAt);
-      // var dateDiff = (now - startedDate)-60*60*1000;
-      // // console.log('updateTime', dateDiff);
-      // dateDiff += pendingTimeCounter;
-      // // console.log('updateTime', pendingTimeCounter);
-      // // console.log('updateTime', dateDiff);
-      // // var dateDiff = user.currentTask.timeCounter;
-      // // user.currentTask.timeCounter = dateFilter(dateDiff, "H'h 'mm'm 'ss's'" ) + dateDiff;
       user.currentTask.timeCounter = dateFilter((pendingTimeCounter - 60 *60 * 1000), "H'h 'mm'm 'ss's'" ) + ' (' + pendingTimeCounter +' ms)' + ' (' + pendingTimeCounter / 1000 / 60 / 60 + ' h)';
     };
 
-    // schedule update in one second
     var updateLater = function updateLater(user) {
-      // save the timeoutId for canceling
       timeoutId = $timeout(function() {
         pendingTimeCounter += 1000;
-        updateTime(user); // update DOM
-        updateLater(user); // schedule another update
+        updateTime(user);
+        updateLater(user);
       }, 1000);
     };
 
-
     return {
       init: function (user) {
-        // console.log('timer init', user);
         pendingTimeCounter = user.currentTask.pendingTimeCounter;
         if (user.currentTask.paused) {
           updateTime(user);
@@ -121,32 +96,26 @@ angular.module('realTeam.services', []).
         }
       },
       start: function (user) {
-        // console.log('timer start', user);
         $timeout.cancel(timeoutId);
         pendingTimeCounter = 0;
         updateLater(user);
       },
       pause: function (user) {
-        // console.log('timer pause', user, timeoutId);
         if (!!timeoutId) {
-          // user.currentTask.issueStatus = 'en pause';
           $timeout.cancel(timeoutId);
           timeoutId = false;
           updateTime(user);
         }
         else {
-          // user.currentTask.issueStatus = 'en cours';
           updateLater(user);
         }
       },
       stop: function (user) {
         pendingTimeCounter = 0;
         $timeout.cancel(timeoutId);
-        // console.log('timer stop', user);
       }
     };
   });
 
 root = angular.element(document.getElementById('content'));
 scope = root.scope();
-// search = root.injector().get('search');

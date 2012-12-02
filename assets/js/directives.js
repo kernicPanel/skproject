@@ -33,74 +33,19 @@ angular.module('realTeam.directives', []).
   directive('users', function() {
     return function(scope, element, attrs) {
       scope.usersOrder = 'name';
-
-      // $(element).isotope({
-      //   itemSelector : '.user',
-      //   getSortData : {
-      //     name : function ( $elem ) {
-      //       return $elem.find('.name').text();
-      //     },
-      //     count : function ( $elem ) {
-      //       return parseInt($elem.find('.count').text(), 10);
-      //     }
-      //   },
-      //   sortBy : 'name'
-      // });
-      // $isotope = $(element).data('isotope');
-
     };
   }).
   directive('userIssues', function(socket, $timeout, dateFilter){
-    // console.log('socket : ', socket);
-
     return function(scope, element, attrs) {
-
-      // scope.timer = false;
-
-      // if (!!scope.user.currentTask &&
-      //     scope.user.currentTask.startedAt &&
-      //     scope.user.currentTask.startedWith === 'realTeam') {
-
-      //   console.log('attrs', attrs);
-      //   // used to update the UI
-      //   var updateTime = function updateTime() {
-      //     var now = new Date();
-      //     var startedDate = new Date(scope.user.currentTask.startedAt);
-      //     var dateDiff = (now - startedDate)-60*60*1000;
-      //     $(element).find('.timeCounter').text(dateFilter(dateDiff, "H'h 'mm'm 'ss's'" ));
-      //   };
-
-      //   // schedule update in one second
-      //   var updateLater = function updateLater() {
-      //     // save the timeoutId for canceling
-      //     timeoutId = $timeout(function() {
-      //       updateTime(); // update DOM
-      //       updateLater(); // schedule another update
-      //     }, 1000);
-      //     scope.timer = true;
-      //   };
-      //   updateLater();
-      // }
-
-
-      // console.log('scope : ', scope);
-      // console.log('element : ', element);
-      // console.log('attrs : ', attrs);
-
       scope.issuesOrder = '-priority.id';
-      // scope.issueOrder = 'subject';
 
       $(element).find('.issues').hide();
 
       $(element).find('.showIssues').on('click', function(){
-        // console.log(this);
         var user = scope.user;
         if (!user.hasOwnProperty('issues')) {
           socket.emit('getUserIssues', user.id, function (err, issues) {
-            // console.log('issues', issues);
-            // console.log('scope', scope);
             user.issues = issues;
-            // scope.$parent.issues = scope.$parent.issues.concat(issues);
           });
         }
         $(this).toggleClass('badge')
@@ -115,13 +60,8 @@ angular.module('realTeam.directives', []).
       });
 
       scope.$watch(scope.user, function() {
-        // element.isotope();
         $isotope.reLayout();
       });
-
-      // $(element).on('click', function(){
-      //   console.log(this);
-      // });
     };
   }).
   directive('issue', function(socket){
@@ -137,23 +77,13 @@ angular.module('realTeam.directives', []).
         });
       });
 
-
-      // scope.$watch(scope.issue, function watchUserIssue() {
-      //   var description = $(element).find('.desc');
-      //   description.html(description.text());
-      //   $isotope.reLayout();
-      // });
-
       $(element).find('.journals').hide();
 
       $(element).find('.showJournal').on('click', function(){
-        // console.log('scope.issue', scope.issue);
         var issue = scope.issue;
         if (!issue.hasOwnProperty('journals')) {
           socket.emit('getCompleteIssue', issue.id, function (err, completeIssue) {
             issue.journals = completeIssue.journals;
-            // console.log('journals', completeIssue.journals);
-
           });
         }
         $(element).find('.journals').slideToggle('fast', function () {
@@ -172,35 +102,23 @@ angular.module('realTeam.directives', []).
   directive('timer', function(socket){
     return function(scope, element, attrs) {
 
-      // console.log('scope : ', scope);
-      // console.log('element : ', element);
-      // console.log('attrs : ', attrs);
       var issue = scope.issue;
 
       $(element).find('.start').on('click', function(){
-        // console.log(scope);
         noty({text: 'start issue ' + issue.id, layout: 'topRight', timeout:3000});
         socket.emit('startIssue', issue.id, function (err, data) {
-          // console.log('err : ', err);
-          // console.log('data : ', data);
         });
       });
 
       $(element).find('.pause').on('click', function(){
-        // console.log(this);
         noty({text: 'pause issue', timeout:3000});
         socket.emit('pauseIssue',{} , function (err, data) {
-          // console.log('err : ', err);
-          // console.log('data : ', data);
         });
       });
 
       $(element).find('.stop').on('click', function(){
-        // console.log(this);
         noty({text: 'stop issue', timeout:3000});
         socket.emit('stopIssue', {}, function (err, data) {
-          // console.log('err : ', err);
-          // console.log('data : ', data);
         });
       });
     };
@@ -220,25 +138,18 @@ angular.module('realTeam.directives', []).
     return function(scope, element, attrs) {
 
       $(element).find('#sync').on('click', function(){
-        // console.log('element', element);
         socket.emit('sync', {}, function (err, data) {
-            // console.log('redmine::sync', err);
-            // console.log('redmine::sync', data);
         });
         return false;
       });
 
       $(element).find('#setusers').on('click', function(){
         socket.emit('setUsersIssues', {}, function (err, data) {
-            // console.log('setUsersIssues', err);
-            // console.log('setUsersIssues', data);
         });
       });
 
       $(element).find('#setprojects').on('click', function(){
         socket.emit('setSkProjects', {}, function (err, data) {
-            // console.log('setSkProjects', err);
-            // console.log('setSkProjects', data);
         });
       });
 
