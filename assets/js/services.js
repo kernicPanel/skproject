@@ -87,6 +87,7 @@ angular.module('realTeam.services', []).
 
     return {
       init: function (user) {
+        console.log('init', user);
         pendingTimeCounter = user.currentTask.pendingTimeCounter;
         if (user.currentTask.paused) {
           updateTime(user);
@@ -96,11 +97,13 @@ angular.module('realTeam.services', []).
         }
       },
       start: function (user) {
+        console.log('start', user);
         $timeout.cancel(timeoutId);
         pendingTimeCounter = 0;
         updateLater(user);
       },
       pause: function (user) {
+        console.log('pause', user);
         if (!!timeoutId) {
           $timeout.cancel(timeoutId);
           timeoutId = false;
@@ -111,6 +114,7 @@ angular.module('realTeam.services', []).
         }
       },
       stop: function (user) {
+        console.log('stop', user);
         pendingTimeCounter = 0;
         $timeout.cancel(timeoutId);
       }

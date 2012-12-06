@@ -60,6 +60,7 @@ function TeamCtrl($scope, socket, search, timer, $timeout) {
 
         socket.on('getCurrentIssues::response', function (issue) {
           var user = search($scope.users, 'login', issue.username);
+          console.log('getCurrentIssues::response', issue.username);
           user.currentTask = issue.currentTask;
           timer.init(user);
         });
