@@ -30,8 +30,8 @@ function TeamCtrl($scope, socket, search, timer, $timeout) {
 
   var usersLoaded = false;
 
-  socket.on('redlive::connect', function (data){
-    console.log('redlive::connect');
+  socket.on('realTeam::connect', function (data){
+    console.log('realTeam::connect');
     noty({text: 'Socket Connected', timeout:3000});
 
     if (!usersLoaded) {
@@ -186,8 +186,8 @@ function TeamCtrl($scope, socket, search, timer, $timeout) {
 
 function AdminCtrl($scope, socket, search) {
 
-  socket.on('redlive::connect', function (data){
-    console.log('redlive::connect');
+  socket.on('realTeam::connect', function (data){
+    console.log('realTeam::connect');
     noty({text: 'Socket Connected', timeout:3000});
   });
 
