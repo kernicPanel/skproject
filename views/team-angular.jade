@@ -63,7 +63,8 @@ block content
                                     //-     option(ng-repeat='issueUser in users', value='issueUser.id') {{issueUser.name}}
                                     p
                                         a(href='{{issue.url}}', target='_blank') {{issue.url}}
-                                    .desc(ng-bind-html-unsafe='issue.description')
+                                    //- .desc(ng-bind-html='issue.description')
+                                    .desc {{issue.description}}
                                     //- {{/description}}
                                     a.showJournal Voir les notes
                                     .journals
