@@ -36,6 +36,8 @@ angular.module('realTeam.directives', []).
     };
   }).
   directive('userIssues', function(socket, $timeout, dateFilter){
+    // ajouter timer
+    // voir exemples de directives
     return function(scope, element, attrs) {
       scope.issuesOrder = '-priority.id';
 
