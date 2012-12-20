@@ -38,13 +38,25 @@ angular.module('realTeam.directives', []).
   directive('userIssues', function(socket, $timeout, dateFilter){
     // ajouter timer
     // voir exemples de directives
+
+
     return function(scope, element, attrs) {
       scope.issuesOrder = '-priority.id';
+      var user = scope.user;
+
+      $(element).on("tick", function () {
+        if (user.currentTask && !user.currentTask.paused) {
+          // console.log('tick', user);
+          user.currentTask.pendingTimeCounter = user.currentTask.pendingDuration + (new Date() - new Date(user.currentTask.startedAt));
+          user.currentTask.pendingTimeCounter += 1000;
+          var pendingTimeCounter = user.currentTask.pendingTimeCounter;
+          user.currentTask.timeCounter = dateFilter((pendingTimeCounter - 60 *60 * 1000), "H'h 'mm'm 'ss's'" ) + ' (' + pendingTimeCounter +' ms)' + ' (' + pendingTimeCounter / 1000 / 60 / 60 + ' h)';
+        }
+      });
 
       $(element).find('.issues').hide();
 
       $(element).find('.showIssues').on('click', function(){
-        var user = scope.user;
         if (!user.hasOwnProperty('issues')) {
           socket.emit('getUserIssues', user.id, function (err, issues) {
             user.issues = issues;
