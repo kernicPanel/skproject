@@ -23,7 +23,7 @@ along with realTeam.  If not, see <http://www.gnu.org/licenses/>.
 
 /* Controllers */
 
-function TeamCtrl($scope, socket, search, timer, $timeout) {
+function TeamCtrl($scope, socket, search, $timeout, tick, dateFilter) {
   socket.on('send:name', function (data) {
     $scope.name = data.name;
   });
@@ -56,13 +56,23 @@ function TeamCtrl($scope, socket, search, timer, $timeout) {
         });
 
         socket.emit('getCurrentIssues', {}, function (err, issues) {
+          // console.log('getCurrentIssues::response', issues);
+          for (var i = issues.length - 1; i >= 0; i--) {
+            var issue = issues[i];
+            var user = search($scope.users, 'login', issue.username);
+            // console.log('getCurrentIssues::response', user, issue);
+            user.currentTask = issue.currentTask;
+
+            if (user.currentTask.paused) {
+              user.currentTask.pendingTimeCounter = user.currentTask.pendingDuration + (new Date() - new Date(user.currentTask.startedAt));
+              user.currentTask.pendingTimeCounter += 1000;
+              var pendingTimeCounter = user.currentTask.pendingTimeCounter;
+              user.currentTask.timeCounter = dateFilter((pendingTimeCounter - 60 *60 * 1000), "H'h 'mm'm 'ss's'" ) + ' (' + pendingTimeCounter +' ms)' + ' (' + pendingTimeCounter / 1000 / 60 / 60 + ' h)';
+            }
+          }
         });
 
         socket.on('getCurrentIssues::response', function (issue) {
-          var user = search($scope.users, 'login', issue.username);
-          console.log('getCurrentIssues::response', issue.username);
-          user.currentTask = issue.currentTask;
-          timer.init(user);
         });
 
         socket.emit('getIssues', {}, function (err, issues) {
@@ -108,24 +118,27 @@ function TeamCtrl($scope, socket, search, timer, $timeout) {
       });
 
       socket.on('startCurrentIssue', function(currentTask){
+        // console.log('startCurrentIssue', currentTask);
         var user = search($scope.users, 'login', currentTask.login);
         user.currentTask = currentTask;
         $timeout(function (scope) {
           $isotope.reLayout();
-          timer.start(user);
         });
       });
 
       socket.on('pauseCurrentIssue', function(currentTask){
+        // console.log('pauseCurrentIssue', currentTask);
         var user = search($scope.users, 'login', currentTask.login);
-        user.currentTask = currentTask;
-        timer.pause(user, currentTask.pendingTimeCounter);
+        // console.log('pauseCurrentIssue user', user.currentTask);
+        // user.currentTask = currentTask;
+        user.currentTask.paused = currentTask.paused;
+        user.currentTask.issueStatus = currentTask.issueStatus;
       });
 
       socket.on('stopCurrentIssue', function(username){
+        // console.log('stopCurrentIssue', username);
         var user = search($scope.users, 'login', username);
         user.currentTask = {};
-        timer.stop(user);
         $timeout(function (scope) {
           $isotope.reLayout();
         });
@@ -187,7 +200,7 @@ function TeamCtrl($scope, socket, search, timer, $timeout) {
 function AdminCtrl($scope, socket, search) {
 
   socket.on('realTeam::connect', function (data){
-    console.log('realTeam::connect');
+    // console.log('realTeam::connect');
     noty({text: 'Socket Connected', timeout:3000});
   });
 

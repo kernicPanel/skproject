@@ -69,56 +69,20 @@ angular.module('realTeam.services', []).
     };
     return search;
   }).
-  factory('timer', function ($rootScope, $timeout, dateFilter) {
-    var timeoutId = false;
-    var pendingTime = 0;
-    var pendingTimeCounter = 0;
-    var updateTime = function updateTime(user) {
-      user.currentTask.timeCounter = dateFilter((pendingTimeCounter - 60 *60 * 1000), "H'h 'mm'm 'ss's'" ) + ' (' + pendingTimeCounter +' ms)' + ' (' + pendingTimeCounter / 1000 / 60 / 60 + ' h)';
-    };
+  factory('tick', function ($timeout) {
 
-    var updateLater = function updateLater(user) {
+    var tick = function tick() {
       timeoutId = $timeout(function() {
-        pendingTimeCounter += 1000;
-        updateTime(user);
-        updateLater(user);
+        // console.log('tick');
+        $.event.trigger({
+          type: "tick"
+        });
+        tick();
       }, 1000);
     };
 
-    return {
-      init: function (user) {
-        console.log('init', user);
-        pendingTimeCounter = user.currentTask.pendingTimeCounter;
-        if (user.currentTask.paused) {
-          updateTime(user);
-        }
-        else {
-          updateLater(user);
-        }
-      },
-      start: function (user) {
-        console.log('start', user);
-        $timeout.cancel(timeoutId);
-        pendingTimeCounter = 0;
-        updateLater(user);
-      },
-      pause: function (user) {
-        console.log('pause', user);
-        if (!!timeoutId) {
-          $timeout.cancel(timeoutId);
-          timeoutId = false;
-          updateTime(user);
-        }
-        else {
-          updateLater(user);
-        }
-      },
-      stop: function (user) {
-        console.log('stop', user);
-        pendingTimeCounter = 0;
-        $timeout.cancel(timeoutId);
-      }
-    };
+    tick();
+
   });
 
 root = angular.element(document.getElementById('content'));
