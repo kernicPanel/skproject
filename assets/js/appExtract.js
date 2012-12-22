@@ -103,12 +103,12 @@ var app = {
             $('#dialog-message').html('');
             //console.log("err : ", err);
             //console.log("issue : ", issue.id, issue);
-            // display.issue(issue);
-            issues.push(issue);
+            display.issue(issue);
+            // issues.push(issue);
         });
 
         socket.on('redmineExtract::getIssues::done', function() {
-            displayGraphs(issues);
+            // displayGraphs(issues);
         });
 
         socket.on('log', function(data){
@@ -413,13 +413,13 @@ var chart = d3.select("#graph").append("div")
     .attr("class", "chart");
 
 var graph = function graph (data) {
-    console.log('data', data);
+    // console.log('data', data);
     chart.selectAll("div")
         .data(data)
         .enter().append("div")
         .style("width", function(d) { return d * 10 + "px"; })
         .text(function(d) { return d; });
-}
+};
 
 /*
 var margin = {top: 5, right: 40, bottom: 20, left: 120},
@@ -476,6 +476,7 @@ function randomizer(d) {
 }
 */
 
+/*
 // d3.csv("flights-3m.json", function(flights) {
 var displayGraphs = function(issues) {
 
@@ -656,7 +657,7 @@ var displayGraphs = function(issues) {
     function chart(div) {
       var width = x.range()[1],
           height = y.range()[0];
-
+console.log('group.top(1)', group.top(1));
       y.domain([0, group.top(1)[0].value]);
 
       div.each(function() {
@@ -831,3 +832,4 @@ var displayGraphs = function(issues) {
     return d3.rebind(chart, brush, "on");
   }
 };
+*/
