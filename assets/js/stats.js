@@ -98,9 +98,12 @@ var app = {
             // graph(stats);
         });
 
-        socket.on('log', function(data){
-            console.log("node log : ", data);
-            test = data;
+
+        socket.on('log', function(source, data){
+            logData = data;
+            console.group("source : ", source);
+            console.log("data : ", data);
+            console.groupEnd();
         });
     });
   }
@@ -345,13 +348,6 @@ var display = (function () {
             var statsHtml = ich.stats(stat);
             $stats.html(statsHtml);
 
-            console.groupCollapsed('moyenneHeureTotal', moyenneHeureTotal);
-                console.log('sommeTotal', sommeTotal);
-                console.log('nbDemandesTotal', nbDemandesTotal);
-                console.log('moyenneHeureTotal', moyenneHeureTotal);
-                console.log(sommeTotal / nbDemandesTotal);
-                console.log(round2decimals(sommeTotal / nbDemandesTotal));
-            console.groupEnd();
             // graph(stat);
             // stats[0]=stat;
 
@@ -449,7 +445,7 @@ var svg = d3.select("#graph").append("svg")
 // d3.csv("data.csv", function(error, data) {
 var displayGraphs = function(data) {
     // data = [data];
-    console.log('data', data);
+    // console.log('data', data);
 
   // data.forEach(function(d) {
   //   d.population = +d.population;
