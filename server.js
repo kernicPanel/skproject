@@ -315,6 +315,27 @@ server.get('/extract', [requireLogin], function(req,res){
   });
 });
 
+server.get('/stats', [requireLogin], function(req,res){
+  var requestLogin = req.session.username;
+  addLocals( null, function( err, locals ) {
+    locals.error = null;
+    locals.username = req.session.username;
+    locals.title = 'Team | ' + locals.title;
+    locals.admin = server.config.server.admin.indexOf(requestLogin) > -1;
+    res.render('stats.jade', {
+      locals : locals
+    });
+  });
+  // res.render('stats.jade', {
+  //   locals : {
+  //     title : server.host + ':' + server.port + ' | skProject | ' + server.config.clientFramework ,
+  //     description: 'Your Page Description',
+  //     author: 'Your Name',
+  //     analyticssiteid: 'XXXXXXX'
+  //   }
+  // });
+});
+
 server.get("/account", [requireLogin], function (req, res) {
   var requestLogin = { username: req.session.username };
   server.redmine.getAppUser(requestLogin, function(err, data) {
