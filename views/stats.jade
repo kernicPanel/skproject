@@ -1,0 +1,51 @@
+extends layout-stats
+
+block content
+  p
+  .container-fluid
+    .row-fluid
+      .span12
+        ul
+          li
+            a#syncIssues(href='#') Sync issues
+          li
+            a#buildStats(href='#') Build Stats
+          li
+            a#getIssues(href='#') Get Issues
+          li
+            a#getSupport(href='#') Get Support
+          li
+            a#getGarantie(href='#') Get Garantie
+    .row-fluid
+      .span12
+        #graph
+          div
+    .row-fluid
+      .span12
+        #statsReport
+    .row-fluid
+      .span12
+        #content
+          table#extract
+            thead
+              tr
+                th nom sous projet
+                th Num Tache
+                th Nom
+                th Date demande
+                th Demande faite par
+                th(colspan=2) delai 1er post
+                th date 1er post
+                th user 1er post
+                th(colspan=2) delai "à valider"
+                th date "à valider"
+                th(colspan=2) delai "à livrer"
+                th date "à livrer"
+                th(colspan=2) delai "livré"
+                th date "livré"
+                th(colspan=2) delai "fermé"
+                th date "fermé"
+                th(colspan=2) delai "rejeté"
+                th date "rejeté"
+                th temps passé
+              tbody

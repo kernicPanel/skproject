@@ -4,8 +4,6 @@ extends layout-angular
 block content
     .container-fluid(ng-controller='TeamCtrl', users)
         .row-fluid
-            //- a.span3(ng-click='testIssueUpdate()') testIssueUpdate
-            //- a.span3(ng-click='checkLastIssue()') checkLastIssue
             .span12
                 #content
                     .user.well.span3(user-issues, ng-repeat='user in users | orderBy:usersOrder')
@@ -16,8 +14,6 @@ block content
                                 span.currentId {{user.ircCurrentTask.startedWith}} &nbsp;
                                 span.currentStatus {{user.ircCurrentTask.issueStatus}} :&nbsp;
                                 span.currentTime  {{user.ircCurrentTask.issueTime}}
-                            //- p
-                            //-     span.start  {{user.currentTask.startedAt}}
                             p
                                 a(href='{{user.ircCurrentTask.issueUrl}}', target='_blank') {{user.ircCurrentTask.issueId}} {{user.ircCurrentTask.issueName}}
                         .current(ng-show='user.currentTask.issueName')
@@ -26,8 +22,6 @@ block content
                                 span.currentId {{user.currentTask.startedWith}} &nbsp;
                                 span.currentStatus {{user.currentTask.issueStatus}} :&nbsp;
                                 span.currentTime.timeCounter  {{user.currentTask.timeCounter}}
-                            //- p
-                            //-     span.start  {{user.currentTask.startedAt}}
                             .timer.badge(timer)
                                 i.icon-time.icon-white
                                 span
@@ -36,8 +30,6 @@ block content
                                     i.icon-plus.addTime
                             p
                                 a(href='{{user.currentTask.issueUrl}}', target='_blank') {{user.currentTask.issueId}} {{user.currentTask.issueName}}
-                        //- p.currentName  {{user.issueName}}
-                        //- a.showIssues(ng-click="getIssues(user)") Tâches assignées
                         a.showIssues Tâches assignées
                             span.count  {{user.issues.length}}
                             i.icon-chevron-right.icon-white
@@ -54,18 +46,10 @@ block content
                                         i.icon-time.icon-white
                                         span
                                             i.icon-play.start
-                                            //- i.icon-pause.pause
-                                            //- i.icon-stop.stop
                                             i.icon-plus.addTime
-                                    //- .info
-                                    //- {{#description}}
-                                    //- select
-                                    //-     option(ng-repeat='issueUser in users', value='issueUser.id') {{issueUser.name}}
                                     p
                                         a(href='{{issue.url}}', target='_blank') {{issue.url}}
-                                    //- .desc(ng-bind-html='issue.description')
                                     .desc {{issue.description}}
-                                    //- {{/description}}
                                     a.showJournal Voir les notes
                                     .journals
                                         .journal(journal, ng-repeat='journal in issue.journals')
