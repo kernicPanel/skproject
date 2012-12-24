@@ -304,7 +304,7 @@ server.post("/create-user", function (req, res) {
   }
 });
 
-server.get('/extract', function(req,res){
+server.get('/extract', [requireLogin], function(req,res){
   res.render('extract.jade', {
     locals : {
       title : server.host + ':' + server.port + ' | skProject | ' + server.config.clientFramework ,
@@ -313,6 +313,27 @@ server.get('/extract', function(req,res){
       analyticssiteid: 'XXXXXXX'
     }
   });
+});
+
+server.get('/stats', [requireLogin], function(req,res){
+  var requestLogin = req.session.username;
+  addLocals( null, function( err, locals ) {
+    locals.error = null;
+    locals.username = req.session.username;
+    locals.title = 'Team | ' + locals.title;
+    locals.admin = server.config.server.admin.indexOf(requestLogin) > -1;
+    res.render('stats.jade', {
+      locals : locals
+    });
+  });
+  // res.render('stats.jade', {
+  //   locals : {
+  //     title : server.host + ':' + server.port + ' | skProject | ' + server.config.clientFramework ,
+  //     description: 'Your Page Description',
+  //     author: 'Your Name',
+  //     analyticssiteid: 'XXXXXXX'
+  //   }
+  // });
 });
 
 server.get("/account", [requireLogin], function (req, res) {
