@@ -172,12 +172,6 @@ function TeamCtrl($scope, socket, search, $timeout, tick, dateFilter) {
         user.issues.push(newIssue);
       });
 
-      socket.on('log', function(source, data){
-        logData = data;
-        console.group("source : ", source);
-        console.log("data : ", data);
-        console.groupEnd();
-      });
     }
   });
 
@@ -208,6 +202,13 @@ function AdminCtrl($scope, socket, search) {
 
 function CommonCtrl($scope, socket, search) {
 
+  socket.on('log', function(source, data){
+    logData = data;
+    console.group("source : ", source);
+    console.log("data : ", data);
+    console.groupEnd();
+  });
+
   var messages = $scope.messages = {};
 
   socket.on('syncStart', function (message){
@@ -215,7 +216,12 @@ function CommonCtrl($scope, socket, search) {
   });
 
   socket.on('syncPending', function (message){
+    // console.log('syncPending', message);
     messages[message.type] = message;
+    if (message.text === 100) {
+      noty({text: message.type + ' ' + message.text, layout: 'topRight', timeout:3000});
+      delete messages[message.type];
+    }
   });
 
   socket.on('syncDone', function (message){

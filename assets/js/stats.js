@@ -27,7 +27,7 @@ var app = {
 
     $('#sync').click(function() {
         console.log("sync : ");
-        socket.emit('redmineExtract::sync', function (data) {
+        socket.emit('redmineStats::sync', function (data) {
           console.log(data);
         });
     });
@@ -37,14 +37,14 @@ var app = {
 
         $('#syncIssues').click(function() {
             console.log('syncIssues');
-            socket.emit('redmineExtract::sync', function (err, data) {
+            socket.emit('redmineStats::sync', function (err, data) {
                 console.log("err : ", err);
                 console.log("data : ", data);
             });
         });
 
         $('#buildStats').click(function() {
-            socket.emit('redmineExtract::buildStats', function (err, data) {
+            socket.emit('redmineStats::buildStats', function (err, data) {
                 console.log("err : ", err);
                 console.log("data : ", data);
                 console.log("stats builded !");
@@ -57,7 +57,7 @@ var app = {
             $('#statsReport').html('');
             display.resetStats();
             $('#dialog-message').html('getting datas');
-            socket.emit('redmineExtract::getIssues', function(err, datas) {
+            socket.emit('redmineStats::getIssues', function(err, datas) {
             });
         });
 
@@ -67,7 +67,7 @@ var app = {
             $('#statsReport').html('');
             display.resetStats();
             $('#dialog-message').html('getting datas');
-            socket.emit('redmineExtract::getGarantie', function(err, datas) {
+            socket.emit('redmineStats::getGarantie', function(err, datas) {
             });
         });
 
@@ -77,14 +77,14 @@ var app = {
             $('#statsReport').html('');
             display.resetStats();
             $('#dialog-message').html('getting datas');
-            socket.emit('redmineExtract::getSupport', function(err, datas) {
+            socket.emit('redmineStats::getSupport', function(err, datas) {
             });
         });
 
 
-        socket.emit('redmineExtract::getIssues', function(err, datas) {});
+        socket.emit('redmineStats::getIssues', function(err, datas) {});
 
-        socket.on('redmineExtract::getIssues::response', function(issue) {
+        socket.on('redmineStats::getIssues::response', function(issue) {
             $('#dialog-message').html('');
             //console.log("err : ", err);
             //console.log("issue : ", issue.id, issue);
@@ -92,7 +92,7 @@ var app = {
             // issues.push(issue);
         });
 
-        socket.on('redmineExtract::getIssues::done', function() {
+        socket.on('redmineStats::getIssues::done', function() {
             displayGraphs(stats);
             // graph(issues);
             // graph(stats);

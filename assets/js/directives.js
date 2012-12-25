@@ -152,7 +152,7 @@ angular.module('realTeam.directives', []).
     return function(scope, element, attrs) {
 
       $(element).find('#sync').on('click', function(){
-        socket.emit('sync', {}, function (err, data) {
+        socket.emit('redmineStats::sync', {}, function (err, data) {
         });
         return false;
       });
