@@ -16,6 +16,14 @@ block content
             a#getSupport(href='#') Get Support
           li
             a#getGarantie(href='#') Get Garantie
+        form#projects.getStats
+          select(name='project')
+            option All
+          label(for='from') From
+          input#from(type='text', name='from')
+          label(for='to') To
+          input#to(type='text', name='to')
+          input#getStats(type='submit', value="Get stats")
     .row-fluid
       .span12
         #graph

@@ -25,6 +25,8 @@ var app = {
   init: function () {
     this.socket = socket = io.connect();
 
+    var projectsLoaded = false;
+
     $('#sync').click(function() {
         console.log("sync : ");
         socket.emit('redmineStats::sync', function (data) {
@@ -81,10 +83,33 @@ var app = {
             });
         });
 
+        if (!projectsLoaded) {
+            // socket.emit('redmineStats::getIssues', function(err, datas) {});
+            socket.emit('redmineStats::getProjects', function(err, projects) {
+                var current = '';
 
-        socket.emit('redmineStats::getIssues', function(err, datas) {});
+                // for (var i = projects.length - 1; i >= 0; i--) {
+                for (var i = 0; i < projects.length; i++) {
+                    var project = projects[i];
+                    var projectOption = ich.projectOption({
+                        id: project.id,
+                        name: project.name,
+                        current: current
+                    });
+                    $projectsSelect.append(projectOption);
+                }
+                projectsLoaded = true;
 
-        socket.on('redmineStats::getIssues::response', function(issue) {
+                $projectsSelect.on('change', function () {
+                    socket.emit('redmineStats::setProject', this.value, function (err, project) {
+                        setDates(project);
+                    });
+                });
+
+            });
+        }
+
+        socket.on('redmineStats::getStats::response', function(issue) {
             $('#dialog-message').html('');
             //console.log("err : ", err);
             // console.log("issue : ", issue.id, issue);
@@ -92,7 +117,7 @@ var app = {
             // issues.push(issue);
         });
 
-        socket.on('redmineStats::getIssues::done', function() {
+        socket.on('redmineStats::getStats::done', function() {
             displayGraphs(stats);
             // graph(issues);
             // graph(stats);
@@ -106,6 +131,70 @@ var app = {
             console.groupEnd();
         });
     });
+
+
+    var $projectsForm = $('#projects');
+    var $projectsSelect = $projectsForm.find('select');
+    var $from = $('#from');
+    var $to = $('#to');
+    var nowFormatted = moment(new Date()).format('DD/MM/YYYY');
+
+    $from.val(nowFormatted);
+    $to.val(nowFormatted);
+
+    $from.datepicker({
+        defaultDate: new Date(),
+        dateFormat: "dd/mm/yy",
+        changeMonth: true,
+        changeYear: true,
+        // numberOfMonths: 3,
+        onClose: function( selectedDate ) {
+            $to.datepicker( "option", "minDate", selectedDate );
+        }
+    });
+    $to.datepicker({
+        defaultDate: new Date(),
+        dateFormat: "dd/mm/yy",
+        changeMonth: true,
+        changeYear: true,
+        // numberOfMonths: 3,
+        onClose: function( selectedDate ) {
+            $from.datepicker( "option", "maxDate", selectedDate );
+        }
+    });
+    $to.datepicker( "option", "minDate", $from.datepicker('getDate') );
+    $from.datepicker( "option", "maxDate", $to.datepicker('getDate') );
+
+    var setDates = function setDates (project) {
+        var from = new Date(project.created_on);
+        var fromFormatted = moment(from).format('DD/MM/YYYY');
+
+        $from.val(fromFormatted);
+        $from.datepicker( "option", "selectedDate", from );
+        $from.datepicker( "option", "minDate", from );
+    };
+
+    $('#getStats').click(function(){
+        resetStats();
+        var settings = {
+            project: $projectsSelect.val(),
+            from: $from.datepicker('getDate'),
+            to: $to.datepicker('getDate')
+        };
+        socket.emit('redmineStats::getStats', settings, function (err, data) {
+            // console.log('err', err);
+            // console.log('data', data);
+        });
+        return false;
+    });
+
+    var resetStats = function resetStats () {
+        display.resetStats();
+        if (typeof g !== 'undefined') {
+            g.remove();
+        }
+    };
+
   }
 };
 
@@ -345,7 +434,7 @@ var display = (function () {
                 moyenneJourTotal: moyenneJourTotal
             };
 
-            console.log('stat', stat);
+            // console.log('stat', stat);
             var statsHtml = ich.stats(stat);
             $stats.html(statsHtml);
 
@@ -452,7 +541,7 @@ var displayGraphs = function(data) {
   //   d.population = +d.population;
   // });
 
-  var g = svg.selectAll(".arc")
+  g = svg.selectAll(".arc")
       // .data(pie([data]))
       .data(pie(data))
       .enter().append("g")
