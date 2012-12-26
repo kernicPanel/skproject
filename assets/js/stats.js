@@ -87,7 +87,7 @@ var app = {
         socket.on('redmineStats::getIssues::response', function(issue) {
             $('#dialog-message').html('');
             //console.log("err : ", err);
-            //console.log("issue : ", issue.id, issue);
+            // console.log("issue : ", issue.id, issue);
             display.issue(issue);
             // issues.push(issue);
         });
@@ -210,7 +210,7 @@ var display = (function () {
     };
 
     publicAccess.issue = function (issue) {
-        //console.log("issue : ", issue);
+        // console.log("issue : ", issue.id, issue);
         moment.lang('fr');
         var dateDemande = formatMoment(issue.created_on);
 
@@ -276,7 +276,7 @@ var display = (function () {
             $(issueHtml).addClass('excluded directClose');
             excluded = true;
         }
-        // $extract.append($(issueHtml));
+        $extract.append($(issueHtml));
 
 
         if (!excluded) {
@@ -345,6 +345,7 @@ var display = (function () {
                 moyenneJourTotal: moyenneJourTotal
             };
 
+            console.log('stat', stat);
             var statsHtml = ich.stats(stat);
             $stats.html(statsHtml);
 
