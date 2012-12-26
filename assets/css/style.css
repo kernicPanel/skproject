@@ -693,6 +693,10 @@ footer {
   color: white;
 }
 
+.getStats label {
+  display: inline;
+}
+
 /* ==|== media queries ======================================================
    EXAMPLE Media Query for Responsive Design.
    This example overrides the primary ('mobile first') styles

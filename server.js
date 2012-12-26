@@ -115,8 +115,8 @@ server.eventsManager.init(server);
 server.redmine = require('./lib/redmine.js');
 server.redmine.init();
 
-server.redmineExtract = require('./lib/redmineExtract.js');
-server.redmineExtract.init();
+server.redmineStats = require('./lib/redmineStats.js');
+server.redmineStats.init();
 
 server.irc = require('./lib/irc.js');
 server.irc.init();
