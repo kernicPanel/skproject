@@ -37,52 +37,6 @@ var app = {
     socket.on('connect', function(data){
         console.log("redmine connect : ");
 
-        $('#syncIssues').click(function() {
-            console.log('syncIssues');
-            socket.emit('redmineStats::sync', function (err, data) {
-                console.log("err : ", err);
-                console.log("data : ", data);
-            });
-        });
-
-        $('#buildStats').click(function() {
-            socket.emit('redmineStats::buildStats', function (err, data) {
-                console.log("err : ", err);
-                console.log("data : ", data);
-                console.log("stats builded !");
-            });
-        });
-
-        $('#getIssues').click(function() {
-            var $extract = $('#extract tbody');
-            $extract.html('');
-            $('#statsReport').html('');
-            display.resetStats();
-            $('#dialog-message').html('getting datas');
-            socket.emit('redmineStats::getIssues', function(err, datas) {
-            });
-        });
-
-        $('#getGarantie').click(function() {
-            var $extract = $('#extract tbody');
-            $extract.html('');
-            $('#statsReport').html('');
-            display.resetStats();
-            $('#dialog-message').html('getting datas');
-            socket.emit('redmineStats::getGarantie', function(err, datas) {
-            });
-        });
-
-        $('#getSupport').click(function() {
-            var $extract = $('#extract tbody');
-            $extract.html('');
-            $('#statsReport').html('');
-            display.resetStats();
-            $('#dialog-message').html('getting datas');
-            socket.emit('redmineStats::getSupport', function(err, datas) {
-            });
-        });
-
         if (!projectsLoaded) {
             // socket.emit('redmineStats::getIssues', function(err, datas) {});
             socket.emit('redmineStats::getProjects', function(err, projects) {
@@ -137,6 +91,7 @@ var app = {
     var $projectsSelect = $projectsForm.find('select');
     var $from = $('#from');
     var $to = $('#to');
+    var $team = $('#team');
     var nowFormatted = moment(new Date()).format('DD/MM/YYYY');
 
     $from.val(nowFormatted);
@@ -166,12 +121,15 @@ var app = {
     $from.datepicker( "option", "maxDate", $to.datepicker('getDate') );
 
     var setDates = function setDates (project) {
+        console.log('project', project);
         var from = new Date(project.created_on);
+        console.log('from', from);
         var fromFormatted = moment(from).format('DD/MM/YYYY');
+        console.log('fromFormatted', fromFormatted);
 
         $from.val(fromFormatted);
         $from.datepicker( "option", "selectedDate", from );
-        $from.datepicker( "option", "minDate", from );
+        // $from.datepicker( "option", "minDate", from );
     };
 
     $('#getStats').click(function(){
@@ -179,7 +137,8 @@ var app = {
         var settings = {
             project: $projectsSelect.val(),
             from: $from.datepicker('getDate'),
-            to: $to.datepicker('getDate')
+            to: $to.datepicker('getDate'),
+            teamPost: !!$team.attr('checked')
         };
         socket.emit('redmineStats::getStats', settings, function (err, data) {
             // console.log('err', err);
@@ -252,6 +211,9 @@ var display = (function () {
     var sommeMore = 0;
     var sommeTotal = 0;
 
+    var $extract = $('#extract tbody');
+    var $stats = $('#statsReport');
+
     publicAccess.resetStats = function() {
         nbDemandes1h = 0;
         nbDemandes2h = 0;
@@ -282,10 +244,10 @@ var display = (function () {
         somme3h = 0;
         sommeMore = 0;
         sommeTotal = 0;
-    };
 
-    var $extract = $('#extract tbody');
-    var $stats = $('#statsReport');
+        $extract.html('');
+        $stats.html('');
+    };
 
     publicAccess.issuesArray = function (datas) {
         //var $extract = $('#extract tbody');
