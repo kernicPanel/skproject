@@ -666,9 +666,30 @@ tr.sameUser {
 #extract {
 }
 
+#stats{
+  display: none;
+}
+
 #statsReport {
   background: #fff;
   margin-bottom: 20px;
+}
+
+#graph {
+  width: 90%;
+}
+
+#graph .chart {
+  width: 100%;
+}
+
+.chart .label {
+  position: absolute;
+  right: -30px;
+  background-color: transparent;
+  color: #000;
+  top: 0;
+  padding: 0;
 }
 
 footer {
@@ -685,12 +706,14 @@ footer {
 }
 
 .chart div {
+  position: relative;
   font: 10px sans-serif;
   background-color: steelblue;
   text-align: right;
-  padding: 3px;
   margin: 1px;
   color: white;
+  padding: 0;
+  height: 1.5em;
 }
 
 .getStats label {

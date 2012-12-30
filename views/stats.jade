@@ -16,37 +16,43 @@ block content
           input#team(type='checkbox', name='team', value='team', checked='checked')
           label(for='team') Include issues from team
           input#getStats(type='submit', value="Get stats")
-    .row-fluid
-      .span12
-        #graph
-          div
-        #easy-as-pie-chart
-    .row-fluid
-      .span12
-        #statsReport
-    .row-fluid
-      .span12
-        #content
-          table#extract
-            thead
-              tr
-                th nom sous projet
-                th Num Tache
-                th Nom
-                th Date demande
-                th Demande faite par
-                th(colspan=2) delai 1er post
-                th date 1er post
-                th user 1er post
-                th(colspan=2) delai "à valider"
-                th date "à valider"
-                th(colspan=2) delai "à livrer"
-                th date "à livrer"
-                th(colspan=2) delai "livré"
-                th date "livré"
-                th(colspan=2) delai "fermé"
-                th date "fermé"
-                th(colspan=2) delai "rejeté"
-                th date "rejeté"
-                th temps passé
-              tbody
+    #stats
+      .row-fluid
+        .span12
+          #graph
+            h2 Moyenne (h)
+            div#less1 Moins de 1h
+            div#less2 Moins de 2h
+            div#less3 Moins de 3h
+            div#more Plus de 3h
+            div#total Totale
+          #easy-as-pie-chart
+      .row-fluid
+        .span12
+          #statsReport
+      .row-fluid
+        .span12
+          #content
+            table#extract
+              thead
+                tr
+                  th nom sous projet
+                  th Num Tache
+                  th Nom
+                  th Date demande
+                  th Demande faite par
+                  th(colspan=2) delai 1er post
+                  th date 1er post
+                  th user 1er post
+                  th(colspan=2) delai "à valider"
+                  th date "à valider"
+                  th(colspan=2) delai "à livrer"
+                  th date "à livrer"
+                  th(colspan=2) delai "livré"
+                  th date "livré"
+                  th(colspan=2) delai "fermé"
+                  th date "fermé"
+                  th(colspan=2) delai "rejeté"
+                  th date "rejeté"
+                  th temps passé
+                tbody
