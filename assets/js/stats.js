@@ -133,6 +133,7 @@ var app = {
     };
 
     $('#getStats').click(function(){
+        $('#stats').show();
         resetStats();
         var settings = {
             project: $projectsSelect.val(),
@@ -451,6 +452,7 @@ var display = (function () {
             //     .text(function(d) { return d; });
 
             // displayGraphs(stat);
+            graph(stat);
             update(stats);
             // g.data(pie([stat.nbDemandes1h]));
             // console.log('g', g);
@@ -461,6 +463,140 @@ var display = (function () {
 
     return publicAccess;
 }());
+
+var chart1h = d3.select("#less1")
+    .attr("class", "chart")
+    .append('div');
+
+var label1h = chart1h.append('div')
+    .attr("class", "label");
+
+var chart2h = d3.select("#less2")
+    .attr("class", "chart")
+    .append('div');
+
+var label2h = chart2h.append('div')
+    .attr("class", "label");
+
+var chart3h = d3.select("#less3")
+    .attr("class", "chart")
+    .append('div');
+
+var label3h = chart3h.append('div')
+    .attr("class", "label");
+
+var chartMore = d3.select("#more")
+    .attr("class", "chart")
+    .append('div');
+
+var labelMore = chartMore.append('div')
+    .attr("class", "label");
+
+var chartTotal = d3.select("#total")
+    .attr("class", "chart")
+    .append('div');
+
+var labelTotal = chartTotal.append('div')
+    .attr("class", "label");
+
+var graph = function graph (stat) {
+
+  var moyenneHeure1h = isNaN(stat.moyenneHeure1h) ?0 :stat.moyenneHeure1h;
+  var moyenneHeure2h = isNaN(stat.moyenneHeure2h) ?0 :stat.moyenneHeure2h;
+  var moyenneHeure3h = isNaN(stat.moyenneHeure3h) ?0 :stat.moyenneHeure3h;
+  var moyenneHeureMore = isNaN(stat.moyenneHeureMore) ?0 :stat.moyenneHeureMore;
+  var moyenneHeureTotal = isNaN(stat.moyenneHeureTotal) ?0 :stat.moyenneHeureTotal;
+
+  var moyenneMax = Math.max(moyenneHeure1h, moyenneHeure2h, moyenneHeure3h, moyenneHeureMore);
+
+  console.log('moyenneMax', moyenneMax);
+
+  chart1h.data([stat])
+    .style("width", function(d) {
+      // console.log('d', d, isNaN(d));
+      if (isNaN(d.moyenneHeure1h)) {
+        return '0px';
+      }
+      return d.moyenneHeure1h * 100 / moyenneMax + "%";
+    });
+
+  label1h.data([stat.moyenneHeure1h])
+    .text(function(d) {
+      if (isNaN(d)) {
+        return '-';
+      }
+      return d;
+    });
+
+  chart2h.data([stat])
+    .style("width", function(d) {
+      // console.log('d', d, isNaN(d));
+      if (isNaN(d.moyenneHeure2h)) {
+        return '0px';
+      }
+      return d.moyenneHeure2h * 100 / moyenneMax + "%";
+    });
+
+  label2h.data([stat.moyenneHeure2h])
+    .text(function(d) {
+      if (isNaN(d)) {
+        return '-';
+      }
+      return d;
+    });
+
+  chart3h.data([stat])
+    .style("width", function(d) {
+      // console.log('d', d, isNaN(d));
+      if (isNaN(d.moyenneHeure3h)) {
+        return '0px';
+      }
+      return d.moyenneHeure3h * 100 / moyenneMax + "%";
+    });
+
+  label3h.data([stat.moyenneHeure3h])
+    .text(function(d) {
+      if (isNaN(d)) {
+        return '-';
+      }
+      return d;
+    });
+
+  chartMore.data([stat])
+    .style("width", function(d) {
+      // console.log('d', d, isNaN(d.moyenneHeureMore));
+      if (isNaN(d.moyenneHeureMore)) {
+        return '0px';
+      }
+      return 100 + "%";
+    });
+
+  labelMore.data([stat.moyenneHeureMore])
+    .text(function(d) {
+      if (isNaN(d)) {
+        return '-';
+      }
+      return d;
+    });
+
+  chartTotal.data([stat])
+    .style("width", function(d) {
+      // console.log('d', d, isNaN(d));
+      if (isNaN(d.moyenneHeureTotal)) {
+        return '0px';
+      }
+      return d.moyenneHeureTotal * 100 / moyenneMax + "%";
+    });
+
+  labelTotal.data([stat.moyenneHeureTotal])
+    .text(function(d) {
+      if (isNaN(d)) {
+        return '-';
+      }
+      return d;
+    });
+
+};
 
 var w = 450;
 var h = 300;
