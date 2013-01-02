@@ -20,7 +20,7 @@ along with realTeam.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 //require('look').start();
-var replify = require('replify');
+// var replify = require('replify');
 // var winston = require('winston');
 
 //setup Dependencies
@@ -36,7 +36,7 @@ console.log('App start'.red.inverse );
 
 var SessionMongoose = require("session-mongoose");
 
-console.dir = require('cdir');
+// console.dir = require('cdir');
 
 colors.setTheme({
     silly: 'rainbow',
@@ -54,15 +54,22 @@ colors.setTheme({
 //Setup Express
 global.server = express.createServer();
 server.config = require('./lib/config.js');
-server.port = (process.env.PORT || server.config.server.port);
+server.port = (process.env.VMC_APP_PORT || server.config.server.port);
 server.host = (process.env.HOST || server.config.server.host);
+
+if (!!process.env.VMC_APP_PORT) {
+  server.host = null;
+}
+
 server.name = server.config.server.name;
 
-replify(server.name, server);
-console.log("REPL".cyan.bold.inverse + " : netcat -U /tmp/repl/" + server.name + ".sock");
-console.log("  or".cyan.bold.inverse + " : socat - UNIX-CONNECT:/tmp/repl/" + server.name + ".sock");
-console.log("  or".cyan.bold.inverse + " : rc /tmp/repl/" + server.name + ".sock (npm install -g repl-client)");
-console.log();
+// replify(server.name, server);
+// console.log("REPL".cyan.bold.inverse + " : netcat -U /tmp/repl/" + server.name + ".sock");
+// console.log("  or".cyan.bold.inverse + " : socat - UNIX-CONNECT:/tmp/repl/" + server.name + ".sock");
+// console.log("  or".cyan.bold.inverse + " : rc /tmp/repl/" + server.name + ".sock (npm install -g repl-client)");
+// console.log();
+
+console.log('VCAP_SERVICES', process.env.VCAP_SERVICES);
 
 server.sessionStore = new SessionMongoose({
   url: server.config.mongo.session,
@@ -119,7 +126,7 @@ server.redmineStats = require('./lib/redmineStats.js');
 server.redmineStats.init();
 
 server.irc = require('./lib/irc.js');
-server.irc.init();
+// server.irc.init();
 
 server.timer = require('./lib/timer.js');
 server.timer.init();
