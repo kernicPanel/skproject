@@ -20,7 +20,6 @@ along with realTeam.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 //require('look').start();
-// var replify = require('replify');
 // var winston = require('winston');
 
 //setup Dependencies
@@ -60,14 +59,17 @@ server.host = (process.env.HOST || server.config.server.host);
 if (!!process.env.VMC_APP_PORT) {
   server.host = null;
 }
+else {
+  var replify = require('replify');
+  replify(server.name, server);
+  console.log("REPL".cyan.bold.inverse + " : netcat -U /tmp/repl/" + server.name + ".sock");
+  console.log("  or".cyan.bold.inverse + " : socat - UNIX-CONNECT:/tmp/repl/" + server.name + ".sock");
+  console.log("  or".cyan.bold.inverse + " : rc /tmp/repl/" + server.name + ".sock (npm install -g repl-client)");
+  console.log();
+}
 
 server.name = server.config.server.name;
 
-// replify(server.name, server);
-// console.log("REPL".cyan.bold.inverse + " : netcat -U /tmp/repl/" + server.name + ".sock");
-// console.log("  or".cyan.bold.inverse + " : socat - UNIX-CONNECT:/tmp/repl/" + server.name + ".sock");
-// console.log("  or".cyan.bold.inverse + " : rc /tmp/repl/" + server.name + ".sock (npm install -g repl-client)");
-// console.log();
 
 console.log('VCAP_SERVICES', process.env.VCAP_SERVICES);
 
