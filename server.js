@@ -116,6 +116,8 @@ server.error(function(err, req, res, next){
 });
 server.listen( server.port, server.host);
 
+server.isRebuilding = false;
+
 server.eventsManager = require('./lib/eventsManager.js');
 server.eventsManager.init(server);
 
