@@ -135,6 +135,36 @@ angular.module('realTeam.directives', []).
         socket.emit('stopIssue', {}, function (err, data) {
         });
       });
+
+      $(element).find('.addtime').on('click', function(){
+        noty({text: 'addtime issue ', layout: 'topRight', timeout:3000});
+        // socket.emit('startIssue', issue.id, function (err, data) {});
+        $('#addtime').modal('show');
+        console.log('+ scope', scope.$parent.issue.id);
+        console.log('+ scope', scope.$parent.issue);
+        test = scope;
+        angular.element($('#addtime')).scope().issue = scope.$parent.issue;
+      });
+
+    };
+  }).
+  directive('addtime', function(socket){
+    return function(scope, element, attrs) {
+
+      var $element = $(element);
+      scope.issue = 'init';
+
+      $element.modal({
+        show: false
+      });
+
+      $element.find('#sendAddtime').on('click', function (){
+        console.log('element', element);
+        console.log('modal scope', scope);
+      });
+
+      // scope.addtime = $element;
+
     };
   }).
   directive('journal', function(socket){

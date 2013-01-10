@@ -42,11 +42,12 @@ block content
                                 span.project {{issue.project.name}} :
                                 a.showIssue {{issue.subject}}
                                 .issueContent(id='{{issueDivId}}')
-                                    .timer.badge(timer)
+                                    .timer.badge(timer, ng-controller='TimerCtrl')
                                         i.icon-time.icon-white
                                         span
                                             i.icon-play.start
-                                            i.icon-plus.addTime
+                                            i.icon-plus.addtime
+                                            //- button.icon-plus.addTime(type='button', addtime, ng-controller='AddtimeCtrl')
                                     p
                                         a(href='{{issue.url}}', target='_blank') {{issue.url}}
                                     .desc {{issue.description}}

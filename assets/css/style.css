@@ -527,8 +527,18 @@ span.priority.Immédiat {
 .timer .start:hover,
 .timer .pause:hover,
 .timer .stop:hover,
-.timer .addTime:hover{
+.timer .addtime:hover{
   cursor: pointer;
+}
+
+#addtime {
+  top: 290px;
+}
+
+@media (max-width: 767px) {
+  #addtime {
+    top: 80px;
+  }
 }
 
 .issueContent {

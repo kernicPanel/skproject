@@ -162,11 +162,13 @@ function TeamCtrl($scope, socket, search, $timeout, tick, dateFilter) {
 
         var newUser = search($scope.users, 'id', updatedIssue.assigned_to.id);
         if (!!newUser) {
+          console.log('updatedIssue', updatedIssue);
           newUser.issues.push(updatedIssue);
         }
       });
 
       socket.on('createIssue', function createIssue (newIssue){
+        console.log('newIssue', newIssue);
         $scope.issues.push(newIssue);
         var user = search($scope.users, 'id', newIssue.assigned_to.id);
         user.issues.push(newIssue);
@@ -189,6 +191,26 @@ function TeamCtrl($scope, socket, search, $timeout, tick, dateFilter) {
     socket.emit('checkLastIssue', {}, function(){
     });
   };
+}
+
+function TimerCtrl($scope, socket, search) {
+
+  // console.log('TimerCtrl', $scope);
+
+
+  // $scope.$addtime.on('click', function(){
+  //   noty({text: 'addtime issue ', layout: 'topRight', timeout:3000});
+  //   // socket.emit('startIssue', issue.id, function (err, data) {});
+  //   $('#addtime').modal('show');
+  //   console.log('+ scope', scope);
+  // });
+
+}
+
+function AddtimeCtrl($scope, socket, search) {
+
+  // console.log('AdddtimeCtrl', $scope);
+
 }
 
 function AdminCtrl($scope, socket, search) {
@@ -219,7 +241,7 @@ function CommonCtrl($scope, socket, search) {
     // console.log('syncPending', message);
     messages[message.type] = message;
     if (message.text === 100) {
-      noty({text: message.type + ' ' + message.text, layout: 'topRight', timeout:3000});
+      // noty({text: message.type + ' ' + message.text, layout: 'topRight', timeout:3000});
       delete messages[message.type];
     }
   });
