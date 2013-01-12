@@ -15,7 +15,8 @@ block content
           input#to(type='text', name='to')
           input#team(type='checkbox', name='team', value='team', checked='checked')
           label(for='team') Include issues from team
-          input#getStats(type='submit', value="Get stats")
+          input#getStats(type='submit', value="Get reaction stats")
+          input#getIssuesStats(type='submit', value="Get issues stats")
     #stats
       .row-fluid
         .span12
@@ -56,3 +57,12 @@ block content
                   th date "rejeté"
                   th temps passé
                 tbody
+  #your-chart
+  //- #gain-loss-chart
+  //- #fluctuation-chart
+  //- #quarter-chart
+  //- #day-of-week-chart
+  //- #monthly-move-chart
+  //- #monthly-volume-chart
+  //- #yearly-bubble-chart
+  //- #version

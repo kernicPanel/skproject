@@ -155,6 +155,23 @@ var app = {
         }
     };
 
+    $('#getIssuesStats').click(function(){
+        // $('#stats').show();
+        resetStats();
+        var settings = {
+            project: $projectsSelect.val(),
+            from: $from.datepicker('getDate'),
+            to: $to.datepicker('getDate'),
+            teamPost: !!$team.attr('checked')
+        };
+        socket.emit('redmineStats::getIssuesStats', settings, function (err, data) {
+            // console.log('err', err);
+            // console.log('data', data);
+            statsdc(data);
+        });
+        return false;
+    });
+
   }
 };
 
