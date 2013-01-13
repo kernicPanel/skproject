@@ -92,6 +92,8 @@ var app = {
     var $from = $('#from');
     var $to = $('#to');
     var $team = $('#team');
+    var $closed = $('#closed');
+    var $assignedToTeam = $('#assignedToTeam');
     var nowFormatted = moment(new Date()).format('DD/MM/YYYY');
 
     $from.val('23/09/2010');
@@ -162,7 +164,9 @@ var app = {
             project: $projectsSelect.val(),
             from: $from.datepicker('getDate'),
             to: $to.datepicker('getDate'),
-            teamPost: !!$team.attr('checked')
+            teamPost: !!$team.attr('checked'),
+            closed: !!$closed.attr('checked'),
+            assignedToTeam: !!$assignedToTeam.attr('checked')
         };
         socket.emit('redmineStats::getIssuesStats', settings, function (err, data) {
             // console.log('err', err);

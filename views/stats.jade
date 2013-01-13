@@ -16,7 +16,13 @@ block content
           input#team(type='checkbox', name='team', value='team', checked='checked')
           label(for='team') Include issues from team
           input#getStats(type='submit', value="Get reaction stats")
+          input#closed(type='checkbox', name='closed', value='closed', checked='checked')
+          label(for='closed') Include closed issues
+          input#assignedToTeam(type='checkbox', name='assignedToTeam', value='assignedToTeam', checked='checked')
+          label(for='assignedToTeam') Only issues assigned to team
           input#getIssuesStats(type='submit', value="Get issues stats")
+        a.reset(href='javascript:dc.filterAll();dc.redrawAll();') reset all
+
     #stats
       .row-fluid
         .span12
@@ -57,7 +63,27 @@ block content
                   th date "rejeté"
                   th temps passé
                 tbody
-  #your-chart
+  #volumeByPriorityChart.donut
+    .reset(style='display: none;') Current filter:
+      span.filter
+      a.reset(href='javascript:volumeByPriorityChart.filterAll();dc.redrawAll();', style='display: none;')  reset
+  #volumeByAssignmentChart.donut
+    .reset(style='display: none;') Current filter:
+      span.filter
+      a.reset(href='javascript:volumeByAssignmentChart.filterAll();dc.redrawAll();', style='display: none;')  reset
+  #volumeByStatusChart.donut
+    .reset(style='display: none;') Current filter:
+      span.filter
+      a.reset(href='javascript:volumeByStatusChart.filterAll();dc.redrawAll();', style='display: none;')  reset
+  #issuesTable
+    .header
+      span id
+      span time_entriesTotal
+      span estimated_hours
+      span done_ratio
+      span priority
+      span assigned_to
+      span status
   //- #gain-loss-chart
   //- #fluctuation-chart
   //- #quarter-chart
