@@ -63,6 +63,7 @@ block content
                   th date "rejeté"
                   th temps passé
                 tbody
+  #issuesChart
   #volumeByPriorityChart.donut
     .reset(style='display: none;') Current filter:
       span.filter
@@ -75,15 +76,16 @@ block content
     .reset(style='display: none;') Current filter:
       span.filter
       a.reset(href='javascript:volumeByStatusChart.filterAll();dc.redrawAll();', style='display: none;')  reset
-  #issuesTable
-    .header
-      span id
-      span time_entriesTotal
-      span estimated_hours
-      span done_ratio
-      span priority
-      span assigned_to
-      span status
+  table#issuesTable
+    thead
+      tr.header
+        th id
+        th time_entriesTotal
+        th estimated_hours
+        th done_ratio
+        th priority
+        th assigned_to
+        th status
   //- #gain-loss-chart
   //- #fluctuation-chart
   //- #quarter-chart

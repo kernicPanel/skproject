@@ -1,3 +1,4 @@
+var issuesChart = dc.barChart("#issuesChart");
 var volumeByPriorityChart = dc.pieChart('#volumeByPriorityChart');
 var volumeByAssignmentChart = dc.pieChart('#volumeByAssignmentChart');
 var volumeByStatusChart = dc.pieChart('#volumeByStatusChart');
@@ -5,13 +6,20 @@ var issuesTable = dc.dataTable("#issuesTable");
 
 var statsdc = function(data) {
 
+  var minID = Number.MAX_VALUE, maxID = Number.MIN_VALUE;
+
   data.forEach(function(e) {
     e.assigned = e.assigned_to.name ?e.assigned_to.name :'none';
+    if (!e.estimated_hours) e.estimated_hours = 0;
+
+    console.log('e.id', e.id);
+    minID = Math.min(minID, e.id);
+    maxID = Math.max(maxID, e.id);
   });
 
   console.log('data', data);
   var volume = data.length;
-  console.log('volume', volume);
+  console.log('volume', volume, minID, maxID);
 
   // feed it through crossfilter
   var ndx = crossfilter(data);
@@ -27,19 +35,15 @@ var statsdc = function(data) {
     return d.priority.name;
   });
 
-  var volumeByStatus = ndx.dimension(function(d) {
-    return d.status.name;
+  // // map/reduce to group sum
+  var volumeByPriorityGroup = volumeByPriority.group().reduceSum(function(d) {
+    // console.log('d', d);
+    return 1;
   });
 
   var volumeByAssignment = ndx.dimension(function(d) {
     // return d.assigned_to.name;
     return d.assigned;
-  });
-
-  // // map/reduce to group sum
-  var volumeByPriorityGroup = volumeByPriority.group().reduceSum(function(d) {
-    // console.log('d', d);
-    return 1;
   });
 
   var volumeByAssignmentGroup = volumeByAssignment.group().reduceSum(function(d) {
@@ -51,11 +55,74 @@ var statsdc = function(data) {
     // return 0;
   });
 
+  var volumeByStatus = ndx.dimension(function(d) {
+    return d.status.name;
+  });
+
   var volumeByStatusGroup = volumeByStatus.group().reduceSum(function(d) {
     // console.log('d', d);
     return 1;
   });
 
+  var volumeByEstimatedTime = ndx.dimension(function(d) {
+    // return d.assigned_to.name;
+    return d.estimated_hours;
+    // return 1;
+  });
+
+  var volumeByEstimatedTimeGroup = volumeByEstimatedTime.group();
+
+  /* Create a bar chart and use the given css selector as anchor. You can also specify
+   * an optional chart group for this chart to be scoped within. When a chart belongs
+   * to a specific group then any interaction with such chart will only trigger redraw
+   * on other charts within the same chart group. */
+  issuesChart
+    .width(990) // (optional) define chart width, :default = 200
+    .height(250) // (optional) define chart height, :default = 200
+    .transitionDuration(500) // (optional) define chart transition duration, :default = 500
+    // (optional) define margins
+    // .margins({top: 10, right: 50, bottom: 30, left: 40})
+    .dimension(volumeByEstimatedTime) // set dimension
+    .group(volumeByEstimatedTimeGroup) // set group
+    // (optional) whether chart should rescale y axis to fit data, :default = false
+    .elasticY(true)
+    // (optional) when elasticY is on whether padding should be applied to y axis domain, :default=0
+    // .yAxisPadding(100)
+    // (optional) whether chart should rescale x axis to fit data, :default = false
+    // .elasticX(true)
+    // (optional) when elasticX is on whether padding should be applied to x axis domain, :default=0
+    .xAxisPadding(500)
+    // define x scale
+    // .x(d3.time.scale().domain([new Date(1985, 0, 1), new Date(2012, 11, 31)]))
+    .x(
+      // test = d3.time.scale().domain([new Date(1985, 0, 1), new Date(2012, 11, 31)])
+      d3.scale.linear().domain([minID, maxID])
+      )
+    // (optional) set filter brush rounding
+    .round(dc.round.floor)
+    // define x axis units
+    // .xUnits(d3.time.months)
+    // (optional) whether bar should be center to its x value, :default=false
+    .centerBar(true)
+    // (optional) set gap between bars manually in px, :default=2
+    // .barGap(1)
+    // (optional) render horizontal grid lines, :default=false
+    // .renderHorizontalGridLines(true)
+    // (optional) render vertical grid lines, :default=false
+    // .renderVerticalGridLines(true)
+    // (optional) add stacked group and custom value retriever
+    // .stack(monthlyMoveGroup, function(d){return d.value;})
+    // (optional) you can add multiple stacked group with or without custom value retriever
+    // if no custom retriever provided base chart's value retriever will be used
+    // .stack(monthlyMoveGroup)
+    // (optional) whether this chart should generate user interactive brush to allow range
+    // selection, :default=true.
+    // .brushOn(true)
+    // (optional) whether svg title element(tooltip) should be generated for each bar using
+    // the given function, :default=no
+    .title(function(d) { return "Value: " + d.value; })
+    // (optional) whether chart should render titles, :default = false
+    .renderTitle(true);
 
   /* Create a pie chart and use the given css selector as anchor. You can also specify
    * an optional chart group for this chart to be scoped within. When a chart belongs
@@ -156,7 +223,7 @@ var statsdc = function(data) {
     .size(100000)
     // dynamic columns creation using an array of closures
     .columns([
-        function(d) { return d.id; },
+        function(d) { return '<a target="_blank" href="' + d.url +'">' + d.id + '</a>'; },
         function(d) { return d.time_entriesTotal; },
         function(d) { return d.estimated_hours; },
         function(d) { return d.done_ratio; },
