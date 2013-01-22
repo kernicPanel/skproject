@@ -7,14 +7,3 @@ block common
             span.pull-right.strong {{message.text}}%
               .progress
                 .bar(style='width: {{message.text}}%;')
-        #addtime.modal.hide.fade(tabindex='-1', role='dialog', aria-labelledby='addtimeLabel', aria-hidden='true', addtime, ng-controller='AddtimeCtrl')
-          .modal-header
-            button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
-            h3#addtimeLabel Add Time
-          .modal-body
-            input(type='text', name='id', value='{{issue.id}}')
-            input(type='text', name='time')
-            input(type='text', name='message')
-          .modal-footer
-            button.btn(data-dismiss='modal', aria-hidden='true') Close
-            button#sendAddtime.btn.btn-primary Save changes

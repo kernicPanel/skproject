@@ -142,8 +142,15 @@ angular.module('realTeam.directives', []).
         $('#addtime').modal('show');
         console.log('+ scope', scope.$parent.issue.id);
         console.log('+ scope', scope.$parent.issue);
-        test = scope;
-        angular.element($('#addtime')).scope().issue = scope.$parent.issue;
+
+        var issue = scope.$parent.issue;
+        var addtimeIssue = {
+          id: issue.id,
+          issueName: issue.subject,
+          issueUrl: issue.url
+        };
+
+        angular.element($('#addtime')).scope().issue = addtimeIssue;
       });
 
     };
@@ -152,15 +159,28 @@ angular.module('realTeam.directives', []).
     return function(scope, element, attrs) {
 
       var $element = $(element);
-      scope.issue = 'init';
+      // scope.issue = 'init';
 
       $element.modal({
         show: false
       });
 
       $element.find('#sendAddtime').on('click', function (){
-        console.log('element', element);
-        console.log('modal scope', scope);
+        // console.log('element', element);
+        // console.log('modal scope', scope);
+
+        console.log("scope.issue", scope.issue);
+        socket.emit('addTime', scope.issue, function (err, data) {
+          console.log("err", err);
+          console.log("data", data);
+          $element.modal('hide');
+          var time_entry = data.time_entry;
+          noty({
+            text: 'issue ' + time_entry.issue.id + ' addtime ' + Math.round(time_entry.hours * 100) / 100,
+            layout: 'topRight',
+            timeout:3000
+          });
+        });
       });
 
       // scope.addtime = $element;

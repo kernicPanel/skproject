@@ -144,6 +144,13 @@ function TeamCtrl($scope, socket, search, $timeout, tick, dateFilter) {
         });
       });
 
+      socket.on('prefillAddtime', function(issue){
+        console.log("issue", issue);
+        $addtime = $('#addtime');
+        $addtime.modal('show');
+        angular.element($addtime).scope().issue = issue;
+      });
+
       socket.on('updateIssue', function(updatedIssue){
         var issue = search( $scope.issues, 'id', updatedIssue.id);
         var issueIndex = $scope.issues.indexOf(issue);

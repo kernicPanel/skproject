@@ -51,6 +51,7 @@ block content
                                     p
                                         a(href='{{issue.url}}', target='_blank') {{issue.url}}
                                     .desc {{issue.description}}
+                                    //- .desc(ng-bind-html-unsafe='issue.description')
                                     a.showJournal Voir les notes
                                     .journals
                                         .journal(journal, ng-repeat='journal in issue.journals')
@@ -60,3 +61,18 @@ block content
                                                 .detail(ng-repeat='detail in journal.details')
                                                     {{detail.name}} {{detail.old_value}} {{detail.new_value}}
 
+    #addtime.modal.hide.fade(tabindex='-1', role='dialog', aria-labelledby='addtimeLabel', aria-hidden='true', addtime, ng-controller='AddtimeCtrl')
+        .modal-header
+            button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+            h3#addtimeLabel Add Time {{issue.id}}
+            h4 {{issue.issueName}}
+            a(href='{{issue.issueUrl}}', target='_blank') {{issue.issueUrl}}
+        form#addtimeForm
+            .modal-body
+                label(for='time') Time (ms)
+                input#time(type='text', name='time', ng-model="issue.pendingDuration", value='{{issue.pendingDuration}}')
+                label(for='message') Message
+                textarea#message(name='message', ng-model="issue.message")
+            .modal-footer
+                button.btn(data-dismiss='modal', aria-hidden='true') Cancel Timer
+                button#sendAddtime.btn.btn-primary Send Addtime
