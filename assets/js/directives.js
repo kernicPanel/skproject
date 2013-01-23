@@ -222,11 +222,6 @@ angular.module('realTeam.directives', []).
         });
       });
 
-      $(element).find('#setprojects').on('click', function(){
-        socket.emit('setSkProjects', {}, function (err, data) {
-        });
-      });
-
     };
   });
 
