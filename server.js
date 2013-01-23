@@ -19,9 +19,6 @@ along with realTeam.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-//require('look').start();
-// var winston = require('winston');
-
 //setup Dependencies
 var connect = require('connect'),
     express = require('express'),
@@ -31,11 +28,8 @@ var connect = require('connect'),
 
 console.log();
 console.log('App start'.red.inverse );
-// winston.log('info', 'test winston');
 
 var SessionMongoose = require("session-mongoose");
-
-// console.dir = require('cdir');
 
 colors.setTheme({
     silly: 'rainbow',
