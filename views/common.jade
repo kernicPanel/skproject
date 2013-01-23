@@ -1,7 +1,9 @@
 block common
-  #common(ng-controller='CommonCtrl')
-    #systemNotif(ng-repeat='message in messages')
-      p {{message.type}} Progress:
-        span.pull-right.strong {{message.text}}%
-          .progress
-            .bar(style='width: {{message.text}}%;')
+  .row-fluid
+    .span12
+      #common(ng-controller='CommonCtrl')
+        #systemNotif(ng-repeat='message in messages')
+          p {{message.type}} Progress:
+            span.pull-right.strong {{message.text}}%
+              .progress
+                .bar(style='width: {{message.text}}%;')

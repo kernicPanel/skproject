@@ -135,6 +135,66 @@ angular.module('realTeam.directives', []).
         socket.emit('stopIssue', {}, function (err, data) {
         });
       });
+
+      $(element).find('.addtime').on('click', function(){
+        noty({text: 'addtime issue ', layout: 'topRight', timeout:3000});
+        // socket.emit('startIssue', issue.id, function (err, data) {});
+        $('#addtime').modal('show');
+        console.log('+ scope', scope.$parent.issue.id);
+        console.log('+ scope', scope.$parent.issue);
+
+        var issue = scope.$parent.issue;
+        var addtimeIssue = {
+          id: issue.id,
+          issueName: issue.subject,
+          issueUrl: issue.url,
+          hours: 0,
+          minutes: 0
+        };
+
+        angular.element($('#addtime')).scope().issue = addtimeIssue;
+      });
+
+    };
+  }).
+  directive('addtime', function(socket){
+    return function(scope, element, attrs) {
+
+      var $element = $(element);
+      // scope.issue = 'init';
+
+      $element.modal({
+        show: false
+      });
+
+      // (15895800 - (((15895800 / 1000 / 60) % 60) * 60 * 1000)) / 1000 / 60 / 60 + ' h ' + Math.round((15895800 / 1000 / 60) % 60) + ' mn';
+
+
+      // scope.$watch(scope.issue, function () {
+      //   var issue = scope.issue;
+      //   issue.hours = formatTime(issue.pendingDuration);
+      // });
+
+      $element.find('#sendAddtime').on('click', function (){
+        // console.log('element', element);
+        // console.log('modal scope', scope);
+
+        console.log("scope.issue", scope.issue);
+        socket.emit('addTime', scope.issue, function (err, data) {
+          console.log("err", err);
+          console.log("data", data);
+          $element.modal('hide');
+          var time_entry = data.time_entry;
+          noty({
+            text: 'issue ' + time_entry.issue.id + ' addtime ' + Math.round(time_entry.hours * 100) / 100,
+            layout: 'topRight',
+            timeout:3000
+          });
+        });
+      });
+
+      // scope.addtime = $element;
+
     };
   }).
   directive('journal', function(socket){
