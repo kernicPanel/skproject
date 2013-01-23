@@ -217,13 +217,13 @@ angular.module('realTeam.directives', []).
         return false;
       });
 
-      $(element).find('#setusers').on('click', function(){
-        socket.emit('setUsersIssues', {}, function (err, data) {
+      $(element).find('#fetchUsers').on('click', function(){
+        socket.emit('fetchUsers', {}, function (err, data) {
         });
       });
 
-      $(element).find('#setprojects').on('click', function(){
-        socket.emit('setSkProjects', {}, function (err, data) {
+      $(element).find('#createTeam').on('click', function(){
+        socket.emit('createTeam', {}, function (err, data) {
         });
       });
 
