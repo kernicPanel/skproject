@@ -30,6 +30,19 @@ function TeamCtrl($scope, socket, search, $timeout, tick, dateFilter) {
 
   var usersLoaded = false;
 
+
+  var formatTime = function formatTime (time) {
+    return (time - (((time / 1000 / 60) % 60) * 60 * 1000)) / 1000 / 60 / 60 + ' h ' + Math.round((time / 1000 / 60) % 60) + ' mn';
+  };
+
+  var formatHours = function formatTime (time) {
+    return (time - (((time / 1000 / 60) % 60) * 60 * 1000)) / 1000 / 60 / 60;
+  };
+
+  var formatMinutes = function formatTime (time) {
+    return Math.round((time / 1000 / 60) % 60);
+  };
+
   socket.on('realTeam::connect', function (data){
     console.log('realTeam::connect');
     noty({text: 'Socket Connected', timeout:3000});
@@ -148,6 +161,8 @@ function TeamCtrl($scope, socket, search, $timeout, tick, dateFilter) {
         console.log("issue", issue);
         $addtime = $('#addtime');
         $addtime.modal('show');
+        issue.hours = formatHours(issue.pendingDuration);
+        issue.minutes = formatMinutes(issue.pendingDuration);
         angular.element($addtime).scope().issue = issue;
       });
 

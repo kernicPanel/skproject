@@ -147,7 +147,9 @@ angular.module('realTeam.directives', []).
         var addtimeIssue = {
           id: issue.id,
           issueName: issue.subject,
-          issueUrl: issue.url
+          issueUrl: issue.url,
+          hours: 0,
+          minutes: 0
         };
 
         angular.element($('#addtime')).scope().issue = addtimeIssue;
@@ -164,6 +166,14 @@ angular.module('realTeam.directives', []).
       $element.modal({
         show: false
       });
+
+      // (15895800 - (((15895800 / 1000 / 60) % 60) * 60 * 1000)) / 1000 / 60 / 60 + ' h ' + Math.round((15895800 / 1000 / 60) % 60) + ' mn';
+
+
+      // scope.$watch(scope.issue, function () {
+      //   var issue = scope.issue;
+      //   issue.hours = formatTime(issue.pendingDuration);
+      // });
 
       $element.find('#sendAddtime').on('click', function (){
         // console.log('element', element);

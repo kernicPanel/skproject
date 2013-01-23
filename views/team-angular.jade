@@ -69,10 +69,19 @@ block content
             a(href='{{issue.issueUrl}}', target='_blank') {{issue.issueUrl}}
         form#addtimeForm
             .modal-body
-                label(for='time') Time (ms)
-                input#time(type='text', name='time', ng-model="issue.pendingDuration", value='{{issue.pendingDuration}}')
-                label(for='message') Message
-                textarea#message(name='message', ng-model="issue.message")
+                .container-fluid
+                    //- label(for='time') Time (ms)
+                    //- input#time(type='text', name='time', ng-model="issue.pendingDuration", value='{{issue.pendingDuration}}')
+                    .row-fluid
+                        .span6
+                            label(for='hours') Hours
+                            input#hours(type='text', name='hours', ng-model="issue.hours", value='{{issue.hours}}')
+                        .span6
+                            label(for='minutes') Minutes
+                            input#minutes(type='text', name='minutes', ng-model="issue.minutes", value='{{issue.minutes}}')
+                        .span12
+                            label(for='message') Message
+                            textarea#message.span12(name='message', ng-model="issue.message")
             .modal-footer
                 button.btn(data-dismiss='modal', aria-hidden='true') Cancel Timer
                 button#sendAddtime.btn.btn-primary Send Addtime
