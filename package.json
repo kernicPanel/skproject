@@ -15,21 +15,20 @@
     "socket.io-client": "0.9.6",
     "socket.io-sessions": "0.6.1",
     "mongoose": "2.5.10",
-    "cron": "git://github.com/ncb000gt/node-cron.git",
     "bcrypt": "0.7.2",
     "stextile": "0.0.8",
     "textilejs": "*",
+    "textile-js": "*",
     "moment": "1.6.2",
     "cdir": "*",
     "winston": "0.6.2",
     "colors": "*",
-    "look": "*",
     "replify": "*"
   },
   "devDependencies": {
     "vows": "0.5.x",
-	"mocha": "*",
-	"should": "*"
+    "mocha": "*",
+    "should": "*"
   },
   "scripts": {
     "test": "make test"
