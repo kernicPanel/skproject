@@ -50,8 +50,8 @@ block content
                                             //- button.icon-plus.addTime(type='button', addtime, ng-controller='AddtimeCtrl')
                                     p
                                         a(href='{{issue.url}}', target='_blank') {{issue.url}}
-                                    .desc {{issue.description}}
-                                    //- .desc(ng-bind-html-unsafe='issue.description')
+                                    //- .desc {{issue.description}}
+                                    .desc(ng-bind-html-unsafe='issue.description')
                                     a.showJournal Voir les notes
                                     .journals
                                         .journal(journal, ng-repeat='journal in issue.journals')
