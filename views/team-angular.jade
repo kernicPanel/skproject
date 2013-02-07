@@ -2,86 +2,86 @@ extends layout-angular
 
 
 block content
-    .container-fluid(ng-controller='TeamCtrl', users)
-        .row-fluid
-            .span12
-                #content
-                    .user.well.span3(user-issues, ng-repeat='user in users | orderBy:usersOrder')
-                        h1.name  {{user.name}}
-                        .current(ng-show='user.ircCurrentTask.issueName')
-                            span.currentPriority  {{user.ircCurrentTask.issuePriority}}
-                            p Tâche irc &nbsp;
-                                span.currentId {{user.ircCurrentTask.startedWith}} &nbsp;
-                                span.currentStatus {{user.ircCurrentTask.issueStatus}} :&nbsp;
-                                span.currentTime  {{user.ircCurrentTask.issueTime}}
-                            p
-                                a(href='{{user.ircCurrentTask.issueUrl}}', target='_blank') {{user.ircCurrentTask.issueId}} {{user.ircCurrentTask.issueName}}
-                        .current(ng-show='user.currentTask.issueName')
-                            span.currentPriority  {{user.currentTask.issuePriority}}
-                            p Tâche &nbsp;
-                                span.currentId {{user.currentTask.startedWith}} &nbsp;
-                                span.currentStatus {{user.currentTask.issueStatus}} :&nbsp;
-                                span.currentTime.timeCounter  {{user.currentTask.timeCounter}}
-                            .timer.badge(timer)
-                                i.icon-time.icon-white
-                                span
-                                    i.icon-pause.pause
-                                    i.icon-stop.stop
-                                    i.icon-plus.addTime
-                            p
-                                a(href='{{user.currentTask.issueUrl}}', target='_blank') {{user.currentTask.issueId}} {{user.currentTask.issueName}}
-                        a.showIssues Tâches assignées
-                            span.count  {{user.issues.length}}
-                            i.icon-chevron-right.icon-white
-                        ul.issues
-                            li.issue(issue, ng-repeat='issue in user.issues | orderBy:issuesOrder')
-                                span(class='{{issue.priority.name}} priority') {{issue.priority.name}}
-                                span.id {{issue.id}}
-                                span.tracker {{issue.tracker.name}}
-                                span.status {{issue.status.name}}
-                                span.project {{issue.project.name}} :
-                                a.showIssue {{issue.subject}}
-                                .issueContent(id='{{issueDivId}}')
-                                    .timer.badge(timer, ng-controller='TimerCtrl')
-                                        i.icon-time.icon-white
-                                        span
-                                            i.icon-play.start
-                                            i.icon-plus.addtime
-                                            //- button.icon-plus.addTime(type='button', addtime, ng-controller='AddtimeCtrl')
-                                    p
-                                        a(href='{{issue.url}}', target='_blank') {{issue.url}}
-                                    .desc {{issue.description}}
-                                    //- .desc(ng-bind-html-unsafe='issue.description')
-                                    a.showJournal Voir les notes
-                                    .journals
-                                        .journal(journal, ng-repeat='journal in issue.journals')
-                                            p {{journal.user.name}} - {{journal.created_on}} :
-                                            .notes(ng-show='journal.notes'){{journal.notes}}
-                                            .details(ng-show='journal.details')
-                                                .detail(ng-repeat='detail in journal.details')
-                                                    {{detail.name}} {{detail.old_value}} {{detail.new_value}}
+  .container-fluid(ng-controller='TeamCtrl', users)
+    .row-fluid
+      .span12
+        #content
+          .user.well.span3(user-issues, ng-repeat='user in users | orderBy:usersOrder')
+              h1.name  {{user.name}}
+              .current(ng-show='user.ircCurrentTask.issueName')
+                span.currentPriority  {{user.ircCurrentTask.issuePriority}}
+                p Tâche irc &nbsp;
+                  span.currentId {{user.ircCurrentTask.startedWith}} &nbsp;
+                  span.currentStatus {{user.ircCurrentTask.issueStatus}} :&nbsp;
+                  span.currentTime  {{user.ircCurrentTask.issueTime}}
+                p
+                  a(href='{{user.ircCurrentTask.issueUrl}}', target='_blank') {{user.ircCurrentTask.issueId}} {{user.ircCurrentTask.issueName}}
+              .current(ng-show='user.currentTask.issueName')
+                span.currentPriority  {{user.currentTask.issuePriority}}
+                p Tâche &nbsp;
+                  span.currentId {{user.currentTask.startedWith}} &nbsp;
+                  span.currentStatus {{user.currentTask.issueStatus}} :&nbsp;
+                  span.currentTime.timeCounter  {{user.currentTask.timeCounter}}
+                .timer.badge(timer)
+                  i.icon-time.icon-white
+                  span
+                    i.icon-pause.pause
+                    i.icon-stop.stop
+                    i.icon-plus.addTime
+                p
+                  a(href='{{user.currentTask.issueUrl}}', target='_blank') {{user.currentTask.issueId}} {{user.currentTask.issueName}}
+              a.showIssues Tâches assignées
+                span.count  {{user.issues.length}}
+                i.icon-chevron-right.icon-white
+              ul.issues
+                li.issue(issue, ng-repeat='issue in user.issues | orderBy:issuesOrder')
+                  span(class='{{issue.priority.name}} priority') {{issue.priority.name}}
+                  span.id {{issue.id}}
+                  span.tracker {{issue.tracker.name}}
+                  span.status {{issue.status.name}}
+                  span.project {{issue.project.name}} :
+                  a.showIssue {{issue.subject}}
+                  .issueContent(id='{{issueDivId}}')
+                    .timer.badge(timer, ng-controller='TimerCtrl')
+                      i.icon-time.icon-white
+                      span
+                        i.icon-play.start
+                        i.icon-plus.addtime
+                        //- button.icon-plus.addTime(type='button', addtime, ng-controller='AddtimeCtrl')
+                    p
+                      a(href='{{issue.url}}', target='_blank') {{issue.url}}
+                    .desc {{issue.description}}
+                    //- .desc(ng-bind-html-unsafe='issue.description')
+                    a.showJournal Voir les notes
+                    .journals
+                      .journal(journal, ng-repeat='journal in issue.journals')
+                        p {{journal.user.name}} - {{journal.created_on}} :
+                        .notes(ng-show='journal.notes'){{journal.notes}}
+                        .details(ng-show='journal.details')
+                          .detail(ng-repeat='detail in journal.details')
+                            {{detail.name}} {{detail.old_value}} {{detail.new_value}}
 
     #addtime.modal.hide.fade(tabindex='-1', role='dialog', aria-labelledby='addtimeLabel', aria-hidden='true', addtime, ng-controller='AddtimeCtrl')
-        .modal-header
-            button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
-            h3#addtimeLabel Add Time {{issue.id}}
-            h4 {{issue.issueName}}
-            a(href='{{issue.issueUrl}}', target='_blank') {{issue.issueUrl}}
-        form#addtimeForm
-            .modal-body
-                .container-fluid
-                    //- label(for='time') Time (ms)
-                    //- input#time(type='text', name='time', ng-model="issue.pendingDuration", value='{{issue.pendingDuration}}')
-                    .row-fluid
-                        .span6
-                            label(for='hours') Hours
-                            input#hours(type='text', name='hours', ng-model="issue.hours", value='{{issue.hours}}')
-                        .span6
-                            label(for='minutes') Minutes
-                            input#minutes(type='text', name='minutes', ng-model="issue.minutes", value='{{issue.minutes}}')
-                        .span12
-                            label(for='message') Message
-                            textarea#message.span12(name='message', ng-model="issue.message")
-            .modal-footer
-                button.btn(data-dismiss='modal', aria-hidden='true') Cancel Timer
-                button#sendAddtime.btn.btn-primary Send Addtime
+      .modal-header
+        button.close(type='button', data-dismiss='modal', aria-hidden='true') ×
+        h3#addtimeLabel Add Time {{issue.id}}
+        h4 {{issue.issueName}}
+        a(href='{{issue.issueUrl}}', target='_blank') {{issue.issueUrl}}
+      form#addtimeForm
+        .modal-body
+          .container-fluid
+              //- label(for='time') Time (ms)
+              //- input#time(type='text', name='time', ng-model="issue.pendingDuration", value='{{issue.pendingDuration}}')
+            .row-fluid
+              .span6
+                label(for='hours') Hours
+                input#hours(type='text', name='hours', ng-model="issue.hours", value='{{issue.hours}}')
+              .span6
+                label(for='minutes') Minutes
+                input#minutes(type='text', name='minutes', ng-model="issue.minutes", value='{{issue.minutes}}')
+              .span12
+                label(for='message') Message
+                textarea#message.span12(name='message', ng-model="issue.message")
+        .modal-footer
+          button.btn(data-dismiss='modal', aria-hidden='true') Cancel Timer
+          button#sendAddtime.btn.btn-primary Send Addtime
