@@ -68,7 +68,7 @@ server.name = server.config.server.name;
 console.log('VCAP_SERVICES', process.env.VCAP_SERVICES);
 
 server.sessionStore = new SessionMongoose({
-  url: server.config.mongo.session,
+  url: server.config.mongo.host,
   interval: 120000 // expiration check worker run interval in millisec (default: 60000)
 });
 
