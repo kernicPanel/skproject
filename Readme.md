@@ -1,20 +1,21 @@
 [![Build Status](http://travis-ci.org/kernicPanel/skproject.png)](http://travis-ci.org/kernicPanel/skproject)
 
-run "npm install" in root to install modules dependencies.
+1. run "npm install" in root to install modules dependencies.
 
-install mongodb
+2. install mongodb
 
-copy /lib/config.example.js to /lib/config.js and edit it
+3. copy /lib/config.example.js to /lib/config.js and edit it
 
-run "node server.js" to run server
+4. run "node server.js" to run server
 
-open "http://localhost:8081/" in browser to connect
+5. open "http://localhost:8081/" in browser to connect
 
-register a user using redmine api key
+6. register a user using redmine api key
 
-add user login to config.server.admin[] in /lib/config.js
+7. add user login to config.server.admin[] in /lib/config.js
 
-open "http://localhost:8081/admin" in browser
+8. open "http://localhost:8081/admin" in browser
 
-click rebuild base to sync realteam db with redmine data
-(can take long time depending on your redmine data and your system)
+9. click rebuild base to sync realteam db with redmine data
+(can take long time depending on your redmine data and your system).
+This is a bit buggy for now, check the logs and retry if necessary
