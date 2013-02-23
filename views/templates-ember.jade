@@ -5,46 +5,68 @@ script(type="text/x-handlebars", data-template-name="team")
   {{view App.User contentBinding="this"}}
   {{/each}}
 
-script(type="text/x-handlebars", data-template-name="user")
-  | <div class="user well span4" {{bindAttr id="type_id"}}>
-  h1.name  {{name}}
-  p  Tâche {{currentStatus}} :
-      span.current  {{currentId}}
-      span.current  {{currentTime}}
-  p  {{currentName}}
-  p
-    | <a {{action "showIssuesCtrl" on="click"}}>Tâches assignées </a>
-    span.count.badge  {{redmine.issuesCount}}
-    i.icon-chevron-down
-  ul.issues
-    {{view App.Issue contentBinding="this"}}
-  | </div>
+//-script(type="text/x-handlebars", data-template-name="user")
+  //-| <div class="user well span4" {{bindAttr id="type_id"}}>
+  //-h1.name  {{name}}
+  //-p  Tâche {{currentStatus}} :
+      //-span.current  {{currentId}}
+      //-span.current  {{currentTime}}
+  //-p  {{currentName}}
+  //-p
+    //-| <a {{action "showIssuesCtrl" on="click"}}>Tâches assignées </a>
+    //-span.count.badge  {{redmine.issuesCount}}
+    //-i.icon-chevron-down
+  //-ul.issues
+    //-{{view App.Issue contentBinding="this"}}
+  //-| </div>
 
-script(type="text/x-handlebars", data-template-name="issue")
-  {{#each issues}}
-  | <li class="issue" {{bindAttr id="type_id"}}>
-  {{view App.IssueContent contentBinding="this"}}
-  | </li>
-  {{/each}}
+//-script(type="text/x-handlebars", data-template-name="issue")
+  //-{{#each issues}}
+  //-| <li class="issue" {{bindAttr id="type_id"}}>
+  //-{{view App.IssueContent contentBinding="this"}}
+  //-| </li>
+  //-{{/each}}
 
-script(type="text/x-handlebars", data-template-name="issueContent")
-  | <span {{bindAttr class="priority.name"}}>{{priority.name}}</span>
-  | <a  {{action "showIssue"}}>{{id}} {{project.name}}  : {{subject}}</a>
-  .issueContent
-    .info
-      span.tracker {{tracker.name}}
-      span.status {{status.name}}
-    pre {{description}}
-    .action
-    | <a {{action "loadMore"}}>load more</a>
-    .journal
-      {{view App.IssueJournal contentBinding="this"}}
+//-script(type="text/x-handlebars", data-template-name="issueContent")
+  //-| <span {{bindAttr class="priority.name"}}>{{priority.name}}</span>
+  //-| <a  {{action "showIssue"}}>{{id}} {{project.name}}  : {{subject}}</a>
+  //-.issueContent
+    //-.info
+      //-span.tracker {{tracker.name}}
+      //-span.status {{status.name}}
+    //-pre {{description}}
+    //-.action
+    //-| <a {{action "loadMore"}}>load more</a>
+    //-.journal
+      //-{{view App.IssueJournal contentBinding="this"}}
 
-script(type="text/x-handlebars", data-template-name="issueJournal")
-  {{#each journal}}
-  {{#if notes}}
-  p {{user.name}} - {{created_on}} :
-    pre {{notes}}
-  {{/if}}}
-  {{/each}}
+//-script(type="text/x-handlebars", data-template-name="issueJournal")
+  //-{{#each journal}}
+  //-{{#if notes}}
+  //-p {{user.name}} - {{created_on}} :
+    //-pre {{notes}}
+  //-{{/if}}}
+  //-{{/each}}
 
+
+//-script(type="text/x-handlebars", data-template-name="application")
+  //-| Hello, {{firstName}} {{lastName}}<br />
+  //-nav
+    //-{{#linkTo "index"}}Home{{/linkTo}}
+    //-{{#linkTo "contributors"}}Contributors{{/linkTo}}
+  //-div
+    //-{{outlet}}
+
+//-script(type="text/x-handlebars", data-template-name="index")
+  //-div
+    //-{{title}}
+
+//-script(type="text/x-handlebars", data-template-name="contributors")
+  //-ul
+    //-{{#each contributor in controller}}
+    //-li
+      //-{{#linkTo contributor contributor}} {{contributor.login}} {{/linkTo}}
+    //-{{/each}}
+
+//-script(type="text/x-handlebars", data-template-name="contributor")
+  //-| Contributor: {{login}}, contributions: {{contributions}}

@@ -357,16 +357,31 @@ server.get("/account", [requireLogin], function (req, res) {
   });
 });
 
-server.get('/team', [requireLogin], function(req,res){
-  var requestLogin = req.session.username;
-  addLocals( null, function( err, locals ) {
-    locals.error = null;
-    locals.username = req.session.username;
-    locals.title = 'Team | ' + locals.title;
-    locals.admin = server.config.server.admin.indexOf(requestLogin) > -1;
-    res.render('team-' + server.config.clientFramework+ '.jade', {
-      locals : locals
-    });
+server.get('/', [requireLogin], function(req,res){
+  res.render('index.html');
+  /*
+   *var requestLogin = req.session.username;
+   *addLocals( null, function( err, locals ) {
+   *  locals.error = null;
+   *  locals.username = req.session.username;
+   *  locals.title = 'Team | ' + locals.title;
+   *  locals.admin = server.config.server.admin.indexOf(requestLogin) > -1;
+   *  res.render('team-' + server.config.clientFramework + '.jade', {
+   *    locals : locals
+   *  });
+   *});
+   */
+});
+
+server.get('/users', [requireLogin], function(req,res){
+  server.redmine.getUsers(function(err, data){
+    res.send({users: data});
+  });
+});
+
+server.get('/users/:id', [requireLogin], function(req,res){
+  server.redmine.getUserIssues(req.params.id, function(err, data){
+    res.send({users: data});
   });
 });
 
@@ -393,7 +408,7 @@ server.get('/admin', [requireLogin], function(req,res){
     // });
   }
   else {
-    res.redirect('/team');
+    res.redirect('/');
   }
 
 });
