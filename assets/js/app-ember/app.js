@@ -1,7 +1,7 @@
-var App = Ember.Application.create({
+var RealTeam = Ember.Application.create({
 /*
  *  ready: function() {
- *    var socket = App.socket = io.connect();
+ *    var socket = RealTeam.socket = io.connect();
  *
  *    socket.on('realTeam::connect', function(data){
  *      console.log('realTeam::connect');
@@ -13,7 +13,7 @@ var App = Ember.Application.create({
  *        //for (var i = 0; i < loopCount; i++) {
  *          ////console.log("getUsers users : ", users[i]);
  *          ////console.log("getUsers redmine : ", users[i].redmine);
- *          //var user = App.User.createRecord(users[i]);
+ *          //var user = RealTeam.User.createRecord(users[i]);
  *        //}
  *      //});
  *    });
@@ -21,47 +21,51 @@ var App = Ember.Application.create({
  */
 });
 
-App.Router.map(function(){
+RealTeam.Router.map(function(){
   this.resource('users', function() {
-    this.resource('user', {path:':user_id'});
+    //this.resource('user', {path:':user_id'});
+    this.resource('user', {path:':user_id'}, function(){
+      this.resource('issues', function(){
+        console.log('nrstnrst');
+      });
+    });
   });
 });
 
-App.ApplicationRoute = Ember.Route.extend({
+RealTeam.ApplicationRoute = Ember.Route.extend({
   setupController: function () {
-    //this.controllerFor('food').set('model', App.Food.find());
+    //this.controllerFor('food').set('model', RealTeam.Food.find());
   },
   init: function () {
     console.log('ApplicationRoute init');
   }
 });
 
-App.IndexRoute = Ember.Route.extend({
+RealTeam.IndexRoute = Ember.Route.extend({
   redirect: function () {
     this.transitionTo('users');
   }
 });
 
-App.UsersRoute = Ember.Route.extend({
+RealTeam.UsersRoute = Ember.Route.extend({
   model: function() {
-    return App.User.find();
+    return RealTeam.User.find();
   }
 });
 
  //Auto generated
-App.UserRoute = Ember.Route.extend({
+RealTeam.UserRoute = Ember.Route.extend({
   init: function () {
     console.log('UserRoute init');
+  },
+  model: function(params) {
+    console.log('UserRoute model', params);
+    //return RealTeam.Issue.find(params.user_id);
   }
-  /*
-   *model: function(params) {
-   *  return App.User.find(params.user_id);
-   *}
-   */
 });
 
 // Auto generated
-App.UsersController = Ember.ArrayController.extend({
+RealTeam.UsersController = Ember.ArrayController.extend({
   sortProperties: ['id'],
   init: function(){
     console.log('init UserController');
@@ -69,10 +73,10 @@ App.UsersController = Ember.ArrayController.extend({
 });
 
 // Auto generated
-//App.UserController = Ember.ObjectController.extend();
+//RealTeam.UserController = Ember.ObjectController.extend();
 
 /*
- *App.FoodController = Ember.ArrayController.extend({
+ *RealTeam.FoodController = Ember.ArrayController.extend({
  *  //needs: ['users'],
  *  sortProperties: ['name'],
  *  addFood: function (food) {
@@ -93,7 +97,7 @@ App.UsersController = Ember.ArrayController.extend({
  */
 
 // Auto generated
-//App.TabController = Ember.ObjectController.extend();
+//RealTeam.TabController = Ember.ObjectController.extend();
 
 // view helpers
 Ember.Handlebars.registerBoundHelper('money', function (value) {
@@ -103,27 +107,27 @@ Ember.Handlebars.registerBoundHelper('money', function (value) {
 });
 
 // Models
-App.Store = DS.Store.extend({
+RealTeam.Store = DS.Store.extend({
   revision: 11,
   //adapter: 'DS.FixtureAdapter'
-  //adapter: 'App.SocketAdapter'
+  //adapter: 'RealTeam.SocketAdapter'
   adapter: 'DS.RESTAdapter'
 });
 
-App.User = DS.Model.extend({
+RealTeam.User = DS.Model.extend({
   name: DS.attr('string'),
   //id: DS.attr('number'),
-  //issues: DS.hasMany('App.Issues')
-  //tab: DS.belongsTo('App.Tab')
+  //issues: DS.hasMany('RealTeam.Issues')
+  //tab: DS.belongsTo('RealTeam.Tab')
 });
 
-App.SocketAdapter = DS.Adapter.extend({
+RealTeam.SocketAdapter = DS.Adapter.extend({
 
 });
 
 /*
- *App.Tab = DS.Model.extend({
- *  tabItems: DS.hasMany('App.TabItem'),
+ *RealTeam.Tab = DS.Model.extend({
+ *  tabItems: DS.hasMany('RealTeam.TabItem'),
  *  cents: function () {
  *    return this.get('tabItems').getEach('cents').reduce(function(accum, item){
  *      return accum + item;
@@ -131,21 +135,21 @@ App.SocketAdapter = DS.Adapter.extend({
  *  }.property('tabItems.@each.cents')
  *});
  *
- *App.TabItem = DS.Model.extend({
+ *RealTeam.TabItem = DS.Model.extend({
  *  cents: DS.attr('number'),
- *  food: DS.belongsTo('App.Food')
+ *  food: DS.belongsTo('RealTeam.Food')
  *});
  *
- *App.Food = DS.Model.extend({
+ *RealTeam.Food = DS.Model.extend({
  *  name: DS.attr('string'),
  *  imageUrl: DS.attr('string'),
  *  cents: DS.attr('number')
  *});
  */
 
-App.User.FIXTURES = [];
+RealTeam.User.FIXTURES = [];
 /*
- *App.User.FIXTURES = [{
+ *RealTeam.User.FIXTURES = [{
  *  id: 1,
  *  tab: 1
  *}, {
@@ -167,7 +171,7 @@ App.User.FIXTURES = [];
  */
 
 /*
- *App.Tab.FIXTURES = [{
+ *RealTeam.Tab.FIXTURES = [{
  *  id: 1,
  *  tabItems: []
  *}, {
@@ -189,7 +193,7 @@ App.User.FIXTURES = [];
  */
 
 /*
- *App.TabItem.FIXTURES = [{
+ *RealTeam.TabItem.FIXTURES = [{
  *  id: 400,
  *  cents: 1500,
  *  food: 1
@@ -213,7 +217,7 @@ App.User.FIXTURES = [];
  */
 
 /*
- *App.Food.FIXTURES = [{
+ *RealTeam.Food.FIXTURES = [{
  *  id: 1,
  *  name: 'Pizza',
  *  imageUrl: 'img/pizza.png',
