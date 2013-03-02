@@ -1,4 +1,7 @@
 RealTeam.UserController = Ember.ObjectController.extend({
-  // Implement your controller here.
+  sortProperties: ['id'],
+  init: function(){
+    console.log('init UserController');
+  }
 });
 

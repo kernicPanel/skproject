@@ -1,1 +1,1 @@
-var RealTeam = Ember.Application.create();
+var RealTeam = Ember.Application.create({});

@@ -1,4 +1,6 @@
-RealTeam.ApplicationController = Ember.ObjectController.extend({
-  // Implement your controller here.
-});
+/*
+ *RealTeam.ApplicationController = Ember.ObjectController.extend({
+ *  // Implement your controller here.
+ *});
+ */
 
