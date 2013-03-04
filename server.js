@@ -360,7 +360,7 @@ server.get("/account", [requireLogin], function (req, res) {
 });
 
 server.get('/', [requireLogin], function(req,res){
-  res.render('index.html');
+  res.sendfile('assets/indexEmber.html');
   /*
    *var requestLogin = req.session.username;
    *addLocals( null, function( err, locals ) {
