@@ -594,61 +594,63 @@ span.priority.Immédiat {
 }
 
 
-.ember-view {
-  width: 100%;
-  *zoom: 1;
-}
-.ember-view:before,
-.ember-view:after {
-  display: table;
-  content: "";
-}
-.ember-view:after {
-  clear: both;
-}
-.ember-view > [class*="span"] {
-  float: left;
-  margin-left: 2.127659574%;
-}
-.ember-view > [class*="span"]:first-child {
-  margin-left: 0;
-}
-.ember-view > .span12 {
-  width: 99.99999998999999%;
-}
-.ember-view > .span11 {
-  width: 91.489361693%;
-}
-.ember-view > .span10 {
-  width: 82.97872339599999%;
-}
-.ember-view > .span9 {
-  width: 74.468085099%;
-}
-.ember-view > .span8 {
-  width: 65.95744680199999%;
-}
-.ember-view > .span7 {
-  width: 57.446808505%;
-}
-.ember-view > .span6 {
-  width: 48.93617020799999%;
-}
-.ember-view > .span5 {
-  width: 40.425531911%;
-}
-.ember-view > .span4 {
-  width: 31.914893614%;
-}
-.ember-view > .span3 {
-  width: 23.404255317%;
-}
-.ember-view > .span2 {
-  width: 14.89361702%;
-}
-.ember-view > .span1 {
-  width: 6.382978723%;
-}
+/*
+ *.ember-view {
+ *  width: 100%;
+ *  *zoom: 1;
+ *}
+ *.ember-view:before,
+ *.ember-view:after {
+ *  display: table;
+ *  content: "";
+ *}
+ *.ember-view:after {
+ *  clear: both;
+ *}
+ *.ember-view > [class*="span"] {
+ *  float: left;
+ *  margin-left: 2.127659574%;
+ *}
+ *.ember-view > [class*="span"]:first-child {
+ *  margin-left: 0;
+ *}
+ *.ember-view > .span12 {
+ *  width: 99.99999998999999%;
+ *}
+ *.ember-view > .span11 {
+ *  width: 91.489361693%;
+ *}
+ *.ember-view > .span10 {
+ *  width: 82.97872339599999%;
+ *}
+ *.ember-view > .span9 {
+ *  width: 74.468085099%;
+ *}
+ *.ember-view > .span8 {
+ *  width: 65.95744680199999%;
+ *}
+ *.ember-view > .span7 {
+ *  width: 57.446808505%;
+ *}
+ *.ember-view > .span6 {
+ *  width: 48.93617020799999%;
+ *}
+ *.ember-view > .span5 {
+ *  width: 40.425531911%;
+ *}
+ *.ember-view > .span4 {
+ *  width: 31.914893614%;
+ *}
+ *.ember-view > .span3 {
+ *  width: 23.404255317%;
+ *}
+ *.ember-view > .span2 {
+ *  width: 14.89361702%;
+ *}
+ *.ember-view > .span1 {
+ *  width: 6.382978723%;
+ *}
+ */
 
 th {
   text-align: center;

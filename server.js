@@ -26,6 +26,8 @@ var connect = require('connect'),
     mongoose = require('mongoose'),
     mongoStore = require('connect-mongodb');
 
+//mongoose.set('debug', true);
+
 console.log();
 console.log('App start'.red.inverse );
 
@@ -373,15 +375,34 @@ server.get('/', [requireLogin], function(req,res){
    */
 });
 
-server.get('/users', [requireLogin], function(req,res){
-  server.redmine.getUsers(function(err, data){
-    res.send({users: data});
+
+server.get('/users/:id', [requireLogin], function(req,res){
+  server.redmine.getUser(req.params.id, function(err, data){
+    res.send({user: data});
   });
 });
 
-server.get('/users/:id', [requireLogin], function(req,res){
-  server.redmine.getUserIssues(req.params.id, function(err, data){
-    res.send({users: data});
+server.get('/users', [requireLogin], function(req,res){
+  server.redmine.getUsers(function(err, users){
+    res.send({ users: users });
+  });
+});
+
+server.get('/issues?:ids', [requireLogin], function(req,res){
+  server.redmine.getIssues(req.query.ids, function(err, data){
+    res.send({issues: data});
+  });
+});
+
+server.get('/issues', [requireLogin], function(req,res){
+  server.redmine.getIssues(false, function(err, data){
+    res.send({issues: data});
+  });
+});
+
+server.get('/issue/:id', [requireLogin], function(req,res){
+  server.redmine.getIssue(req.params.id, function(err, data){
+    res.send({issue: data});
   });
 });
 

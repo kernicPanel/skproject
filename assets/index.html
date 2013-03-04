@@ -52,7 +52,7 @@
       <h2>Users</h2>
       <ul>
       {{#each user in controller}}
-        <li>{{#linkTo "user" user class="panel six columns"}}{{ user.name }}{{/linkTo}}</li>
+        <li>{{#linkTo "user" user class="panel six columns"}}{{ user.name }}{{/linkTo}} {{ user.issuesCount }}</li>
       {{/each}}
       </ul>
     </script>
@@ -63,26 +63,32 @@
           {{ render "food" }}
         </div>
         <div class="span9">
-          <h2>User <span>{{name}}</span></h2>
-          {{ render "tab"  tab }}
+          <h2>User <span>{{name}} {{issuesCount}}</span></h2>
+          {{issues}}
+          {{#each issue in issues}}
+            {{issue}}
+              <p>{{issue.subject}}</p>
+              <p>{{issue.url}}</p>
+          {{else}}
+              <p>No issues !!</p>
+          {{/each}}
+          {{ render "issues"  issues }}
         </div>
       </div>
     </script>
 
-    <script type="text/x-handlebars" data-template-name="tab">
-      <ul id="customer-tab">
-        {{#each tabItem in tabItems}}
+    <script type="text/x-handlebars" data-template-name="issues">
+      <ul id="customer-issues">
+        {{#each issue in issues}}
           <li>
-            <h3>{{ tabItem.food.name }} <span>${{ money tabItem.cents }}</span></h3>
+            <p>{{issue.subject}}</p>
+            <p>{{issue.url}}</p>
           </li>
         {{else}}
           <li>
-            <h3>Click a food te add it</h3>
+            <p>No issues</p>
           </li>
         {{/each}}
-        <li id="total">
-          <h3>Total <span>${{ money cents }}</span></h3>
-        </li>
       </ul>
     </script>
 

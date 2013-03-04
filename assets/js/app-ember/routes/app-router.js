@@ -1,36 +1,11 @@
-// RealTeam.Router = Ember.Router.extend({
-//   root: Ember.Route.extend({
-//     index: Ember.Route.extend({
-//       route: '/'
-
-//       // You'll likely want to connect a view here.
-//       // connectOutlets: function(router) {
-//       //   router.get('applicationController').connectOutlet(RealTeam.MainView);
-//       // }
-
-//       // Layout your routes here...
-//     })
-//   })
-// });
-
 RealTeam.Router.map(function() {
   this.resource('users', function() {
-    this.resource('user', {path:':user_id'});
+    this.resource('user', {path:':user_id'}, function(){
+      this.route("issues");
+      this.route("issue", { path: "/issues/:issue_id" });
+    });
   });
 });
-
-/*
- *RealTeam.Router.map(function() {
- *  this.resource('users', function() {
- *    //this.resource('user', {path:':user_id'});
- *    this.resource('user', {path:':user_id'}, function(){
- *      this.resource('issues', function(){
- *        console.log('nrstnrst');
- *      });
- *    });
- *  });
- *});
- */
 
 RealTeam.ApplicationRoute = Ember.Route.extend({
   setupController: function () {
@@ -59,7 +34,6 @@ RealTeam.UserRoute = Ember.Route.extend({
     console.log('UserRoute init');
   },
   model: function(params) {
-    console.log('UserRoute model', params);
-    //return RealTeam.Issue.find(params.user_id);
+    return RealTeam.User.find(params.user_id);
   }
 });
