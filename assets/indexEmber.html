@@ -9,13 +9,13 @@
     <!-- Set the viewport width to device width for mobile -->
     <meta name="viewport" content="width=device-width" />
 
-    <title>Ordr: Rstaurant Mnu Systm fuuuuck</title>
+    <title>RealTeam</title>
 
     <!-- Included CSS Files (Compressed) -->
-    <!--<link rel="stylesheet" href="css/foundation.css">-->
-    <!--<link rel="stylesheet" href="css/app.css">-->
     <link rel='stylesheet' href='css/bootstrap.css'>
-    <link rel='stylesheet' href='css/style.css'>
+    <link rel='stylesheet' href='css/h5bp-head.css'>
+    <link rel='stylesheet' href='css/realteam.css'>
+    <link rel='stylesheet' href='css/h5bp-foot.css'>
     <link rel='stylesheet' href='css/bootstrap-responsive.css'>
   </head>
   <body>
@@ -24,9 +24,7 @@
       <div class="container-fluid">
         <div class="row-fluid">
           <div class="span12">
-            <h1>Team</h1>
-            <hr />
-            <p>{{ outlet }}</p>
+            {{ outlet }}
           </div>
         </div>
       </div>
@@ -38,11 +36,11 @@
 
     <script type="text/x-handlebars" data-template-name="users">
       <div class="row-fluid">
-        <div id="users" class="four columns">
+        <div id="users" class="span4">
           {{ template "userMenu"}}
         </div>
 
-        <div id="order" class="eight columns">
+        <div id="order" class="span8">
           {{outlet}}
         </div>
       </div>
@@ -92,25 +90,9 @@
       </ul>
     </script>
 
-    <!--
-       -<script type="text/x-handlebars" data-template-name="food">
-       -  <ul id="menu">
-       -  {{#each controller}}
-       -  <li>
-       -    <a href="#" {{ action "addFood" this }}>
-       -      <img {{ bindAttr src="imageUrl" }} />
-       -      <p>{{ name }}</p>
-       -    </a>
-       -  </li>
-       -  {{/each}}
-       -  </ul>
-       -</script>
-       -->
 
     <!--<script src="/socket.io/socket.io.js"></script>-->
     <script src="js/lib/jquery-1.8.2.min.js"></script>
-    <!--<script src="js/libs/handlebars-1.0.0.rc.2.js"></script>-->
-    <!--<script src="js/libs/ember.js"></script>-->
     <script src="js/lib/ember/handlebars-1.0.rc.3.js"></script>
     <script src="js/lib/ember/ember-1.0.0-rc.1.js"></script>
     <script src="js/lib/ember/ember-data.js"></script>
