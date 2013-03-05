@@ -12,11 +12,11 @@
     <title>RealTeam</title>
 
     <!-- Included CSS Files (Compressed) -->
-    <link rel='stylesheet' href='css/bootstrap.css'>
     <link rel='stylesheet' href='css/h5bp-head.css'>
-    <link rel='stylesheet' href='css/realteam.css'>
-    <link rel='stylesheet' href='css/h5bp-foot.css'>
+    <link rel='stylesheet' href='css/bootstrap-cyborg.css'>
+    <link rel='stylesheet' href='css/style.css'>
     <link rel='stylesheet' href='css/bootstrap-responsive.css'>
+    <link rel='stylesheet' href='css/h5bp-foot.css'>
   </head>
   <body>
 
@@ -31,64 +31,74 @@
     </script>
 
     <script type="text/x-handlebars" data-template-name="index">
-      suck
+      <div class="row-fluid">
+        <div id="users" class="span12">
+          {{ template "team"}}
+        </div>
+      </div>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="team">
+      {{#each user in controller}}
+        <div class="well span4">
+          {{#linkTo "user" user}}{{ user.name }} {{ user.issuesCount }}{{/linkTo}}
+        </div>
+      {{/each}}
     </script>
 
     <script type="text/x-handlebars" data-template-name="users">
       <div class="row-fluid">
-        <div id="users" class="span4">
+        <div id="users" class="span2">
           {{ template "userMenu"}}
         </div>
 
-        <div id="order" class="span8">
+        <div id="user" class="span10">
           {{outlet}}
         </div>
       </div>
     </script>
 
     <script type="text/x-handlebars" data-template-name="userMenu">
-      <h2>Users</h2>
-      <ul>
-      {{#each user in controller}}
-        <li>{{#linkTo "user" user class="panel six columns"}}{{ user.name }}{{/linkTo}} {{ user.issuesCount }}</li>
-      {{/each}}
-      </ul>
-    </script>
-
-    <script type="text/x-handlebars" data-template-name="user">
-      <div class="row-fluid">
-        <div class="span3">
-          {{ render "food" }}
-        </div>
-        <div class="span9">
-          <h2>User <span>{{name}} {{issuesCount}}</span></h2>
-          {{issues}}
-          {{#each issue in issues}}
-            {{issue}}
-              <p>{{issue.subject}}</p>
-              <p>{{issue.url}}</p>
-          {{else}}
-              <p>No issues !!</p>
+      <div class="sidebar-nav navbar navbar-inverse">
+        <div class="navbar-inner">
+          <ul class="nav">
+          {{#each user in controller}}
+            <li>{{#linkTo "user" user}}{{ user.name }} {{ user.issuesCount }}{{/linkTo}}</li>
           {{/each}}
-          {{ render "issues"  issues }}
+          </ul>
         </div>
       </div>
     </script>
 
-    <script type="text/x-handlebars" data-template-name="issues">
-      <ul id="customer-issues">
-        {{#each issue in issues}}
-          <li>
-            <p>{{issue.subject}}</p>
-            <p>{{issue.url}}</p>
-          </li>
-        {{else}}
-          <li>
-            <p>No issues</p>
-          </li>
-        {{/each}}
-      </ul>
+    <script type="text/x-handlebars" data-template-name="user">
+      <h2>User <span>{{name}} {{issuesCount}}</span></h2>
+      {{#each issue in issues}}
+        <div class="issue well">
+          <p>{{issue.subject}}</p>
+          <p>{{issue.url}}</p>
+        </div>
+      {{else}}
+        <p>No issues.</p>
+      {{/each}}
+      {{! render "issues"  issues }}
     </script>
+
+    <!--
+       -<script type="text/x-handlebars" data-template-name="issues">
+       -  <ul id="customer-issues">
+       -    {{#each issue in issues}}
+       -      <li>
+       -        <p>{{issue.subject}}</p>
+       -        <p>{{issue.url}}</p>
+       -      </li>
+       -    {{else}}
+       -      <li>
+       -        <p>No issues</p>
+       -      </li>
+       -    {{/each}}
+       -  </ul>
+       -</script>
+       -->
 
 
     <!--<script src="/socket.io/socket.io.js"></script>-->

@@ -18,7 +18,15 @@ RealTeam.ApplicationRoute = Ember.Route.extend({
 
 RealTeam.IndexRoute = Ember.Route.extend({
   redirect: function () {
-    this.transitionTo('users');
+    //this.transitionTo('users');
+  },
+  /*
+   *setupController: function(controller, users) {
+   *  controller.set('content', RealTeam.get('users'));
+   *}
+   */
+  model: function() {
+    return RealTeam.User.find();
   }
 });
 
