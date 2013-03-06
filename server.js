@@ -124,7 +124,7 @@ server.redmineStats = require('./lib/redmineStats.js');
 server.redmineStats.init();
 
 server.irc = require('./lib/irc.js');
-// server.irc.init();
+server.irc.init();
 
 server.timer = require('./lib/timer.js');
 server.timer.init();

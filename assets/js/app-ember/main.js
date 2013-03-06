@@ -1,1 +1,3 @@
-var RealTeam = Ember.Application.create({});
+var RealTeam = Ember.Application.create({
+  socket: io.connect(window.location.hostname)
+});
