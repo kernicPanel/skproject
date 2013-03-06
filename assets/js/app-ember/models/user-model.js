@@ -4,19 +4,19 @@
 RealTeam.User = DS.Model.extend({
   name: DS.attr('string'),
   issuesCount: function () {
-    return this.get('issues').loadingRecordsCount
+    return this.get('issue_ids').loadingRecordsCount
   }.property('issues'),
-  issues: DS.hasMany('RealTeam.Issue')
+  issue_ids: DS.hasMany('RealTeam.Issue')
 });
 
 RealTeam.User.FIXTURES = [{
   id: 1,
   name: 'user 1',
-  issues: [1, 2]
+  issue_ids: [1, 2, 5]
 },{
   id: 2,
   name: 'user 2',
-  issues: [3, 4]
+  issue_ids: [3, 4]
 }];
 
 RealTeam.Issue = DS.Model.extend({
@@ -45,4 +45,9 @@ RealTeam.Issue.FIXTURES = [{
   subject: 'issue 4',
   url: 'mnrsaumauiauiu rastmnsratmrstaust',
   user: 2
+},{
+  id: 5,
+  subject: 'issue 5',
+  url: 'rastmnsratmrstaust',
+  user: 1
 }];

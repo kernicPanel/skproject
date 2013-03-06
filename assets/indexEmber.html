@@ -72,7 +72,7 @@
 
     <script type="text/x-handlebars" data-template-name="user">
       <h2>User <span>{{name}} {{issuesCount}}</span></h2>
-      {{#each issue in issues}}
+      {{#each issue in issue_ids}}
         <div class="issue well">
           <p>{{issue.subject}}</p>
           <p>{{issue.url}}</p>
