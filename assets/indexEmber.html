@@ -65,7 +65,7 @@
           <ul class="nav">
           {{#each user in controller}}
             <li>
-              {{#linkTo "user" user}}{{ user.id }} {{ user.name }} ({{ user.issuesCount }})<br />
+              {{#linkTo "user" user}}{{ user.id }} {{ user.name }} ({{ issuesCount user }})<br />
               {{user.current}}
               {{/linkTo}}
             </li>
@@ -76,7 +76,7 @@
     </script>
 
     <script type="text/x-handlebars" data-template-name="user">
-      <h2>User <span>{{name}} {{issuesCount}}</span></h2>
+      <h2>User <span>{{name}} {{issuesCount this}}</span></h2>
       {{#each issue in issues}}
         <div class="issue well">
           <p> <a {{bindAttr href="issue.url"}} target="_blank">{{issue.id}} {{issue.subject}}</a></p>
@@ -95,7 +95,7 @@
               <p> <a {{bindAttr href="issue.url"}} target="_blank">{{issue.id}} {{issue.subject}}</a></p>
             </div>
           {{else}}
-            <p>No issues.</p>
+            <p>... Fetching issues ...</p>
           {{/each}}
         </div>
       </div>
@@ -136,6 +136,8 @@
 
     <script src="/js/app-ember/views/application-view.js"></script>
     <script src="/js/app-ember/views/user-view.js"></script>
+
+    <script src="/js/app-ember/helpers/issuesCount.js"></script>
 
     <!--<script src="js/app-ember/app.js"></script>-->
   </body>

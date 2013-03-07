@@ -3,9 +3,11 @@
 
 RealTeam.User = DS.Model.extend({
   name: DS.attr('string'),
-  issuesCount: function () {
-    return this.get('issues').loadingRecordsCount
-  }.property('issues'),
+  /*
+   *issuesCount: function () {
+   *  return this.get('issues').length
+   *}.property('issues'),
+   */
   issues: DS.hasMany('RealTeam.Issue'),
   current: DS.attr('string')
 });
