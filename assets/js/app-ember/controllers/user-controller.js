@@ -1,6 +1,4 @@
 RealTeam.UserController = Ember.ObjectController.extend({
-  sortProperties: ['name'],
-  sortAscending: false,
   init: function(){
     console.log('init UserController');
   },
@@ -11,11 +9,15 @@ RealTeam.UserController = Ember.ObjectController.extend({
 //debugger;
   }
 });
+
+RealTeam.UsersController = Ember.ArrayController.extend({
+  sortProperties: ['name'],
+  sortAscending: true,
+});
+
 RealTeam.userController = RealTeam.UserController.create();
 
 RealTeam.IssueController = Ember.ObjectController.extend({
-  sortProperties: ['id'],
-  sortAscending: false,
   init: function(){
     console.log('init UserController');
   },
@@ -23,5 +25,11 @@ RealTeam.IssueController = Ember.ObjectController.extend({
     console.log('issue update', issue);
   }
 });
+
+RealTeam.IssuesController = Ember.ArrayController.extend({
+  sortProperties: ['id'],
+  sortAscending: false,
+});
+
 RealTeam.issueController = RealTeam.IssueController.create();
 
