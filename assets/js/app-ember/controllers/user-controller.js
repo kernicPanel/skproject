@@ -1,21 +1,13 @@
 RealTeam.UserController = Ember.ObjectController.extend({
-  sortProperties: ['id'],
+  sortProperties: ['name'],
   init: function(){
     console.log('init UserController');
   },
   updateCurrentIssue: function (issue) {
-    console.log('user updateCurrentIssue', issue);
-    var user = this.get('model');
-    test = user;
-    console.log('user', user);
+    var user = RealTeam.User.find(issue.userId);
+    user.set('current', issue.issueId);
 
 //debugger;
-    /*
-     *tabItems.createRecord({
-     *  food: food,
-     *  cents: food.get('cents')
-     *});
-     */
   }
 });
 RealTeam.userController = RealTeam.UserController.create();

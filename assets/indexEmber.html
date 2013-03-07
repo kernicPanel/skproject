@@ -41,7 +41,8 @@
     <script type="text/x-handlebars" data-template-name="team">
       {{#each user in controller}}
         <div class="well span4">
-          {{#linkTo "user" user}}{{ user.name }} {{ user.issuesCount }}{{/linkTo}}
+          <p>{{#linkTo "user" user}}{{ user.name }} {{ user.issuesCount }}{{/linkTo}}</p>
+          <p>{{user.current}}</p>
         </div>
       {{/each}}
     </script>
@@ -63,7 +64,11 @@
         <div class="navbar-inner">
           <ul class="nav">
           {{#each user in controller}}
-            <li>{{#linkTo "user" user}}{{ user.name }} {{ user.issuesCount }}{{/linkTo}}</li>
+            <li>
+              {{#linkTo "user" user}}{{ user.name }} {{ user.issuesCount }}<br />
+              {{user.current}}
+              {{/linkTo}}
+            </li>
           {{/each}}
           </ul>
         </div>
@@ -72,10 +77,9 @@
 
     <script type="text/x-handlebars" data-template-name="user">
       <h2>User <span>{{name}} {{issuesCount}}</span></h2>
-      {{#each issue in issue_ids}}
+      {{#each issue in issues}}
         <div class="issue well">
-          <p>{{issue.subject}}</p>
-          <p>{{issue.url}}</p>
+          <p> <a {{bindAttr href="issue.url"}} target="_blank">{{issue.id}} {{issue.subject}}</a></p>
         </div>
       {{else}}
         <p>No issues.</p>
