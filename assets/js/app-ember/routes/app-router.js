@@ -5,6 +5,9 @@ RealTeam.Router.map(function() {
       this.route("issue", { path: "/issues/:issue_id" });
     });
   });
+  this.resource('issues', function() {
+    this.route("issues");
+  });
 });
 
 RealTeam.ApplicationRoute = Ember.Route.extend({
@@ -43,5 +46,11 @@ RealTeam.UserRoute = Ember.Route.extend({
   },
   model: function(params) {
     return RealTeam.User.find(params.user_id);
+  }
+});
+
+RealTeam.IssuesRoute = Ember.Route.extend({
+  model: function() {
+    return RealTeam.Issue.find();
   }
 });

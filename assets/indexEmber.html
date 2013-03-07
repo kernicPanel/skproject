@@ -65,7 +65,7 @@
           <ul class="nav">
           {{#each user in controller}}
             <li>
-              {{#linkTo "user" user}}{{ user.name }} {{ user.issuesCount }}<br />
+              {{#linkTo "user" user}}{{ user.id }} {{ user.name }} ({{ user.issuesCount }})<br />
               {{user.current}}
               {{/linkTo}}
             </li>
@@ -85,6 +85,20 @@
         <p>No issues.</p>
       {{/each}}
       {{! render "issues"  issues }}
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="issues">
+      <div class="row-fluid">
+        <div id="users" class="span12">
+          {{#each issue in controller}}
+            <div class="issue well">
+              <p> <a {{bindAttr href="issue.url"}} target="_blank">{{issue.id}} {{issue.subject}}</a></p>
+            </div>
+          {{else}}
+            <p>No issues.</p>
+          {{/each}}
+        </div>
+      </div>
     </script>
 
     <!--
