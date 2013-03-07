@@ -385,6 +385,14 @@ server.get('/users/:id', [requireLogin], function(req,res){
 server.get('/users', [requireLogin], function(req,res){
   server.redmine.getUsers(function(err, users){
     res.send({ users: users });
+    /*
+     *server.redmine.getIssues(false, function(err, issues){
+     *  res.send({
+     *    users: users,
+     *    issues: issues
+     *  });
+     *});
+     */
   });
 });
 
