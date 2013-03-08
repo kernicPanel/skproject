@@ -32,41 +32,41 @@
 
     <script type="text/x-handlebars" data-template-name="index">
       <div class="row-fluid">
-        <div id="users" class="span12">
+        <div id="teamMembers" class="span12">
           {{ template "team"}}
         </div>
       </div>
     </script>
 
     <script type="text/x-handlebars" data-template-name="team">
-      {{#each user in controller}}
+      {{#each teamMember in controller}}
         <div class="well span4">
-          <p>{{#linkTo "user" user}}{{ user.name }} {{ user.issuesCount }}{{/linkTo}}</p>
-          <p>{{user.current}}</p>
+          <p>{{#linkTo "teamMember" teamMember}}{{ teamMember.name }} {{ teamMember.issuesCount }}{{/linkTo}}</p>
+          <p>{{teamMember.current}}</p>
         </div>
       {{/each}}
     </script>
 
-    <script type="text/x-handlebars" data-template-name="users">
+    <script type="text/x-handlebars" data-template-name="teamMembers">
       <div class="row-fluid">
-        <div id="users" class="span2">
-          {{ template "userMenu"}}
+        <div id="teamMembers" class="span2">
+          {{ template "teamMemberMenu"}}
         </div>
 
-        <div id="user" class="span10">
+        <div id="teamMember" class="span10">
           {{outlet}}
         </div>
       </div>
     </script>
 
-    <script type="text/x-handlebars" data-template-name="userMenu">
+    <script type="text/x-handlebars" data-template-name="teamMemberMenu">
       <div class="sidebar-nav navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav">
-          {{#each user in controller}}
+          {{#each teamMember in controller}}
             <li>
-              {{#linkTo "user" user}}{{ user.id }} {{ user.name }} ({{ issuesCount user }})<br />
-              {{user.current}}
+              {{#linkTo "teamMember" teamMember}}{{ teamMember.id }} {{ teamMember.name }} ({{ issuesCount teamMember }})<br />
+              {{teamMember.current}}
               {{/linkTo}}
             </li>
           {{/each}}
@@ -75,8 +75,8 @@
       </div>
     </script>
 
-    <script type="text/x-handlebars" data-template-name="user">
-      <h2>User <span>{{name}} {{issuesCount this}}</span></h2>
+    <script type="text/x-handlebars" data-template-name="teamMember">
+      <h2>teamMember <span>{{name}} {{issuesCount this}}</span></h2>
       {{#each issue in issues}}
         {{template "issue"}}
       {{else}}
@@ -87,7 +87,7 @@
 
     <script type="text/x-handlebars" data-template-name="issues">
       <div class="row-fluid">
-        <div id="users" class="span12">
+        <div id="teamMembers" class="span12">
           {{#each issue in controller}}
             {{template "issue"}}
           {{else}}
@@ -134,13 +134,13 @@
     <script src="/js/app-ember/socket.js"></script>
     <script src="/js/app-ember/routes/app-router.js"></script>
     <script src="/js/app-ember/controllers/application-controller.js"></script>
-    <script src="/js/app-ember/controllers/user-controller.js"></script>
+    <script src="/js/app-ember/controllers/teamMember-controller.js"></script>
     <script src="/js/app-ember/store.js"></script>
     <script src="/js/app-ember/models/application-model.js"></script>
-    <script src="/js/app-ember/models/user-model.js"></script>
+    <script src="/js/app-ember/models/teamMember-model.js"></script>
 
     <script src="/js/app-ember/views/application-view.js"></script>
-    <script src="/js/app-ember/views/user-view.js"></script>
+    <script src="/js/app-ember/views/teamMember-view.js"></script>
 
     <script src="/js/app-ember/helpers/issuesCount.js"></script>
 

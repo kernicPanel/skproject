@@ -376,19 +376,19 @@ server.get('/', [requireLogin], function(req,res){
 });
 
 
-server.get('/users/:id', [requireLogin], function(req,res){
-  server.redmine.getUser(req.params.id, function(err, data){
-    res.send({user: data});
+server.get('/team_members/:id', [requireLogin], function(req,res){
+  server.redmine.getTeamMember(req.params.id, function(err, data){
+    res.send({team_member: data});
   });
 });
 
-server.get('/users', [requireLogin], function(req,res){
-  server.redmine.getUsers(function(err, users){
-    res.send({ users: users });
+server.get('/team_members', [requireLogin], function(req,res){
+  server.redmine.getTeamMembers(function(err, teamMembers){
+    res.send({ team_members: teamMembers });
     /*
      *server.redmine.getIssues(false, function(err, issues){
      *  res.send({
-     *    users: users,
+     *    teamMembers: teamMembers,
      *    issues: issues
      *  });
      *});
