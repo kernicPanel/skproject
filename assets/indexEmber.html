@@ -78,9 +78,7 @@
     <script type="text/x-handlebars" data-template-name="user">
       <h2>User <span>{{name}} {{issuesCount this}}</span></h2>
       {{#each issue in issues}}
-        <div class="issue well">
-          <p> <a {{bindAttr href="issue.url"}} target="_blank">{{issue.id}} {{issue.subject}}</a></p>
-        </div>
+        {{template "issue"}}
       {{else}}
         <p>No issues.</p>
       {{/each}}
@@ -91,14 +89,21 @@
       <div class="row-fluid">
         <div id="users" class="span12">
           {{#each issue in controller}}
-            <div class="issue well">
-              <p> <a {{bindAttr href="issue.url"}} target="_blank">{{issue.id}} {{issue.subject}}</a></p>
-            </div>
+            {{template "issue"}}
           {{else}}
             <p>... Fetching issues ...</p>
           {{/each}}
         </div>
       </div>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="issue">
+        <div class="issue well">
+          <p>
+            <a {{bindAttr href="issue.url"}} target="_blank">{{issue.id}} {{issue.subject}}</a>
+            <button {{action "start" issue}}>start</button>
+          </p>
+        </div>
     </script>
 
     <!--
