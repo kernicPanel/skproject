@@ -1,13 +1,55 @@
 
 // Requires Ember-Data
 
+/*
+ *RealTeam.Currentuser = DS.Model.extend({
+ *  name: DS.attr('string'),
+ *  issues: DS.hasMany('RealTeam.Issue'),
+ *  current: DS.attr('string'),
+ *
+ *  apiKey: DS.attr('string'),
+ *  created_on: DS.attr('string'),
+ *  currentTask: DS.attr('string'),
+ *  firstname: DS.attr('string'),
+ *  last_login_on: DS.attr('string'),
+ *  lastname: DS.attr('string'),
+ *  mail: DS.attr('string'),
+ *  password: DS.attr('string'),
+ *  username: DS.attr('string'),
+ *});
+ *RealTeam.Currentuser.sync = {
+ *  find: function(id, process) {
+ *    jQuery.getJSON("/people/" + id).then(function(json) {
+ *      process(json).camelizeKeys().load();
+ *    });
+ *  }
+ *};
+ */
+RealTeam.Currentuser = Ember.Object.extend();
+RealTeam.Currentuser.reopenClass({
+  username: 'initial username',
+  find: function(){
+    console.log('Currentuser find start');
+    $.getJSON('/currentuser', function(data) {
+    //$.ajax({
+      //url: '/currentuser',
+      //dataType: 'jsonp',
+      //context: this,
+      //complete: function(data){
+        //data.data.forEach(function(contributor){
+          //this.allContributors.addObject(App.Contributor.create(contributor))
+        //}, this)
+        console.log('Currentuser this', this);
+        console.log('Currentuser find', data);
+        //this.set('username', data.currentuser.username);
+        return RealTeam.set('currentuser', RealTeam.Currentuser.create(data.currentuser));
+    });
+    //return this.allContributors;
+  }
+});
+
 RealTeam.TeamMember = DS.Model.extend({
   name: DS.attr('string'),
-  /*
-   *issuesCount: function () {
-   *  return this.get('issues').length
-   *}.property('issues'),
-   */
   issues: DS.hasMany('RealTeam.Issue'),
   current: DS.attr('string')
 });

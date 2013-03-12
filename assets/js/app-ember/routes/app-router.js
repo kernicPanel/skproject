@@ -14,6 +14,12 @@ RealTeam.ApplicationRoute = Ember.Route.extend({
   setupController: function () {
     //this.controllerFor('food').set('model', RealTeam.Food.find());
     RealTeam.TeamMember.find();
+    //RealTeam.Currentuser.find();
+
+    //this.controllerFor('currentuser').set('model', RealTeam.Currentuser.find());
+    RealTeam.Currentuser.find();
+    //RealTeam.currentuser = RealTeam.Currentuser.find();
+    //RealTeam.set('currentUser', RealTeam.Currentuser.find());
   },
   init: function () {
     console.log('ApplicationRoute init');

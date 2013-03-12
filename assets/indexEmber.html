@@ -24,25 +24,46 @@
       <div class="container-fluid">
         <div class="row-fluid">
           <div class="span12">
-            {{ outlet }}
+            {{ template "currentuser" }}
           </div>
+        </div>
+        <div class="row-fluid">
+          <!--<div class="span12">-->
+            {{ outlet }}
+          <!--</div>-->
         </div>
       </div>
     </script>
 
+    <script type="text/x-handlebars" data-template-name="currentuser">
+      {{#with RealTeam.currentuser}}
+        <!--<div class="well span12">-->
+          <div class="well">
+            <p>{{firstname}} {{lastname}}
+            {{#with currentTask}}
+              {{startedAt}}
+            {{/with}}
+            </p>
+          </div>
+        <!--</div>-->
+      {{/with}}
+    </script>
+
     <script type="text/x-handlebars" data-template-name="index">
-      <div class="row-fluid">
-        <div id="teamMembers" class="span12">
+      <!--<div class="row-fluid">-->
+        <!--<div id="teamMembers" class="span12">-->
           {{ template "team"}}
-        </div>
-      </div>
+        <!--</div>-->
+      <!--</div>-->
     </script>
 
     <script type="text/x-handlebars" data-template-name="team">
       {{#each teamMember in controller}}
-        <div class="well span4">
-          <p>{{#linkTo "teamMember" teamMember}}{{ teamMember.name }} {{ teamMember.issuesCount }}{{/linkTo}}</p>
-          <p>{{teamMember.current}}</p>
+        <div class="span4">
+          <div class="well">
+            <p>{{#linkTo "teamMember" teamMember}}{{ teamMember.name }} {{ teamMember.issuesCount }}{{/linkTo}}</p>
+            <p>{{teamMember.current}}</p>
+          </div>
         </div>
       {{/each}}
     </script>

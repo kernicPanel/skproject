@@ -1,9 +1,24 @@
+RealTeam.CurrentuserController = Ember.ObjectController.extend({
+  init: function(){
+    console.log('init CurrentuserController');
+  },
+  updateCurrentIssue: function (issue) {
+    //var teamMember = RealTeam.TeamMember.find(issue.team_memberId);
+    //teamMember.set('current', issue.issueId);
+  },
+  start: function(issue){
+    console.log('currentuser start', issue.get('id'));
+  }
+});
+
+RealTeam.currentuser = RealTeam.CurrentuserController.create();
+
 RealTeam.TeamMemberController = Ember.ObjectController.extend({
   init: function(){
     console.log('init TeamMemberController');
   },
   updateCurrentIssue: function (issue) {
-    var teamMember = RealTeam.TeamMember.find(issue.teamMemberId);
+    var teamMember = RealTeam.TeamMember.find(issue.team_memberId);
     teamMember.set('current', issue.issueId);
 
 //debugger;

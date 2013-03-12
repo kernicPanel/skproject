@@ -3,10 +3,6 @@ RealTeam.socket.on('realTeam::connect', function (data){
 });
 
 RealTeam.socket.on('redmine::currentIssueUpdated', function (issue){
-  //console.log('updateIssue', issue);
-  //RealTeam.teamMemberController.find({login: issue.login});
-  //RealTeam.issueController.find({login: issue.login});
-
   RealTeam.teamMemberController.updateCurrentIssue(issue);
 });
 
