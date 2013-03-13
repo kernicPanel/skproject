@@ -13,11 +13,23 @@ RealTeam.Router.map(function() {
 RealTeam.ApplicationRoute = Ember.Route.extend({
   setupController: function () {
     RealTeam.TeamMember.find();
+
+    //this.controllerFor('currentuser').set('model', RealTeam.Currentuser.find());
     RealTeam.Currentuser.find();
+    //RealTeam.currentuser = RealTeam.Currentuser.find();
+    //RealTeam.set('currentUser', RealTeam.Currentuser.find());
   },
   init: function () {
     console.log('ApplicationRoute init');
+  },
+  events: {
+    stop: function() {
+      // do your business.
+      console.log("stop ApplicationRoute : ");
+      RealTeam.currentuserController.stop();
+    }
   }
+
 });
 
 RealTeam.IndexRoute = Ember.Route.extend({
