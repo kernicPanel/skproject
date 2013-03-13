@@ -41,6 +41,9 @@
           <div class="well">
             <p>{{firstname}} {{lastname}}
             {{#with currentTask}}
+              {{id}}
+              {{issueStatus}}
+              {{issueName}}
               {{startedAt}}
             {{/with}}
             </p>
@@ -119,12 +122,10 @@
     </script>
 
     <script type="text/x-handlebars" data-template-name="issue">
-        <div class="issue well">
-          <p>
-            <a {{bindAttr href="issue.url"}} target="_blank">{{issue.id}} {{issue.subject}}</a>
-            <button {{action "start" issue}}>start</button>
-          </p>
-        </div>
+      <div class="issue well">
+        <a {{bindAttr href="issue.url"}} target="_blank">{{issue.id}} {{issue.subject}}</a>
+        <button class="btn btn-small" {{action "start" issue}}>start</button>
+      </div>
     </script>
 
     <!--

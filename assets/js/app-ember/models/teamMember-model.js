@@ -31,20 +31,8 @@ RealTeam.Currentuser.reopenClass({
   find: function(){
     console.log('Currentuser find start');
     $.getJSON('/currentuser', function(data) {
-    //$.ajax({
-      //url: '/currentuser',
-      //dataType: 'jsonp',
-      //context: this,
-      //complete: function(data){
-        //data.data.forEach(function(contributor){
-          //this.allContributors.addObject(App.Contributor.create(contributor))
-        //}, this)
-        console.log('Currentuser this', this);
-        console.log('Currentuser find', data);
-        //this.set('username', data.currentuser.username);
         return RealTeam.set('currentuser', RealTeam.Currentuser.create(data.currentuser));
     });
-    //return this.allContributors;
   }
 });
 

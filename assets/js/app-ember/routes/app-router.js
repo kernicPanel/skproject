@@ -12,14 +12,8 @@ RealTeam.Router.map(function() {
 
 RealTeam.ApplicationRoute = Ember.Route.extend({
   setupController: function () {
-    //this.controllerFor('food').set('model', RealTeam.Food.find());
     RealTeam.TeamMember.find();
-    //RealTeam.Currentuser.find();
-
-    //this.controllerFor('currentuser').set('model', RealTeam.Currentuser.find());
     RealTeam.Currentuser.find();
-    //RealTeam.currentuser = RealTeam.Currentuser.find();
-    //RealTeam.set('currentUser', RealTeam.Currentuser.find());
   },
   init: function () {
     console.log('ApplicationRoute init');
@@ -27,14 +21,6 @@ RealTeam.ApplicationRoute = Ember.Route.extend({
 });
 
 RealTeam.IndexRoute = Ember.Route.extend({
-  redirect: function () {
-    //this.transitionTo('teamMembers');
-  },
-  /*
-   *setupController: function(controller, teamMembers) {
-   *  controller.set('content', RealTeam.get('teamMembers'));
-   *}
-   */
   model: function() {
     return RealTeam.TeamMember.find();
   }
@@ -46,7 +32,6 @@ RealTeam.TeamMembersRoute = Ember.Route.extend({
   }
 });
 
- //Auto generated
 RealTeam.TeamMemberRoute = Ember.Route.extend({
   init: function () {
     console.log('TeamMemberRoute init');
