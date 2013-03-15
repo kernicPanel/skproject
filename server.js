@@ -416,7 +416,7 @@ server.get('/issue/:id', [requireLogin], function(req,res){
 
 server.get('/currentuser', [requireLogin], function(req,res){
   var requestLogin = { username: req.session.username };
-  server.redmine.getAppUser(requestLogin, function(err, data){
+  server.redmine.getUser(requestLogin, function(err, data){
     res.send({currentuser: data});
   });
 });
