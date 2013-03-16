@@ -37,7 +37,11 @@ RealTeam.Currentuser.reopenClass({
 });
 
 RealTeam.TeamMember = DS.Model.extend({
-  name: DS.attr('string'),
+  firstname: DS.attr('string'),
+  lastname: DS.attr('string'),
+  name: function() {
+    return this.get('firstname') + ' ' + this.get('lastname');
+  }.property('firstname', 'lastname'),
   issues: DS.hasMany('RealTeam.Issue'),
   current: DS.attr('string')
 });

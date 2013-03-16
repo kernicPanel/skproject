@@ -383,12 +383,12 @@ server.get('/team_members/:id', [requireLogin], function(req,res){
 });
 
 server.get('/team_members', [requireLogin], function(req,res){
-  server.redmine.getTeamMembers(function(err, teamMembers){
-    res.send({ team_members: teamMembers });
+  server.redmine.getTeamMembers(function(err, users){
+    res.send({ team_members: users });
     /*
      *server.redmine.getIssues(false, function(err, issues){
      *  res.send({
-     *    teamMembers: teamMembers,
+     *    users: users,
      *    issues: issues
      *  });
      *});
