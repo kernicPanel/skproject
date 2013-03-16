@@ -1,6 +1,6 @@
 RealTeam.Router.map(function() {
-  this.resource('teamMembers', function() {
-    this.resource('teamMember', {path:':teamMember_id'}, function(){
+  this.resource('users', function() {
+    this.resource('user', {path:':user_id'}, function(){
       this.route("issues");
       this.route("issue", { path: "/issues/:issue_id" });
     });
@@ -12,7 +12,7 @@ RealTeam.Router.map(function() {
 
 RealTeam.ApplicationRoute = Ember.Route.extend({
   setupController: function () {
-    RealTeam.TeamMember.find();
+    RealTeam.User.find();
 
     //this.controllerFor('currentuser').set('model', RealTeam.Currentuser.find());
     RealTeam.Currentuser.find();
@@ -34,22 +34,22 @@ RealTeam.ApplicationRoute = Ember.Route.extend({
 
 RealTeam.IndexRoute = Ember.Route.extend({
   model: function() {
-    return RealTeam.TeamMember.find();
+    return RealTeam.User.find();
   }
 });
 
-RealTeam.TeamMembersRoute = Ember.Route.extend({
+RealTeam.UsersRoute = Ember.Route.extend({
   model: function() {
-    return RealTeam.TeamMember.find();
+    return RealTeam.User.find();
   }
 });
 
-RealTeam.TeamMemberRoute = Ember.Route.extend({
+RealTeam.UserRoute = Ember.Route.extend({
   init: function () {
-    console.log('TeamMemberRoute init');
+    console.log('UserRoute init');
   },
   model: function(params) {
-    return RealTeam.TeamMember.find(params.teamMember_id);
+    return RealTeam.User.find(params.user_id);
   }
 });
 

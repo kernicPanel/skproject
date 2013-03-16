@@ -55,43 +55,43 @@
 
     <script type="text/x-handlebars" data-template-name="index">
       <!--<div class="row-fluid">-->
-        <!--<div id="teamMembers" class="span12">-->
+        <!--<div id="users" class="span12">-->
           {{ template "team"}}
         <!--</div>-->
       <!--</div>-->
     </script>
 
     <script type="text/x-handlebars" data-template-name="team">
-      {{#each teamMember in controller}}
+      {{#each user in controller}}
         <div class="span4">
           <div class="well">
-            <p>{{#linkTo "teamMember" teamMember}}{{ teamMember.name }} {{ teamMember.issuesCount }}{{/linkTo}}</p>
-            <p>{{teamMember.current}}</p>
+            <p>{{#linkTo "user" user}}{{ user.name }} {{ user.issuesCount }}{{/linkTo}}</p>
+            <p>{{user.current}}</p>
           </div>
         </div>
       {{/each}}
     </script>
 
-    <script type="text/x-handlebars" data-template-name="teamMembers">
+    <script type="text/x-handlebars" data-template-name="users">
       <div class="row-fluid">
-        <div id="teamMembers" class="span2">
-          {{ template "teamMemberMenu"}}
+        <div id="users" class="span2">
+          {{ template "userMenu"}}
         </div>
 
-        <div id="teamMember" class="span10">
+        <div id="user" class="span10">
           {{outlet}}
         </div>
       </div>
     </script>
 
-    <script type="text/x-handlebars" data-template-name="teamMemberMenu">
+    <script type="text/x-handlebars" data-template-name="userMenu">
       <div class="sidebar-nav navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav">
-          {{#each teamMember in controller}}
+          {{#each user in controller}}
             <li>
-              {{#linkTo "teamMember" teamMember}}{{ teamMember.id }} {{ teamMember.name }} ({{ issuesCount teamMember }})<br />
-              {{teamMember.current}}
+              {{#linkTo "user" user}}{{ user.id }} {{ user.name }} ({{ issuesCount user }})<br />
+              {{user.current}}
               {{/linkTo}}
             </li>
           {{/each}}
@@ -100,8 +100,8 @@
       </div>
     </script>
 
-    <script type="text/x-handlebars" data-template-name="teamMember">
-      <h2>teamMember <span>{{name}} {{issuesCount this}}</span></h2>
+    <script type="text/x-handlebars" data-template-name="user">
+      <h2>user <span>{{name}} {{issuesCount this}}</span></h2>
       {{#each issue in issues}}
         {{template "issue"}}
       {{else}}
@@ -112,7 +112,7 @@
 
     <script type="text/x-handlebars" data-template-name="issues">
       <div class="row-fluid">
-        <div id="teamMembers" class="span12">
+        <div id="users" class="span12">
           {{#each issue in controller}}
             {{template "issue"}}
           {{else}}

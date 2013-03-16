@@ -24,32 +24,32 @@ RealTeam.CurrentuserController = Ember.ObjectController.extend({
 
 RealTeam.currentuserController = RealTeam.CurrentuserController.create();
 
-RealTeam.TeamMemberController = Ember.ObjectController.extend({
+RealTeam.UserController = Ember.ObjectController.extend({
   init: function(){
-    console.log('init TeamMemberController');
+    console.log('init UserController');
   },
   updateCurrentIssue: function (issue) {
-    var teamMember = RealTeam.TeamMember.find(issue.team_memberId);
-    teamMember.set('current', issue.issueId);
+    var user = RealTeam.User.find(issue.userId);
+    user.set('current', issue.issueId);
 
 //debugger;
   },
   start: function(issue){
-    console.log('teamMember start', issue.get('id'));
+    console.log('user start', issue.get('id'));
     RealTeam.currentuserController.start(issue);
   }
 });
 
-RealTeam.TeamMembersController = Ember.ArrayController.extend({
+RealTeam.UsersController = Ember.ArrayController.extend({
   sortProperties: ['name'],
   sortAscending: true,
 });
 
-RealTeam.teamMemberController = RealTeam.TeamMemberController.create();
+RealTeam.userController = RealTeam.UserController.create();
 
 RealTeam.IssueController = Ember.ObjectController.extend({
   init: function(){
-    console.log('init TeamMemberController');
+    console.log('init UserController');
   },
   update: function (issue) {
     console.log('issue update', issue);
