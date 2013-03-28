@@ -23,10 +23,25 @@ RealTeam.ApplicationRoute = Ember.Route.extend({
     console.log('ApplicationRoute init');
   },
   events: {
+    pause: function() {
+      // do your business.
+      //console.log("pause ApplicationRoute : ");
+      RealTeam.currentuserController.pause();
+    },
     stop: function() {
       // do your business.
-      console.log("stop ApplicationRoute : ");
+      //console.log("stop ApplicationRoute : ");
       RealTeam.currentuserController.stop();
+    },
+    addTime: function() {
+      // do your business.
+      //console.log("addTime ApplicationRoute : ");
+      RealTeam.currentuserController.addTime();
+    },
+    cancelTime: function() {
+      // do your business.
+      //console.log("cancelTime ApplicationRoute : ");
+      RealTeam.currentuserController.cancelTime();
     }
   }
 

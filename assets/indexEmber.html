@@ -39,14 +39,32 @@
       {{#with RealTeam.currentuser}}
         <!--<div class="well span12">-->
           <div class="well">
-            <p>{{firstname}} {{lastname}}
-            {{#with currentTask}}
-              {{id}}
-              {{issueStatus}}
-              {{issueName}}
-              {{startedAt}}
-            {{/with}}
-              <button class="btn btn-small" {{action "stop"}}>stop</button>
+            <p>{{firstname}} {{lastname}} {{mail}}
+              {{#if hasAddtime}}
+
+                {{#with currentTask}}
+                  {{view Ember.TextField valueBinding="id" id="id"}}
+                  {{view Ember.TextField valueBinding="hours" id="hours"}}
+                  {{view Ember.TextField valueBinding="minutes" id="minutes"}}
+                  {{view Ember.TextField valueBinding="message" id="message"}}
+                  <!--<input {{bindAttr value="id"}} type="text" name="id" id="id" />-->
+                  <!--<input {{bindAttr value="hours"}} type="text" name="hours" id="hours"/>-->
+                  <!--<input {{bindAttr value="minutes"}} type="text" name="minutes" id="minutes"/>-->
+                  <!--<input {{bindAttr value="startedAt"}} type="text" name="startedAt" id="startedAt" />-->
+                  <button class="btn btn-small" {{action "addTime"}}>addTime</button>
+                  <button class="btn btn-small" {{action "cancelTime"}}>cancel</button>
+                {{/with}}
+              {{else}}
+                {{#with currentTask}}
+                  {{id}}
+                  {{issueStatus}}
+                  {{pendingDuration}}
+                  {{issueName}}
+                  {{startedAt}}
+                  <button class="btn btn-small" {{action "pause"}}>pause</button>
+                  <button class="btn btn-small" {{action "stop"}}>stop</button>
+                {{/with}}
+              {{/if}}
             </p>
           </div>
         <!--</div>-->
