@@ -4,18 +4,18 @@ RealTeam.CurrentuserController = Ember.ObjectController.extend({
     console.log('init CurrentuserController');
   },
   updateCurrentIssue: function (issue) {
-    RealTeam.currentuser.set('currentTask', issue);
+    RealTeam.currentuser.set('currentIssue', issue);
   },
   start: function(issue){
-    //RealTeam.currentuser.set('currentTask', issue);
+    //RealTeam.currentuser.set('currentIssue', issue);
     RealTeam.socket.emit('startIssue', issue.id, function (err, issue) {
       RealTeam.currentuserController.updateCurrentIssue(issue);
     });
   },
   pause: function(){
-    //RealTeam.currentuser.set('currentTask', issue);
+    //RealTeam.currentuser.set('currentIssue', issue);
     console.log("pause currentuser : ");
-    //RealTeam.currentuser.set('currentTask', issue);
+    //RealTeam.currentuser.set('currentIssue', issue);
     RealTeam.socket.emit('pauseIssue', function (err, issue) {
       console.log("pause : ", issue);
       RealTeam.currentuserController.updateCurrentIssue(issue);
@@ -34,8 +34,8 @@ RealTeam.CurrentuserController = Ember.ObjectController.extend({
     });
   },
   addTime: function(){
-    console.log("RealTeam.currentuser.get('currentTask') : ", RealTeam.currentuser.get('currentTask'));
-    var currentIssue = RealTeam.currentuser.get('currentTask');
+    console.log("RealTeam.currentuser.get('currentIssue') : ", RealTeam.currentuser.get('currentIssue'));
+    var currentIssue = RealTeam.currentuser.get('currentIssue');
     console.log("addTime currentuser : ", currentIssue);
     RealTeam.socket.emit('addTime', currentIssue, function (err, issue) {
       RealTeam.currentuser.set('hasAddtime', false);
@@ -43,7 +43,7 @@ RealTeam.CurrentuserController = Ember.ObjectController.extend({
     });
   },
   cancelTime: function(){
-    //console.log("RealTeam.currentuser.get('currentTask') : ", RealTeam.currentuser.get('currentTask'));
+    //console.log("RealTeam.currentuser.get('currentIssue') : ", RealTeam.currentuser.get('currentIssue'));
     console.log("cancelTime currentuser : ");
     RealTeam.currentuser.set('hasAddtime', false);
     RealTeam.currentuserController.updateCurrentIssue(null);

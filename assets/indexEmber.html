@@ -42,7 +42,7 @@
             <p>{{firstname}} {{lastname}} {{mail}}
               {{#if hasAddtime}}
 
-                {{#with currentTask}}
+                {{#with currentIssue}}
                   {{view Ember.TextField valueBinding="id" id="id"}}
                   {{view Ember.TextField valueBinding="hours" id="hours"}}
                   {{view Ember.TextField valueBinding="minutes" id="minutes"}}
@@ -55,7 +55,7 @@
                   <button class="btn btn-small" {{action "cancelTime"}}>cancel</button>
                 {{/with}}
               {{else}}
-                {{#with currentTask}}
+                {{#with currentIssue}}
                   {{id}}
                   {{issueStatus}}
                   {{pendingDuration}}
