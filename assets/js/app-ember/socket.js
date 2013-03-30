@@ -31,9 +31,10 @@ RealTeam.socket.on('removeUserIssue', function (data){
 
   var updatedIssue = RealTeam.Issue.find(data.issueId);
 
-  var oldUser = RealTeam.User.find(data.userId);
-  var oldUserIssues = oldUser.get('issues');
-  oldUserIssues.removeObject(updatedIssue);
+  var user = RealTeam.User.find(data.userId);
+  var userIssues = user.get('issues');
+  userIssues.removeObject(updatedIssue);
+  user.set('issuesCount', user.get('issuesCount') - 1);
 });
 
 RealTeam.socket.on('addUserIssue', function (data){
@@ -41,9 +42,10 @@ RealTeam.socket.on('addUserIssue', function (data){
 
   var updatedIssue = RealTeam.Issue.find(data.issueId);
 
-  var newUser = RealTeam.User.find(data.userId);
-  var newUserIssues = newUser.get('issues');
-  newUserIssues.addObject(updatedIssue);
+  var user = RealTeam.User.find(data.userId);
+  var userIssues = user.get('issues');
+  userIssues.addObject(updatedIssue);
+  user.set('issuesCount', user.get('issuesCount') + 1);
 });
 
 RealTeam.socket.on('log', function(source, data){
