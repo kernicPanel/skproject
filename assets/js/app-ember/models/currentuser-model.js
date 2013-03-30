@@ -1,6 +1,6 @@
 RealTeam.Currentuser = Ember.Object.extend();
 RealTeam.Currentuser.reopenClass({
-  username: 'initial username',
+  login: 'initial login',
   hasAddtime: false,
   find: function(){
     console.log('Currentuser find start');
