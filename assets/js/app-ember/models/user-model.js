@@ -5,7 +5,11 @@ RealTeam.User = DS.Model.extend({
     return this.get('firstname') + ' ' + this.get('lastname');
   }.property('firstname', 'lastname'),
   issues: DS.hasMany('RealTeam.Issue'),
-  current: DS.attr('string')
+  current: DS.attr('string'),
+  issuesCount: function() {
+    var issues = this.get('issues');
+    return issues.toArray().length;
+  }.property('issues'),
 });
 
 RealTeam.User.FIXTURES = [{
