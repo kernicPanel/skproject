@@ -186,11 +186,38 @@ ul.nav {
 .currentUser.well {
   margin: 0;
   padding: 8px 20px;
+  height: 20px;
+  top: 30px;
+  width: 100%;
+  position: fixed;
+  z-index: 1;
 }
 
 .currentUser input[type=text] {
   padding: 0;
   margin: 0;
+  text-align: center;
+  background-color: #858585;
+  border: 1px solid #CCC;
+  color: #FFF;
+}
+
+#id {
+  width: 40px;
+}
+
+#hours {
+  width: 20px;
+}
+
+#minutes {
+  width: 20px;
+}
+
+#message {
+  width: 60%;
+  text-align: left;
+  padding: 0 4px;
 }
 
 .btn-group > .btn {
@@ -208,6 +235,10 @@ ul.nav {
   background-repeat: repeat-x;
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fffafafa', endColorstr='#ffe9e9e9', GradientType=0);
 
+}
+
+.container {
+  margin-top: 70px;
 }
 
 body > .container-fluid {
