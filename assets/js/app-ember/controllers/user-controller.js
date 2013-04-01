@@ -12,15 +12,26 @@ RealTeam.UserController = Ember.ObjectController.extend({
     console.log('user start', issue.get('id'));
     RealTeam.currentuserController.start(issue);
   },
-  sort: function(sort){
+  sort: function(sort, asc){
+    if (typeof asc === 'undefined') {
+      asc = true;
+    }
     var issuesSorted = this.get('issuesSorted');
-    issuesSorted.set('sortProperties', [sort]);
+    var sortProperties = issuesSorted.get('sortProperties');
+    if (sort === sortProperties[0]) {
+      var sortAsc = issuesSorted.get('sortAscending');
+      issuesSorted.set('sortAscending', !sortAsc);
+    }
+    else {
+      issuesSorted.set('sortProperties', [sort]);
+      issuesSorted.set('sortAscending', asc);
+    }
     var sortAsc = issuesSorted.get('sortAscending');
-    issuesSorted.set('sortAscending', !sortAsc);
   },
   issuesSorted: function() {
     return Ember.ArrayProxy.createWithMixins(Ember.SortableMixin, {
       sortProperties: RealTeam.issueSort,
+      sortAscending: false,
       content: this.get('model.issues')
     });
   }.property('model.issues.@each.id'),

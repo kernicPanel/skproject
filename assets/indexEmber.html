@@ -123,7 +123,7 @@
       <button class="btn btn-mini" {{action "sort" "id"}}>id</button>
       <button class="btn btn-mini" {{action "sort" "subject"}}>subject</button>
       <button class="btn btn-mini" {{action "sort" "project.name"}}>project.name</button>
-      <button class="btn btn-mini" {{action "sort" "priority.id"}}>priority.id</button>
+      <button class="btn btn-mini" {{action "sort" "priority.id" false}}>priority.id</button>
       {{#each issue in issuesSorted}}
         {{template "issue"}}
       {{else}}
@@ -151,7 +151,7 @@
         <button class="btn btn-mini" {{action "start" issue}}>start</button>
         <p>createdOn : {{issue.createdOn}}</p>
         <p> updatedOn : {{issue.updatedOn}}</p>
-        <p>description : {{issue.description}}</p>
+        <!--<p>description : {{!issue.description}}</p>-->
         <p>status : {{issue.status}}</p>
         <p>priority.name : {{issue.priority.name}}</p>
       </div>
