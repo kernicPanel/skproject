@@ -122,6 +122,8 @@
       <h2>user <span>{{name}} {{issuesCount}}</span></h2>
       <button class="btn btn-mini" {{action "sort" "id"}}>id</button>
       <button class="btn btn-mini" {{action "sort" "subject"}}>subject</button>
+      <button class="btn btn-mini" {{action "sort" "project.name"}}>project.name</button>
+      <button class="btn btn-mini" {{action "sort" "priority.id"}}>priority.id</button>
       {{#each issue in issuesSorted}}
         {{template "issue"}}
       {{else}}
@@ -144,12 +146,6 @@
 
     <script type="text/x-handlebars" data-template-name="issue">
       <div class="issue well">
-        {{#linkTo "issue" issue}}{{ issue.subject }} (linkTo){{/linkTo}}
-        <p>user : {{issue.user}}</p>
-        {{#with issue.user}}
-          <p>name : {{name}}</p>
-        {{/with}}
-        <p>user.name : {{issue.user.name}}</p>
         <p>project.name : {{issue.project.name}}</p>
         <a {{bindAttr href="issue.url"}} target="_blank">{{issue.id}} {{issue.subject}}</a>
         <button class="btn btn-mini" {{action "start" issue}}>start</button>
@@ -158,8 +154,6 @@
         <p>description : {{issue.description}}</p>
         <p>status : {{issue.status}}</p>
         <p>priority.name : {{issue.priority.name}}</p>
-        <p>priorityName : {{issue.priorityName}}</p>
-        <button class="btn btn-mini" {{action "scope" issue}}>scope</button>
       </div>
     </script>
 

@@ -9,5 +9,6 @@ RealTeam.Store = DS.Store.extend({
 });
 
 DS.RESTAdapter.configure("plurals", {
-    currentuser: "currentuser"
+    currentuser: "currentuser",
+    priority: "priorities"
 });

@@ -7,11 +7,7 @@ RealTeam.Issue = DS.Model.extend({
   createdOn: DS.attr('string'),
   updatedOn: DS.attr('string'),
   status: DS.attr('string'),
-  priorityName: DS.attr('string'),
-  priority: {
-    name: DS.attr('string'),
-    id: DS.attr('number')
-  }
+  priority: DS.belongsTo('RealTeam.Priority')
 });
 
 RealTeam.Issue.FIXTURES = [{

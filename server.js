@@ -432,6 +432,12 @@ server.get('/projects/:id', [requireLogin], function(req,res){
   });
 });
 
+server.get('/priorities/:id', [requireLogin], function(req,res){
+  server.redmine.getPriority(req.params.id, function(err, data){
+    res.send({priorities: data});
+  });
+});
+
 server.get('/currentuser', [requireLogin], function(req,res){
   //var requestLogin = { login: req.session.login };
   //console.log("req.session : ", req.session);

@@ -5,3 +5,7 @@ RealTeam.Project = DS.Model.extend({
   identifier: DS.attr('string'),
   name: DS.attr('string')
 });
+
+RealTeam.Priority = DS.Model.extend({
+  name: DS.attr('string')
+});
