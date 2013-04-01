@@ -11,7 +11,16 @@ RealTeam.UserController = Ember.ObjectController.extend({
   start: function(issue){
     console.log('user start', issue.get('id'));
     RealTeam.currentuserController.start(issue);
-  }
+  },
+  sort: function(sort){
+    this.get('issuesSorted').set('sortProperties', [sort]);
+  },
+  issuesSorted: function() {
+    return Ember.ArrayProxy.createWithMixins(Ember.SortableMixin, {
+      sortProperties: RealTeam.issueSort,
+      content: this.get('model.issues')
+    });
+  }.property('model.issues.@each.id')
 });
 
 RealTeam.UsersController = Ember.ArrayController.extend({

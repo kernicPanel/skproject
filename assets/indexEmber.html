@@ -120,7 +120,9 @@
 
     <script type="text/x-handlebars" data-template-name="user">
       <h2>user <span>{{name}} {{issuesCount}}</span></h2>
-      {{#each issue in issues}}
+      <button class="btn btn-mini" {{action "sort" "id"}}>id</button>
+      <button class="btn btn-mini" {{action "sort" "subject"}}>subject</button>
+      {{#each issue in issuesSorted}}
         {{template "issue"}}
       {{else}}
         <p>No issues.</p>
