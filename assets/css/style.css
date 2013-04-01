@@ -153,6 +153,8 @@ ul.nav {
     list-style-type: none;
     /*padding-left: 5px;*/
     width: 100%;
+    border-top: 1px solid rgba(121, 121, 121, 0.24);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.46);
 }
 
 .sidebar-nav li li {
