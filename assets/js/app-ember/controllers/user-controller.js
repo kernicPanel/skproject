@@ -20,7 +20,11 @@ RealTeam.UserController = Ember.ObjectController.extend({
       sortProperties: RealTeam.issueSort,
       content: this.get('model.issues')
     });
-  }.property('model.issues.@each.id')
+  }.property('model.issues.@each.id'),
+  scope: function(arg){
+    console.log('issue scope', arg);
+    test = arg;
+  }
 });
 
 RealTeam.UsersController = Ember.ArrayController.extend({

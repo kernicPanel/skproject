@@ -5,8 +5,13 @@ RealTeam.IssueController = Ember.ObjectController.extend({
   update: function (issue) {
     console.log('issue update', issue);
   },
-  start: function(arg){
-    console.log('issue start', arg);
+  start: function(issue){
+    console.log('issue start', issue.get('id'));
+    RealTeam.currentuserController.start(issue);
+  },
+  scope: function(arg){
+    console.log('issue scope', arg);
+    test = arg;
   }
 });
 
@@ -15,6 +20,11 @@ RealTeam.IssuesController = Ember.ArrayController.extend({
   sortAscending: false,
   start: function(issue){
     console.log('issue start', issue.get('id'));
+    RealTeam.currentuserController.start(issue);
+  },
+  scope: function(arg){
+    console.log('issue scope', arg);
+    test = arg;
   }
 });
 

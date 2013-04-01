@@ -408,9 +408,27 @@ server.get('/issues', [requireLogin], function(req,res){
   });
 });
 
-server.get('/issue/:id', [requireLogin], function(req,res){
+server.get('/issues/:id', [requireLogin], function(req,res){
   server.redmine.getIssue(req.params.id, function(err, data){
     res.send({issue: data});
+  });
+});
+
+server.get('/projects?:ids', [requireLogin], function(req,res){
+  server.redmine.getProjects(req.query.ids, function(err, data){
+    res.send({projects: data});
+  });
+});
+
+server.get('/projects', [requireLogin], function(req,res){
+  server.redmine.getProjects(false, function(err, data){
+    res.send({projects: data});
+  });
+});
+
+server.get('/projects/:id', [requireLogin], function(req,res){
+  server.redmine.getProject(req.params.id, function(err, data){
+    res.send({project: data});
   });
 });
 

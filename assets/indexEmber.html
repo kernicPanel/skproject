@@ -27,7 +27,7 @@
           <ul class="nav">
             <li><a href="/admin">Admin</a></li>
             <li>{{#linkTo 'index'}}Team{{/linkTo}}</li>
-            <li>{{#linkTo 'issues'}}Issues{{/linkTo}}</li>
+            <!--<li>{{#linkTo 'issues'}}Issues{{/linkTo}}</li>-->
             <li><a href="/stats">Stats</a></li>
           </ul>
         </div>
@@ -144,8 +144,22 @@
 
     <script type="text/x-handlebars" data-template-name="issue">
       <div class="issue well">
+        {{#linkTo "issue" issue}}{{ issue.subject }} (linkTo){{/linkTo}}
+        <p>user : {{issue.user}}</p>
+        {{#with issue.user}}
+          <p>name : {{name}}</p>
+        {{/with}}
+        <p>user.name : {{issue.user.name}}</p>
+        <p>project.name : {{issue.project.name}}</p>
         <a {{bindAttr href="issue.url"}} target="_blank">{{issue.id}} {{issue.subject}}</a>
         <button class="btn btn-mini" {{action "start" issue}}>start</button>
+        <p>createdOn : {{issue.createdOn}}</p>
+        <p> updatedOn : {{issue.updatedOn}}</p>
+        <p>description : {{issue.description}}</p>
+        <p>status : {{issue.status}}</p>
+        <p>priority.name : {{issue.priority.name}}</p>
+        <p>priorityName : {{issue.priorityName}}</p>
+        <button class="btn btn-mini" {{action "scope" issue}}>scope</button>
       </div>
     </script>
 
@@ -184,6 +198,7 @@
     <script src="/js/app-ember/models/application-model.js"></script>
     <script src="/js/app-ember/models/currentuser-model.js"></script>
     <script src="/js/app-ember/models/user-model.js"></script>
+    <script src="/js/app-ember/models/project-model.js"></script>
     <script src="/js/app-ember/models/issue-model.js"></script>
 
     <script src="/js/app-ember/views/application-view.js"></script>

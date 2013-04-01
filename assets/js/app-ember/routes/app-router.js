@@ -7,6 +7,9 @@ RealTeam.Router.map(function() {
   });
   this.resource('issues', function() {
     this.route("issues");
+    this.resource('issue', {path:':issue_id'}, function(){
+      this.route("issue", { path: "/issues/:issue_id" });
+    });
   });
 });
 
@@ -71,5 +74,14 @@ RealTeam.UserRoute = Ember.Route.extend({
 RealTeam.IssuesRoute = Ember.Route.extend({
   model: function() {
     return RealTeam.Issue.find();
+  }
+});
+
+RealTeam.IssueRoute = Ember.Route.extend({
+  init: function () {
+    console.log('IssueRoute init');
+  },
+  model: function(params) {
+    return RealTeam.Issue.find(params.issue_id);
   }
 });
