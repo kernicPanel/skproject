@@ -149,8 +149,8 @@
         <p>project.name : {{issue.project.name}}</p>
         <a {{bindAttr href="issue.url"}} target="_blank">{{issue.id}} {{issue.subject}}</a>
         <button class="btn btn-mini" {{action "start" issue}}>start</button>
-        <p>createdOn : {{issue.createdOn}}</p>
-        <p>updatedOn : {{issue.updatedOn}}</p>
+        <p>createdOn : {{date issue.createdOn}}</p>
+        <p>updatedOn : {{date issue.updatedOn}}</p>
         <p>spentHours : {{issue.spentHours}}</p>
         <p>estimatedHours : {{issue.estimatedHours}}</p>
         <p>description : {{textile issue.description}}</p>
@@ -182,6 +182,7 @@
     <script src="js/lib/ember/ember-1.0.0-rc.2.js"></script>
     <script src="js/lib/ember/ember-data.js"></script>
     <script src="js/lib/textile.js"></script>
+    <script src="js/lib/moment.min.js"></script>
 
     <script src="/js/app-ember/main.js"></script>
     <script src="/js/app-ember/socket.js"></script>
@@ -202,6 +203,7 @@
 
     <!--<script src="/js/app-ember/helpers/issuesCount.js"></script>-->
     <script src="/js/app-ember/helpers/textile.js"></script>
+    <script src="/js/app-ember/helpers/date.js"></script>
 
     <!--<script src="js/app-ember/app.js"></script>-->
   </body>
