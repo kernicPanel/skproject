@@ -438,6 +438,12 @@ server.get('/priorities/:id', [requireLogin], function(req,res){
   });
 });
 
+server.get('/statuses/:id', [requireLogin], function(req,res){
+  server.redmine.getStatus(req.params.id, function(err, data){
+    res.send({statuses: data});
+  });
+});
+
 server.get('/currentuser', [requireLogin], function(req,res){
   //var requestLogin = { login: req.session.login };
   //console.log("req.session : ", req.session);

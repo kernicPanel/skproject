@@ -152,7 +152,7 @@
         <p>createdOn : {{issue.createdOn}}</p>
         <p> updatedOn : {{issue.updatedOn}}</p>
         <p>description : {{textile issue.description}}</p>
-        <p>status : {{issue.status}}</p>
+        <p>status : {{issue.status.name}}</p>
         <p>priority.name : {{issue.priority.name}}</p>
       </div>
     </script>
@@ -173,7 +173,6 @@
        -  </ul>
        -</script>
        -->
-
 
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/lib/jquery-1.9.1.min.js"></script>
