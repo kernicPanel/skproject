@@ -151,7 +151,7 @@
         <button class="btn btn-mini" {{action "start" issue}}>start</button>
         <p>createdOn : {{issue.createdOn}}</p>
         <p> updatedOn : {{issue.updatedOn}}</p>
-        <!--<p>description : {{!issue.description}}</p>-->
+        <p>description : {{textile issue.description}}</p>
         <p>status : {{issue.status}}</p>
         <p>priority.name : {{issue.priority.name}}</p>
       </div>
@@ -180,6 +180,7 @@
     <script src="js/lib/ember/handlebars-1.0.rc.3.js"></script>
     <script src="js/lib/ember/ember-1.0.0-rc.2.js"></script>
     <script src="js/lib/ember/ember-data.js"></script>
+    <script src="js/lib/textile.js"></script>
 
     <script src="/js/app-ember/main.js"></script>
     <script src="/js/app-ember/socket.js"></script>
@@ -199,6 +200,7 @@
     <script src="/js/app-ember/views/user-view.js"></script>
 
     <!--<script src="/js/app-ember/helpers/issuesCount.js"></script>-->
+    <script src="/js/app-ember/helpers/textile.js"></script>
 
     <!--<script src="js/app-ember/app.js"></script>-->
   </body>
