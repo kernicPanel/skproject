@@ -150,7 +150,9 @@
         <a {{bindAttr href="issue.url"}} target="_blank">{{issue.id}} {{issue.subject}}</a>
         <button class="btn btn-mini" {{action "start" issue}}>start</button>
         <p>createdOn : {{issue.createdOn}}</p>
-        <p> updatedOn : {{issue.updatedOn}}</p>
+        <p>updatedOn : {{issue.updatedOn}}</p>
+        <p>spentHours : {{issue.spentHours}}</p>
+        <p>estimatedHours : {{issue.estimatedHours}}</p>
         <p>description : {{textile issue.description}}</p>
         <p>status : {{issue.status.name}}</p>
         <p>priority.name : {{issue.priority.name}}</p>

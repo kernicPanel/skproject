@@ -6,6 +6,8 @@ RealTeam.Issue = DS.Model.extend({
   description: DS.attr('string'),
   createdOn: DS.attr('string'),
   updatedOn: DS.attr('string'),
+  spentHours: DS.attr('number'),
+  estimatedHours: DS.attr('number'),
   status: DS.belongsTo('RealTeam.Status'),
   priority: DS.belongsTo('RealTeam.Priority')
 });
