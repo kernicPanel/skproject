@@ -64,12 +64,12 @@
                 {{#with currentIssue}}
                   {{id}}
                   {{issueStatus}}
-                  {{pendingDuration}}
                   {{issueName}}
-                  {{startedAt}}
-                  <button class="btn btn-mini" {{action "pause"}}>pause</button>
-                  <button class="btn btn-mini" {{action "stop"}}>stop</button>
+                  {{!timer startedAt pendingDuration}}
                 {{/with}}
+                {{timer currentTimer currentIssue.pendingDuration}}
+                <button class="btn btn-mini" {{action "pause"}}>pause</button>
+                <button class="btn btn-mini" {{action "stop"}}>stop</button>
               {{/if}}
             </p>
           </div>
@@ -204,6 +204,7 @@
     <!--<script src="/js/app-ember/helpers/issuesCount.js"></script>-->
     <script src="/js/app-ember/helpers/textile.js"></script>
     <script src="/js/app-ember/helpers/date.js"></script>
+    <script src="/js/app-ember/helpers/timer.js"></script>
 
     <!--<script src="js/app-ember/app.js"></script>-->
   </body>

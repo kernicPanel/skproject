@@ -228,9 +228,7 @@ server.post("/redmine-key", function (req, res) {
         locals.error = "Api Key doesn't exists";
         locals.login = '';
         locals.title = 'Login | ' + locals.title;
-        res.render('login.jade', {
-          locals : locals
-        });
+        res.render('login.jade', locals);
       });
     }
     else if (!data) {
@@ -238,15 +236,12 @@ server.post("/redmine-key", function (req, res) {
         locals.error = "Api Key already registered";
         locals.login = '';
         locals.title = 'Login | ' + locals.title;
-        res.render('login.jade', {
-          locals : locals
-        });
+        res.render('login.jade', locals);
       });
     }
     else {
       var user = data.user;
       res.render('create-user.jade', {
-        locals : {
           error: null,
           login:  user.mail.split('@')[0],
           firstname:  user.firstname,
@@ -256,8 +251,7 @@ server.post("/redmine-key", function (req, res) {
           created_on: user.created_on,
           mail: user.mail,
           id: user.id
-        }
-      });
+        });
     }
   });
 });
@@ -277,9 +271,7 @@ server.post("/create-user", function (req, res) {
     addLocals( req.body, function( err, locals) {
       locals.error = "passwords must match";
       locals.title = 'Create user | ' + locals.title;
-      res.render('create-user.jade', {
-        locals : locals
-      });
+      res.render('create-user.jade', locals);
     });
   }
   else {
@@ -289,22 +281,18 @@ server.post("/create-user", function (req, res) {
       locals.error = null;
       locals.login = login;
       locals.title = 'Login | ' + locals.title;
-      res.render('login.jade', {
-        locals : locals
-      });
+      res.render('login.jade', locals);
     });
   }
 });
 
 server.get('/extract', [requireLogin], function(req,res){
-  res.render('extract.jade', {
-    locals : {
+  res.render('extract.jade',  {
       title : server.host + ':' + server.port + ' | skProject | ' + server.config.clientFramework ,
       description: 'Your Page Description',
       author: 'Your Name',
       analyticssiteid: 'XXXXXXX'
-    }
-  });
+    });
 });
 
 server.get('/stats', [requireLogin], function(req,res){
@@ -314,9 +302,7 @@ server.get('/stats', [requireLogin], function(req,res){
     locals.login = req.session.login;
     locals.title = 'Team | ' + locals.title;
     locals.admin = server.config.server.admin.indexOf(requestLogin) > -1;
-    res.render('stats.jade', {
-      locals : locals
-    });
+    res.render('stats.jade', locals);
   });
   // res.render('stats.jade', {
   //   locals : {
@@ -338,9 +324,7 @@ server.get("/account", [requireLogin], function (req, res) {
         data.title = 'Account | ' + data.title;
         data.admin = true;
       console.log('data!!!', data);
-        res.render('account.jade', {
-          locals : data
-        });
+        res.render('account.jade', data);
       });
     }
   });
