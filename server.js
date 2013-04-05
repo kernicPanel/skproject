@@ -22,16 +22,18 @@ along with realTeam.  If not, see <http://www.gnu.org/licenses/>.
 //setup Dependencies
 var connect = require('connect'),
     express = require('express'),
+    http = require('http'),
     colors = require('colors'),
     mongoose = require('mongoose'),
-    mongoStore = require('connect-mongodb');
+    //mongoStore = require('connect-mongodb');
+    RedisStore = require('connect-redis')(connect);
 
 //mongoose.set('debug', true);
 
 console.log();
 console.log('App start'.red.inverse );
 
-var SessionMongoose = require("session-mongoose");
+//var SessionMongoose = require("session-mongoose");
 
 colors.setTheme({
     silly: 'rainbow',
@@ -47,7 +49,8 @@ colors.setTheme({
 });
 
 //Setup Express
-global.server = express.createServer();
+global.server = express();
+global.httpServer = http.createServer(server);
 server.config = require('./lib/config.js');
 server.port = (process.env.VMC_APP_PORT || server.config.server.port);
 server.host = (process.env.HOST || server.config.server.host);
@@ -65,14 +68,13 @@ else {
 }
 
 server.name = server.config.server.name;
+server.sessionSecret = "shshshshshss!"
+server.cookieParser = express.cookieParser(server.sessionSecret);
 
 
 console.log('VCAP_SERVICES', process.env.VCAP_SERVICES);
 
-server.sessionStore = new SessionMongoose({
-  url: server.config.mongo.session,
-  interval: 120000 // expiration check worker run interval in millisec (default: 60000)
-});
+server.sessionStore = new RedisStore();
 
 server.configure(function(){
     //server.use(express.logger());
@@ -82,8 +84,8 @@ server.configure(function(){
     server.use(connect.bodyParser());
     server.use(express.cookieParser());
     server.use(express.session({
-      secret: "shhhhhhhhh!",
-      key: "express.sid",
+      secret: server.sessionSecret,
+      //key: "express.sid",
       store: server.sessionStore
     }));
     server.use(express.methodOverride());
@@ -94,25 +96,11 @@ server.configure(function(){
 server.users = {};
 
 //setup the errors
-server.error(function(err, req, res, next){
-    if (err instanceof NotFound) {
-        res.render('404.jade', { locals: {
-                  title : '404 - Not Found',
-                  description: '',
-                  author: '',
-                  analyticssiteid: 'XXXXXXX'
-                },status: 404 });
-    } else {
-        res.render('500.jade', { locals: {
-                  title : 'The Server Encountered an Error',
-                  description: '',
-                  author: '',
-                  analyticssiteid: 'XXXXXXX',
-                  error: err
-                },status: 500 });
-    }
+server.use(function(err, req, res, next){
+  console.error(err.stack);
+  res.send(500, 'Something broke!');
 });
-server.listen( server.port, server.host);
+httpServer.listen( server.port, server.host);
 
 server.eventsManager = require('./lib/eventsManager.js');
 server.eventsManager.init(server);
@@ -187,12 +175,11 @@ function requireLogin (req, res, next) {
 /** Login form */
 server.get("/login", function (req, res) {
     addLocals( null, function( err, locals) {
+      console.log("locals : ", locals);
       locals.error = null;
       locals.login = '';
       locals.title = 'Login | ' + locals.title;
-      res.render('login.jade', {
-        locals : locals
-      });
+      res.render('login.jade', locals);
     });
 });
 
@@ -464,9 +451,7 @@ server.get('/admin', [requireLogin], function(req,res){
       locals.login = requestLogin;
       locals.title = 'Admin | ' + locals.title;
       locals.admin = true;
-      res.render('admin.jade', {
-        locals : locals
-      });
+      res.render('admin.jade', locals);
     });
     // res.send({
     //   pid: process.pid,
@@ -509,8 +494,8 @@ server.get('/500', function(req, res){
 });
 
 //The 404 Route (ALWAYS Keep this as the last route)
-server.get('/*', function(req, res){
-    throw new NotFound;
+server.use(function(req, res, next){
+  res.send(404, 'Sorry cant find that!');
 });
 
 function NotFound(msg){
