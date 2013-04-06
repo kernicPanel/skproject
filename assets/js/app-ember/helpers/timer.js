@@ -20,6 +20,10 @@ Ember.Handlebars.registerBoundHelper('timer', function(date, pendingDuration) {
 //var timer = moment().seconds(date);
 
 //var timer =  moment(date).subtract('ms', pendingDuration).fromNow();
+
+  if (!date) {
+    return date;
+  }
 console.log("date : ", date);
 console.log("pendingDuration : ", pendingDuration);
 var duration = moment.duration(date * 1000, 'milliseconds');
