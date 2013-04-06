@@ -191,9 +191,7 @@ server.post("/login", function (req, res) {
         locals.error = "Wrong login or password";
         locals.login = login;
         locals.title = 'Login | ' + locals.title;
-        res.render('login.jade', {
-          locals : locals
-        });
+        res.render('login.jade', locals);
       });
     }
     else {
