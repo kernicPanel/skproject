@@ -163,9 +163,9 @@ server.addUser = function addUser ( login, callback ) {
 function requireLogin (req, res, next) {
   if (req.session.login) {
     // User is authenticated, let him in
-    server.addUser( req.session.login, function( err, data ){
+    //server.addUser( req.session.login, function( err, data ){
       next();
-    });
+    //});
   } else {
     // Otherwise, we redirect him to login form
     res.redirect("/login");
