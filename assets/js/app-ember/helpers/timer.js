@@ -21,17 +21,27 @@ Ember.Handlebars.registerBoundHelper('timer', function(date, pendingDuration) {
 
 //var timer =  moment(date).subtract('ms', pendingDuration).fromNow();
 
-  if (!date) {
-    return date;
-  }
-console.log("date : ", date);
-console.log("pendingDuration : ", pendingDuration);
-var duration = moment.duration(date * 1000, 'milliseconds');
-var timer = moment(duration.asMilliseconds()).add(pendingDuration).format('d hh:mm:ss');
+if (!date) {
+  return ;
+}
+//console.log("date : ", date);
+//date = moment(new Date(date));
+//date = moment(date).local();
+date = moment(date);
+//console.log("date : ", date);
+//console.log("pendingDuration : ", pendingDuration);
+//var duration = moment.duration(date, 'milliseconds');
+//var timer = moment(duration.asMilliseconds());
+//console.log("date.zone() : ", date.zone());
+var formatedTimer = date.format('H:mm:ss');
 
 //var timer = moment.duration(date, 'seconds');
-console.log("timer : ", timer);
-return timer;
+//console.log("timer : ", timer);
+//realteam.currentuser.set('currenttimer', timer);
+//RealTeam.currentuserController.runTimer();
+return formatedTimer;
+//return date;
 //return timer.format("dddd, MMMM Do YYYY, h:mm:ss a");
 
+//return moment.duration(date).humanize();
 });

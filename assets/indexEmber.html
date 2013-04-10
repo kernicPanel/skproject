@@ -66,10 +66,11 @@
                   {{issueStatus}}
                   {{issueName}}
                   {{!timer startedAt pendingDuration}}
+                  {{timer currentTimer}}
+                  <button class="btn btn-mini" {{action "pause"}}>pause</button>
+                  <button class="btn btn-mini" {{action "stop"}}>stop</button>
                 {{/with}}
-                {{timer currentTimer currentIssue.pendingDuration}}
-                <button class="btn btn-mini" {{action "pause"}}>pause</button>
-                <button class="btn btn-mini" {{action "stop"}}>stop</button>
+                {{!timer currentIssue.startedAt currentIssue.pendingDuration}}
               {{/if}}
             </p>
           </div>
