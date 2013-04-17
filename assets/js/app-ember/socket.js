@@ -1,5 +1,6 @@
 RealTeam.socket.on('realTeam::connect', function (data){
   console.log('realTeam::connect');
+  notyfy({text: 'Socket Connected', timeout:3000});
 });
 
 RealTeam.socket.on('redmine::currentIssueUpdated', function (issue){
@@ -7,6 +8,9 @@ RealTeam.socket.on('redmine::currentIssueUpdated', function (issue){
 });
 
 RealTeam.socket.on('updateIssue', function (issue){
+  notyfy({text:'updating issue ' + issue.id, layout: 'topRight', timeout:3000});
+  notyfy({text:'from ' + issue.assigned_to.name, layout: 'topRight', timeout:3000});
+  notyfy({text:'to ' + issue.assigned_to.name, layout: 'topRight', timeout:3000});
   console.log('updateIssue', issue);
 
   var updatedIssue = RealTeam.Issue.find(issue.id);
