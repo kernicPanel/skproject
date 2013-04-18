@@ -123,17 +123,18 @@
     </script>
 
     <script type="text/x-handlebars" data-template-name="user">
-      <h2>user <span>{{name}} {{issuesCount}}</span></h2>
-      <button class="btn btn-mini" {{action "sort" "id"}}>id</button>
-      <button class="btn btn-mini" {{action "sort" "subject"}}>subject</button>
-      <button class="btn btn-mini" {{action "sort" "project.name"}}>project.name</button>
-      <button class="btn btn-mini" {{action "sort" "priority.id" false}}>priority.id</button>
-      {{#each issue in issuesSorted}}
-        {{template "issue"}}
-      {{else}}
-        <p>No issues.</p>
-      {{/each}}
-      {{! render "issues"  issues }}
+      <div class="user">
+        <h1>{{name}} {{issuesCount}}</h1>
+        <button class="btn btn-mini" {{action "sort" "id"}}>id</button>
+        <button class="btn btn-mini" {{action "sort" "subject"}}>subject</button>
+        <button class="btn btn-mini" {{action "sort" "project.name"}}>project.name</button>
+        <button class="btn btn-mini" {{action "sort" "priority.id" false}}>priority.id</button>
+        {{#each issue in issuesSorted}}
+          {{template "issue"}}
+        {{else}}
+          <p>No issues.</p>
+        {{/each}}
+      </div>
     </script>
 
     <script type="text/x-handlebars" data-template-name="issues">
@@ -150,16 +151,13 @@
 
     <script type="text/x-handlebars" data-template-name="issue">
       <div class="issue well">
-        <p>project.name : {{issue.project.name}}</p>
-        <a {{bindAttr href="issue.url"}} target="_blank">{{issue.id}} {{issue.subject}}</a>
-        <button class="btn btn-mini" {{action "start" issue}}>start</button>
-        <p>createdOn : {{date issue.createdOn}}</p>
-        <p>updatedOn : {{date issue.updatedOn}}</p>
-        <p>spentHours : {{issue.spentHours}}</p>
-        <p>estimatedHours : {{issue.estimatedHours}}</p>
-        <p>description : {{textile issue.description}}</p>
-        <p>status : {{issue.status.name}}</p>
-        <p>priority.name : {{issue.priority.name}}</p>
+        <h2>{{issue.project.name}}<a {{bindAttr href="issue.url"}} target="_blank">{{issue.id}} {{issue.subject}}</a><button class="btn btn-mini" {{action "start" issue}}>start</button></h2>
+        
+        <span {{bindAttr class=":priority issue.priority.cssClass"}}>{{issue.priority.name}}</span>
+        <span {{bindAttr class=":status issue.status.cssClass"}}>{{issue.status.name}}</span>
+        <p>created: {{date issue.createdOn}} | updated: {{date issue.updatedOn}}</p>
+        <p>estimatedHours : {{issue.estimatedHours}} | spentHours : {{issue.spentHours}}</p>
+        <p>{{textile issue.description}}</p>
       </div>
     </script>
 

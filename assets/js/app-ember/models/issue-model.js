@@ -7,7 +7,10 @@ RealTeam.Project = DS.Model.extend({
 });
 
 RealTeam.Priority = DS.Model.extend({
-  name: DS.attr('string')
+  name: DS.attr('string'),
+  cssClass: function() {
+    return 'priority' + this.get('id');
+  }.property('id'),
 });
 
 RealTeam.Status = DS.Model.extend({
