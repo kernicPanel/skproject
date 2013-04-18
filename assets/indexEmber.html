@@ -156,7 +156,7 @@
         <span {{bindAttr class=":priority issue.priority.cssClass"}}>{{issue.priority.name}}</span>
         <span {{bindAttr class=":status issue.status.cssClass"}}>{{issue.status.name}}</span>
         <p>created: {{date issue.createdOn}} | updated: {{date issue.updatedOn}}</p>
-        <p>estimatedHours : {{issue.estimatedHours}} | spentHours : {{issue.spentHours}}</p>
+        <p>estimatedHours : {{issue.estimatedHours}} | timeEntriesTotal : {{issue.timeEntriesTotal}} | doneRatio : {{issue.doneRatio}}%</p>
         <p>{{textile issue.description}}</p>
       </div>
     </script>

@@ -224,7 +224,7 @@ var statsdc = function(data) {
     // dynamic columns creation using an array of closures
     .columns([
         function(d) { return '<a target="_blank" href="' + d.url +'">' + d.id + '</a>'; },
-        function(d) { return d.time_entriesTotal; },
+        function(d) { return d.time_entries_total; },
         function(d) { return d.estimated_hours; },
         function(d) { return d.done_ratio; },
         function(d) { return d.priority.name; },
