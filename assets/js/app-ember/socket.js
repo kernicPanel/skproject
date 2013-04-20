@@ -7,6 +7,14 @@ RealTeam.socket.on('redmine::currentIssueUpdated', function (issue){
   RealTeam.userController.updateCurrentIssue(issue);
 });
 
+/*
+ *RealTeam.socket.on('createIssue', function (issueID){
+ *  console.log('createIssue', issueID);
+ *  var createdIssue = RealTeam.Issue.find(issueID);
+ *  console.log('createdIssue', createdIssue);
+ *});
+ */
+
 RealTeam.socket.on('updateIssue', function (issueID, detail){
   notyfy({text:'updating issue ' + issueID, layout: 'topRight', timeout:3000});
   //notyfy({text:'from ' + issue.assigned_to.name, layout: 'topRight', timeout:3000});
@@ -56,12 +64,15 @@ RealTeam.socket.on('removeUserIssue', function (data){
 RealTeam.socket.on('addUserIssue', function (data){
   console.log('addUserIssue', data);
 
-  var updatedIssue = RealTeam.Issue.find(data.issueId);
+  updatedIssue = RealTeam.Issue.find(data.issueId);
 
-  var user = RealTeam.User.find(data.userId);
-  var userIssues = user.get('issues');
-  userIssues.addObject(updatedIssue);
-  user.set('issuesCount', user.get('issuesCount') + 1);
+  updatedIssue.on('didLoad', function() {
+    console.log("Loaded!");
+    user = RealTeam.User.find(data.userId);
+    userIssues = user.get('issues');
+    userIssues.pushObject(updatedIssue);
+    user.set('issuesCount', user.get('issuesCount') + 1);
+  });
 });
 
 RealTeam.socket.on('log', function(source, data){
