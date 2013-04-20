@@ -7,14 +7,26 @@ RealTeam.socket.on('redmine::currentIssueUpdated', function (issue){
   RealTeam.userController.updateCurrentIssue(issue);
 });
 
-RealTeam.socket.on('updateIssue', function (issue){
-  notyfy({text:'updating issue ' + issue.id, layout: 'topRight', timeout:3000});
-  notyfy({text:'from ' + issue.assigned_to.name, layout: 'topRight', timeout:3000});
-  notyfy({text:'to ' + issue.assigned_to.name, layout: 'topRight', timeout:3000});
-  console.log('updateIssue', issue);
+RealTeam.socket.on('updateIssue', function (issueID, detail){
+  notyfy({text:'updating issue ' + issueID, layout: 'topRight', timeout:3000});
+  //notyfy({text:'from ' + issue.assigned_to.name, layout: 'topRight', timeout:3000});
+  //notyfy({text:'to ' + issue.assigned_to.name, layout: 'topRight', timeout:3000});
+  console.log('issueID, detail', issueID, detail);
 
-  var updatedIssue = RealTeam.Issue.find(issue.id);
+  var updatedIssue = RealTeam.Issue.find(issueID);
   console.log("updatedIssue : ", updatedIssue);
+  test = detail;
+  if (detail.name ==='status_id') {
+    updatedIssue.set('status', RealTeam.Status.find( detail.new_value ));
+  }
+
+  if (detail.name ==='priority_id') {
+    updatedIssue.set('priority', RealTeam.Priority.find( detail.new_value ));
+  }
+
+  if (detail.name ==='done_ratio') {
+    updatedIssue.set('doneRatio', detail.new_value );
+  }
 
 /*
  *  var oldUser = RealTeam.User.find(data.oldUserId);
