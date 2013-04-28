@@ -30,7 +30,7 @@
           <ul class="nav">
             <li><a href="/admin">Admin</a></li>
             <li>{{#linkTo 'index'}}Team{{/linkTo}}</li>
-            <!--<li>{{#linkTo 'issues'}}Issues{{/linkTo}}</li>-->
+            <li>{{#linkTo 'projects'}}Projects{{/linkTo}}</li>
             <li><a href="/stats">Stats</a></li>
           </ul>
         </div>
@@ -138,6 +138,18 @@
       </div>
     </script>
 
+    <script type="text/x-handlebars" data-template-name="projects">
+      <div class="row">
+        <div id="users" class="span2">
+          {{ template "projectMenu"}}
+        </div>
+
+        <div id="user" class="span10">
+          {{outlet}}
+        </div>
+      </div>
+    </script>
+
     <script type="text/x-handlebars" data-template-name="issues">
       <div class="row">
         <div id="users" class="span12">
@@ -147,6 +159,38 @@
             <p>... Fetching issues ...</p>
           {{/each}}
         </div>
+      </div>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="projectMenu">
+      <div class="sidebar-nav navbar navbar-inverse">
+        <div class="navbar-inner">
+          <ul class="nav">
+          {{#each project in controller}}
+            <li>
+              {{#linkTo "project" project}}{{ project.name }} ({{ project.issuesCount }})<br />
+              {{project.current}}
+              {{/linkTo}}
+            </li>
+          {{/each}}
+          </ul>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="project">
+      <div class="user">
+        <h1>{{name}} {{issuesCount}}</h1>
+        <!--<button class="btn btn-mini" {{action "sort" "id"}}>id</button>-->
+        <!--<button class="btn btn-mini" {{action "sort" "subject"}}>subject</button>-->
+        <!--<button class="btn btn-mini" {{action "sort" "project.name"}}>project.name</button>-->
+        <!--<button class="btn btn-mini" {{action "sort" "priority.id" false}}>priority.id</button>-->
+        <!--<button class="btn btn-mini" {{action "filter" "Immédiat" false}}>filter Immédiat</button>-->
+        {{#each issue in issues}}
+          {{template "issue"}}
+        {{else}}
+          <p>No issues.</p>
+        {{/each}}
       </div>
     </script>
 

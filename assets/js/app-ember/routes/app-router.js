@@ -5,10 +5,10 @@ RealTeam.Router.map(function() {
       this.route("issue", { path: "/issues/:issue_id" });
     });
   });
-  this.resource('issues', function() {
-    this.route("issues");
-    this.resource('issue', {path:':issue_id'}, function(){
-      this.route("issue", { path: "/issues/:issue_id" });
+  this.resource('projects', function() {
+    this.route("projects");
+    this.resource('project', {path:':project_id'}, function(){
+      this.route("project", { path: "/projects/:project_id" });
     });
   });
 });
@@ -71,17 +71,17 @@ RealTeam.UserRoute = Ember.Route.extend({
   }
 });
 
-RealTeam.IssuesRoute = Ember.Route.extend({
+RealTeam.ProjectsRoute = Ember.Route.extend({
   model: function() {
-    return RealTeam.Issue.find();
+    return RealTeam.Project.find();
   }
 });
 
-RealTeam.IssueRoute = Ember.Route.extend({
+RealTeam.ProjectRoute = Ember.Route.extend({
   init: function () {
-    console.log('IssueRoute init');
+    console.log('ProjectRoute init');
   },
   model: function(params) {
-    return RealTeam.Issue.find(params.issue_id);
+    return RealTeam.Project.find(params.project_id);
   }
 });

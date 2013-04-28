@@ -4,7 +4,11 @@ RealTeam.Project = DS.Model.extend({
   updatedOn: DS.attr('string'),
   identifier: DS.attr('string'),
   name: DS.attr('string'),
-  issues: DS.hasMany('RealTeam.Issue')
+  issues: DS.hasMany('RealTeam.Issue'),
+  issuesCount: function() {
+    var issues = this.get('issues');
+    return issues.toArray().length;
+  }.property('issues')
 });
 
 RealTeam.Priority = DS.Model.extend({

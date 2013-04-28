@@ -227,6 +227,11 @@ angular.module('realTeam.directives', []).
         });
       });
 
+      $(element).find('#createProjects').on('click', function(){
+        socket.emit('createProjects', {}, function (err, data) {
+        });
+      });
+
     };
   });
 
