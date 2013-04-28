@@ -3,16 +3,19 @@ RealTeam.Project = DS.Model.extend({
   createdOn: DS.attr('string'),
   updatedOn: DS.attr('string'),
   identifier: DS.attr('string'),
-  name: DS.attr('string')
+  name: DS.attr('string'),
+  issues: DS.hasMany('RealTeam.Issue')
 });
 
 RealTeam.Priority = DS.Model.extend({
   name: DS.attr('string'),
+  issue: DS.belongsTo('RealTeam.Issue'),
   cssClass: function() {
     return 'priority' + this.get('id');
-  }.property('id'),
+  }.property('id')
 });
 
 RealTeam.Status = DS.Model.extend({
+  issue: DS.belongsTo('RealTeam.Issue'),
   name: DS.attr('string')
 });

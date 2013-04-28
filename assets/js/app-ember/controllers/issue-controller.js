@@ -16,8 +16,8 @@ RealTeam.IssueController = Ember.ObjectController.extend({
 });
 
 RealTeam.IssuesController = Ember.ArrayController.extend({
-  sortProperties: ['id'],
-  sortAscending: false,
+  //sortProperties: ['id'],
+  //sortAscending: false,
   start: function(issue){
     console.log('issue start', issue.get('id'));
     RealTeam.currentuserController.start(issue);
