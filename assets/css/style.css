@@ -158,10 +158,8 @@ ul.nav {
 }
 
 .sidebar-nav li li {
-    list-style-type: none;
-    padding-left: 5px;
-    line-height: 1.1em;
-    margin-bottom: 4px;
+    padding-left: 20px;
+    width: auto;
 }
 
 .sidebar-nav a {
