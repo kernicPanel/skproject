@@ -12,7 +12,7 @@
     "socket.io": "~0.9.14",
     "socket.io-client": "0.9.11",
     "socket.io-sessions": "0.6.1",
-    "mongoose": "2.5.10",
+    "mongoose": "3.6.8",
     "stextile": "0.0.8",
     "textilejs": "*",
     "textile-js": "*",
