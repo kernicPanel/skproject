@@ -4,6 +4,7 @@ RealTeam.Project = DS.Model.extend({
   updatedOn: DS.attr('string'),
   identifier: DS.attr('string'),
   name: DS.attr('string'),
+  children: DS.hasMany('RealTeam.Project'),
   issues: DS.hasMany('RealTeam.Issue'),
   issuesCount: function() {
     var issues = this.get('issues');

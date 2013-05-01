@@ -167,11 +167,19 @@
         <div class="navbar-inner">
           <ul class="nav">
           {{#each project in controller}}
-            <li>
-              {{#linkTo "project" project}}{{ project.name }} ({{ project.issuesCount }})<br />
-              {{project.current}}
-              {{/linkTo}}
-            </li>
+              <li>
+                {{#linkTo "project" project}}{{ project.name }} ({{ project.issuesCount }})<br />
+                {{project.current}}
+                {{project.parent.name}}
+                {{/linkTo}}
+                <ul>
+                  {{#each child in project.children}}
+                    <li>
+                      {{#linkTo "project" child}}{{ child.name }} ({{ child.issuesCount }}){{/linkTo}}
+                    </li>
+                  {{/each}}
+                </ul>
+              </li>
           {{/each}}
           </ul>
         </div>
@@ -239,6 +247,7 @@
     <script src="/js/app-ember/controllers/currentuser-controller.js"></script>
     <script src="/js/app-ember/controllers/user-controller.js"></script>
     <script src="/js/app-ember/controllers/issue-controller.js"></script>
+    <script src="/js/app-ember/controllers/project-controller.js"></script>
     <script src="/js/app-ember/store.js"></script>
     <script src="/js/app-ember/models/application-model.js"></script>
     <script src="/js/app-ember/models/currentuser-model.js"></script>
