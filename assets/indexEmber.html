@@ -189,6 +189,18 @@
     <script type="text/x-handlebars" data-template-name="project">
       <div class="user">
         <h1>{{name}} {{issuesCount}}</h1>
+        <div class="navbar navbar-inverse">
+          <div class="navbar-inner">
+            <ul class="nav">
+              {{#linkTo "project" parent}}{{ parent.name }}{{/linkTo}}
+              {{#each child in children}}
+                <li>
+                  {{#linkTo "project" child}}{{ child.name }}{{/linkTo}}
+                </li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
         <!--<button class="btn btn-mini" {{action "sort" "id"}}>id</button>-->
         <!--<button class="btn btn-mini" {{action "sort" "subject"}}>subject</button>-->
         <!--<button class="btn btn-mini" {{action "sort" "project.name"}}>project.name</button>-->
