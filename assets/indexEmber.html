@@ -194,12 +194,19 @@
         <!--<button class="btn btn-mini" {{action "sort" "project.name"}}>project.name</button>-->
         <!--<button class="btn btn-mini" {{action "sort" "priority.id" false}}>priority.id</button>-->
         <!--<button class="btn btn-mini" {{action "filter" "Immédiat" false}}>filter Immédiat</button>-->
+        <div class="stats">
+          {{view RealTeam.GraphView idBinding=id}}
+        </div>
         {{#each issue in issues}}
           {{template "issue"}}
         {{else}}
           <p>No issues.</p>
         {{/each}}
       </div>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name='graph'>
+      <div id="chartContainer" style="height: 300px; width: 100%;"> </div>
     </script>
 
     <script type="text/x-handlebars" data-template-name="issue">
@@ -239,6 +246,7 @@
     <script src="js/lib/textile.js"></script>
     <script src="js/lib/moment.min.js"></script>
     <script src="js/lib/jquery.notyfy.js"></script>
+    <script src="js/lib/highcharts/js/highcharts.js"></script>
 
     <script src="/js/app-ember/main.js"></script>
     <script src="/js/app-ember/socket.js"></script>

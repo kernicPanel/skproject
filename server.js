@@ -401,6 +401,12 @@ server.get('/projects/:id', [requireLogin], function(req,res){
   });
 });
 
+server.get('/statsProject/:id', [requireLogin], function(req,res){
+  server.redmine.getStatsProject(req.params.id, function(err, stats){
+    res.send(stats);
+  });
+});
+
 server.get('/priorities/:id', [requireLogin], function(req,res){
   server.redmine.getPriority(req.params.id, function(err, data){
     res.send({priorities: data});
