@@ -141,7 +141,7 @@
     <script type="text/x-handlebars" data-template-name="projects">
       <div class="row">
         <div id="users" class="span2">
-          {{ template "projectMenu"}}
+          {{ partial "projectMenu"}}
         </div>
 
         <div id="user" class="span10">
@@ -162,18 +162,18 @@
       </div>
     </script>
 
-    <script type="text/x-handlebars" data-template-name="projectMenu">
+    <script type="text/x-handlebars" data-template-name="_projectMenu">
       <div class="sidebar-nav navbar navbar-inverse">
         <div class="navbar-inner">
           <ul class="nav">
-          {{#each project in controller}}
+          {{#each rootProject in rootProjects}}
               <li>
-                {{#linkTo "project" project}}{{ project.name }} ({{ project.issuesCount }})<br />
-                {{project.current}}
-                {{project.parent.name}}
+                {{#linkTo "project" rootProject}}{{ rootProject.name }} ({{ rootProject.issuesCount }})<br />
+                {{rootProject.current}}
+                {{rootProject.parent.name}}
                 {{/linkTo}}
                 <ul>
-                  {{#each child in project.children}}
+                  {{#each child in rootProject.children}}
                     <li>
                       {{#linkTo "project" child}}{{ child.name }} ({{ child.issuesCount }}){{/linkTo}}
                     </li>
