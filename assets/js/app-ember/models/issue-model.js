@@ -10,7 +10,22 @@ RealTeam.Project = DS.Model.extend({
   issuesCount: function() {
     var issues = this.get('issues');
     return issues.toArray().length;
-  }.property('issues')
+  }.property('issues'),
+
+  isExpanded: false,
+  expand: function() {
+    this.set('isExpanded', true);
+  },
+  contract: function() {
+    this.set('isExpanded', false);
+  },
+  hasChildren: function(){
+    var children = this.get('children');
+    return !!children.toArray().length;
+  }.property('children'),
+  hasParent: function(){
+    return !!this.get('parent');
+  }.property('parent')
 });
 
 RealTeam.Priority = DS.Model.extend({

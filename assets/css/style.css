@@ -89,6 +89,15 @@ ul.nav {
   padding: 4px 8px 4px;
 }
 
+.navbar .nav.projects > li > a {
+  padding: 4px 8px 4px 18px;
+}
+
+.navbar .nav.projects > li > a.showChildren {
+  padding: 4px 8px 4px;
+  position: absolute;
+}
+
 .navbar .nav a.active,
 .navbar .nav a.active:hover,
 .navbar .nav a.active:focus {
@@ -155,6 +164,7 @@ ul.nav {
     width: 100%;
     border-top: 1px solid rgba(121, 121, 121, 0.24);
     border-bottom: 1px solid rgba(0, 0, 0, 0.46);
+    position: relative;
 }
 
 .sidebar-nav li li {

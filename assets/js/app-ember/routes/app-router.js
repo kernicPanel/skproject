@@ -82,6 +82,14 @@ RealTeam.ProjectRoute = Ember.Route.extend({
     console.log('ProjectRoute init');
   },
   model: function(params) {
-    return RealTeam.Project.find(params.project_id);
+    console.log('ici?', params);
+    var currentProject = RealTeam.Project.find(params.project_id);
+    if (currentProject.get('hasParent')) {
+      currentProject.on('didLoad', function(){
+        test = currentProject;
+        currentProject.get('parent').set('isExpanded', true);
+      });
+    }
+    return currentProject;
   }
 });

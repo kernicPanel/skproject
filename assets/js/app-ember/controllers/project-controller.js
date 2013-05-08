@@ -1,15 +1,30 @@
-/*
- *RealTeam.ProjectController = Ember.ObjectController.extend({
- *  init: function(){
- *    console.log('init ProjectController');
- *  },
- *  firstLevel: function (project) {
- *    console.log('this', this);
- *    return true;
- *    //return !this.get('parent');
- *  }.property('model.parent@each.id')
- *});
- */
+RealTeam.ProjectController = Ember.ObjectController.extend({
+  init: function(){
+    console.log('init ProjectController');
+  },
+  //isExpanded: false,
+  /*
+   *expand: function() {
+   *  this.set('isExpanded', true);
+   *},
+   *contract: function() {
+   *  this.set('isExpanded', false);
+   *},
+   */
+  /*
+   *hasChildren: function(){
+   *  console.log('children', this.get('children'));
+   *  return !!this.get('children');
+   *}.property('model.children@each.id'),
+   */
+  /*
+   *firstLevel: function (project) {
+   *  console.log('this', this);
+   *  return true;
+   *  //return !this.get('parent');
+   *}.property('model.parent@each.id')
+   */
+});
 
 RealTeam.ProjectsController = Ember.ArrayController.extend({
   init: function(){
@@ -17,6 +32,11 @@ RealTeam.ProjectsController = Ember.ArrayController.extend({
   },
   //sortProperties: ['id'],
   //sortAscending: false,
+  //isExpanded: false,
+  showChildren: function(id) {
+    var currentProject = RealTeam.Project.find(id);
+    currentProject.set('isExpanded', !currentProject.get('isExpanded'));
+  },
   rootProjects: function(){
     var filteredProjects = this.filter(function(project) {
       //console.log('project.get(parent)', project.get('parent'));
@@ -73,7 +93,7 @@ RealTeam.GraphView = Ember.View.extend({
               color: '#000000',
               connectorColor: '#000000',
               formatter: function() {
-                console.log('formatter', this);
+                //console.log('formatter', this);
                 return '<b>'+ this.point.name +'</b> : ' + this.y + ' ('+ this.percentage +'%)';
               }
             }

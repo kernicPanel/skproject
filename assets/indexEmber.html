@@ -165,20 +165,30 @@
     <script type="text/x-handlebars" data-template-name="_projectMenu">
       <div class="sidebar-nav navbar navbar-inverse">
         <div class="navbar-inner">
-          <ul class="nav">
+          <ul class="nav projects">
           {{#each rootProject in rootProjects}}
               <li>
-                {{#linkTo "project" rootProject}}{{ rootProject.name }} ({{ rootProject.issuesCount }})<br />
-                {{rootProject.current}}
-                {{rootProject.parent.name}}
-                {{/linkTo}}
-                <ul>
-                  {{#each child in rootProject.children}}
-                    <li>
-                      {{#linkTo "project" child}}{{ child.name }} ({{ child.issuesCount }}){{/linkTo}}
-                    </li>
-                  {{/each}}
-                </ul>
+                {{#if rootProject.hasChildren}}
+                  <a class="showChildren" {{action showChildren rootProject.id}}>
+                    {{#if rootProject.isExpanded}}
+                      -
+                    {{else}}
+                      +
+                    {{/if}}
+                  </a>
+                {{/if}}
+                {{#linkTo "project" rootProject}}{{ rootProject.name }}{{/linkTo}}
+                {{#if rootProject.hasChildren}}
+                  {{#if rootProject.isExpanded}}
+                    <ul class="subnav">
+                      {{#each child in rootProject.children}}
+                        <li>
+                          {{#linkTo "project" child}}{{ child.name }}{{/linkTo}}
+                        </li>
+                      {{/each}}
+                    </ul>
+                  {{/if}}
+                {{/if}}
               </li>
           {{/each}}
           </ul>
