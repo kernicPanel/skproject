@@ -62,7 +62,7 @@ RealTeam.UserController = Ember.ObjectController.extend({
           filter = new RegExp(filter.text, 'i');
           var matchRelation = false;
           item.eachRelationship(function(attr, val){
-            if (!!issue.get(attr) && !!issue.get(attr).get('name')) {
+            if (!!item.get(attr) && !!item.get(attr).get('name')) {
               var attributeName = item.get(attr).get('name');
               if (!!attributeName && !!attributeName.toString().match(filter)) {
                 matchRelation = true;
@@ -71,7 +71,7 @@ RealTeam.UserController = Ember.ObjectController.extend({
             }
           });
           item.eachAttribute(function(attr, val){
-            if (!!issue.get(attr)) {
+            if (!!item.get(attr)) {
               var attributeName = item.get(attr);
               if (!!attributeName && !!attributeName.toString().match(filter)) {
                 matchRelation = true;
