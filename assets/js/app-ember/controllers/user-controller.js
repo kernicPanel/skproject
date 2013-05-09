@@ -110,14 +110,15 @@ RealTeam.UsersController = Ember.ArrayController.extend({
 RealTeam.Select2Search = Ember.View.extend({
   templateName: "select2Search",
   didInsertElement: function (buffer) {
-    var issues = this.issues.get('content').toArray();
     var view = this;
+    var controller = view.get('controller');
     $("#select2Search").select2({
       minimumInputLength: 2,
       tags:[],
       query: function (query) {
         var data = {results: []};
         var indexed = [];
+        var issues = controller.get('issuesDisplayed').toArray();
         issues.forEach(function(issue){
           issue = RealTeam.Issue.find(issue.id);
           issue.eachRelationship(function(attr, val){

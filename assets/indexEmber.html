@@ -127,7 +127,7 @@
       <div class="user">
         <h1>{{name}} {{issuesCount}}</h1>
         <!--{{view RealTeam.IssueFilter valueBinding="filterString"}}-->
-        {{view RealTeam.Select2Search issuesBinding=issues}}
+        {{view RealTeam.Select2Search}}
         {{#each issue in issuesDisplayed}}
           {{template "issue"}}
         {{else}}
