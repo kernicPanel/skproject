@@ -68,6 +68,10 @@ RealTeam.UserRoute = Ember.Route.extend({
   },
   model: function(params) {
     return RealTeam.User.find(params.user_id);
+  },
+  setupController: function(controller) {
+    controller.set('filterString', '');
+    controller.filter();
   }
 });
 

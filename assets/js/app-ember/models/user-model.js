@@ -10,6 +10,12 @@ RealTeam.User = DS.Model.extend({
     var issues = this.get('issues');
     return issues.toArray().length;
   }.property('issues'),
+  /*
+   *issuesDisplayed: function() {
+   *  //return this.get('issuesSorted');
+   *  return this.get('issues');
+   *}.property('issues')
+   */
 });
 
 RealTeam.User.FIXTURES = [{

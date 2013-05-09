@@ -44,15 +44,34 @@ RealTeam.UserController = Ember.ObjectController.extend({
     return issues;
   }.property('model.issues.@each.id'),
   issuesDisplayed: function() {
-    return this.get('issuesSorted');
+    //return this.get('issuesSorted');
+    return this.get('model.issues');
   }.property('model.issues.@each.id'),
+  filterString: '',
   filter: function(filter){
-    console.log('filter', filter);
-    this.set('filtered', !this.get('filtered'));
-    console.log('this.filtered', this.get('filtered'));
-    var issuesSorted = this.get('issuesSorted');
-    if (this.get('filtered')) {
-      this.set('issuesDisplayed', issuesSorted.filterProperty('priority.name', filter));
+    filter = new RegExp(this.get('filterString'), 'i');
+    var issuesSorted = this.get('model.issues');
+    if (filter.toString() !== '/(?:)/i') {
+      //var issuesDisplayed = issuesSorted.filterProperty('priority.name', filter);
+      var issuesDisplayed = issuesSorted.filter(function(item, index, self) {
+        var isDisplayed = false;
+        item.eachRelationship(function(attr, val){
+          var attributeName = item.get(attr).get('name');
+          if (!!attributeName && !!attributeName.toString().match(filter)) {
+            isDisplayed = true;
+            return true;
+          }
+        });
+        item.eachAttribute(function(attr, val){
+          var attributeName = item.get(attr);
+          if (!!attributeName && !!attributeName.toString().match(filter)) {
+            isDisplayed = true;
+            return true;
+          }
+        });
+        return isDisplayed;
+      });
+      this.set('issuesDisplayed', issuesDisplayed);
     }
     else {
       this.set('issuesDisplayed', this.get('model.issues'));
@@ -65,9 +84,17 @@ RealTeam.UserController = Ember.ObjectController.extend({
   }
 });
 
+RealTeam.userController = RealTeam.UserController.create();
+
+RealTeam.IssueFilter = Ember.TextField.extend({
+  filterStringBinding: 'RealTeam.userController.filterString',
+  change: function(evt) {
+    this.get('controller').filter();
+  }
+});
+
 RealTeam.UsersController = Ember.ArrayController.extend({
   sortProperties: ['name'],
   sortAscending: true
 });
 
-RealTeam.userController = RealTeam.UserController.create();
