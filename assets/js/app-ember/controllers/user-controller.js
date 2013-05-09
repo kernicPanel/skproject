@@ -62,17 +62,21 @@ RealTeam.UserController = Ember.ObjectController.extend({
           filter = new RegExp(filter.text, 'i');
           var matchRelation = false;
           item.eachRelationship(function(attr, val){
-            var attributeName = item.get(attr).get('name');
-            if (!!attributeName && !!attributeName.toString().match(filter)) {
-              matchRelation = true;
-              return true;
+            if (!!issue.get(attr) && !!issue.get(attr).get('name')) {
+              var attributeName = item.get(attr).get('name');
+              if (!!attributeName && !!attributeName.toString().match(filter)) {
+                matchRelation = true;
+                return true;
+              }
             }
           });
           item.eachAttribute(function(attr, val){
-            var attributeName = item.get(attr);
-            if (!!attributeName && !!attributeName.toString().match(filter)) {
-              matchRelation = true;
-              return true;
+            if (!!issue.get(attr)) {
+              var attributeName = item.get(attr);
+              if (!!attributeName && !!attributeName.toString().match(filter)) {
+                matchRelation = true;
+                return true;
+              }
             }
           });
           excluded = !matchRelation;
