@@ -197,6 +197,11 @@ ul.nav {
   border-radius: 4px 4px 0 0;
 }
 
+.select2-container-multi .select2-choices .select2-search-field input {
+  font-weight: bold;
+  font-size: 1.2em;
+}
+
 .well {
   padding: 5px 10px;
   background-color: #000;
