@@ -126,8 +126,8 @@
     <script type="text/x-handlebars" data-template-name="user">
       <div class="user">
         <h1>{{name}} {{issuesCount}}</h1>
-        {{view RealTeam.IssueFilter valueBinding="filterString"}}
-        {{view RealTeam.Select2Search issuesBinding=issues valueBinding="filterString"}}
+        <!--{{view RealTeam.IssueFilter valueBinding="filterString"}}-->
+        {{view RealTeam.Select2Search issuesBinding=issues}}
         {{#each issue in issuesDisplayed}}
           {{template "issue"}}
         {{else}}
@@ -137,7 +137,7 @@
     </script>
 
     <script type="text/x-handlebars" data-template-name='select2Search'>
-      <input type="hidden" id="select2Search" style="width:300px" class="select2-offscreene" tabindex="-1">
+      <input type="hidden" id="select2Search" class="select2-offscreene" tabindex="-1">
     </script>
 
     <script type="text/x-handlebars" data-template-name="projects">

@@ -181,6 +181,22 @@ ul.nav {
   text-decoration: none;
 }
 
+.select2-container {
+  width: 100%;
+}
+
+.select2-choices {
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+}
+
+.select2-dropdown-open .select2-choices {
+  -webkit-border-radius: 4px 4px 0 0;
+  -moz-border-radius: 4px 4px 0 0;
+  border-radius: 4px 4px 0 0;
+}
+
 .well {
   padding: 5px 10px;
   background-color: #000;
