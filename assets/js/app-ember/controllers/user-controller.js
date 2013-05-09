@@ -52,37 +52,33 @@ RealTeam.UserController = Ember.ObjectController.extend({
   filter: function(filter){
     var controller = this;
     var filterArray = this.get('filterArray');
-    var isDisplayed, excluded;
+    var isDisplayed, included;
     var issuesSorted = controller.get('model.issues');
     if (filterArray.length) {
       var issuesDisplayed = issuesSorted.filter(function(item, index, self) {
-        excluded = false;
-        filterArray.forEach(function(filter){
-          isDisplayed = false;
-          filter = new RegExp(filter.text, 'i');
-          var matchRelation = false;
+        included = false;
+        isDisplayed = -1;
+        filterArray.forEach(function(filter, ind){
+          filter = filter.text;
           item.eachRelationship(function(attr, val){
             if (!!item.get(attr) && !!item.get(attr).get('name')) {
               var attributeName = item.get(attr).get('name');
-              if (!!attributeName && !!attributeName.toString().match(filter)) {
-                matchRelation = true;
-                return true;
+              if (!!attributeName && attributeName.toString() === filter) {
+                ++isDisplayed;
               }
             }
           });
           item.eachAttribute(function(attr, val){
             if (!!item.get(attr)) {
               var attributeName = item.get(attr);
-              if (!!attributeName && !!attributeName.toString().match(filter)) {
-                matchRelation = true;
-                return true;
+              if (!!attributeName && attributeName.toString() === filter) {
+                ++isDisplayed;
               }
             }
           });
-          excluded = !matchRelation;
-          isDisplayed = matchRelation;
+          included = (isDisplayed === ind);
         });
-        return isDisplayed && !excluded;
+        return included;
       });
       controller.set('issuesDisplayed', issuesDisplayed);
     }
