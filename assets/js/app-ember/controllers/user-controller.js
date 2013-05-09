@@ -48,33 +48,42 @@ RealTeam.UserController = Ember.ObjectController.extend({
     return this.get('model.issues');
   }.property('model.issues.@each.id'),
   filterString: '',
+  filterArray: [],
   filter: function(filter){
-    filter = new RegExp(this.get('filterString'), 'i');
-    var issuesSorted = this.get('model.issues');
-    if (filter.toString() !== '/(?:)/i') {
-      //var issuesDisplayed = issuesSorted.filterProperty('priority.name', filter);
+    var controller = this;
+    var filterArray = this.get('filterArray');
+    var isDisplayed, excluded;
+    var issuesSorted = controller.get('model.issues');
+    if (filterArray.length) {
       var issuesDisplayed = issuesSorted.filter(function(item, index, self) {
-        var isDisplayed = false;
-        item.eachRelationship(function(attr, val){
-          var attributeName = item.get(attr).get('name');
-          if (!!attributeName && !!attributeName.toString().match(filter)) {
-            isDisplayed = true;
-            return true;
-          }
+        excluded = false;
+        filterArray.forEach(function(filter){
+          isDisplayed = false;
+          filter = new RegExp(filter.text, 'i');
+          var matchRelation = false;
+          item.eachRelationship(function(attr, val){
+            var attributeName = item.get(attr).get('name');
+            if (!!attributeName && !!attributeName.toString().match(filter)) {
+              matchRelation = true;
+              return true;
+            }
+          });
+          item.eachAttribute(function(attr, val){
+            var attributeName = item.get(attr);
+            if (!!attributeName && !!attributeName.toString().match(filter)) {
+              matchRelation = true;
+              return true;
+            }
+          });
+          excluded = !matchRelation;
+          isDisplayed = matchRelation;
         });
-        item.eachAttribute(function(attr, val){
-          var attributeName = item.get(attr);
-          if (!!attributeName && !!attributeName.toString().match(filter)) {
-            isDisplayed = true;
-            return true;
-          }
-        });
-        return isDisplayed;
+        return isDisplayed && !excluded;
       });
-      this.set('issuesDisplayed', issuesDisplayed);
+      controller.set('issuesDisplayed', issuesDisplayed);
     }
     else {
-      this.set('issuesDisplayed', this.get('model.issues'));
+      controller.set('issuesDisplayed', controller.get('model.issues'));
     }
   },
   filtered: false,
@@ -98,3 +107,52 @@ RealTeam.UsersController = Ember.ArrayController.extend({
   sortAscending: true
 });
 
+RealTeam.Select2Search = Ember.View.extend({
+  templateName: "select2Search",
+  didInsertElement: function (buffer) {
+    var issues = this.issues.get('content').toArray();
+    var view = this;
+    $("#select2Search").select2({
+      minimumInputLength: 1,
+      tags:[],
+      query: function (query) {
+        var data = {results: []};
+        var indexed = [];
+        issues.forEach(function(issue){
+          issue = RealTeam.Issue.find(issue.id);
+          issue.eachRelationship(function(attr, val){
+            var attributeName = issue.get(attr).get('name');
+            if (!indexed[attributeName]) {
+              indexed[attributeName] = true;
+              filter = new RegExp(query.term, 'i');
+              if (!!attributeName && !!attributeName.toString().match(filter)) {
+                data.results.push({id: attributeName, text: attributeName});
+              }
+            }
+          });
+          issue.eachAttribute(function(attr, val){
+            var attributeName = issue.get(attr);
+            if (!indexed[attributeName]) {
+              indexed[attributeName] = true;
+              filter = new RegExp(query.term, 'i');
+              if (!!attributeName && !!attributeName.toString().match(filter)) {
+                data.results.push({id: attributeName, text: attributeName});
+              }
+            }
+          });
+        });
+        query.callback(data);
+      }
+    })
+    .on('change', function(e){
+      if ($(this).select2('data').length) {
+        view.get('controller').set('filterArray', $(this).select2('data'));
+      }
+      else {
+        view.get('controller').set('filterArray', []);
+      }
+      view.get('controller').filter();
+    });
+
+  }
+});

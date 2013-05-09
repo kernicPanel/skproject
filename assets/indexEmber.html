@@ -17,6 +17,7 @@
     <link rel='stylesheet' href='css/bootstrap.css'>
     <link rel='stylesheet' href='css/jquery.notyfy.css'>
     <link rel='stylesheet' href='css/default.notyfy.css'>
+    <link rel='stylesheet' href='js/lib/select2/select2.css'>
     <link rel='stylesheet' href='css/realteam.notyfy.css'>
     <link rel='stylesheet' href='css/style.css'>
     <link rel='stylesheet' href='css/bootstrap-responsive.css'>
@@ -126,12 +127,17 @@
       <div class="user">
         <h1>{{name}} {{issuesCount}}</h1>
         {{view RealTeam.IssueFilter valueBinding="filterString"}}
+        {{view RealTeam.Select2Search issuesBinding=issues valueBinding="filterString"}}
         {{#each issue in issuesDisplayed}}
           {{template "issue"}}
         {{else}}
           <p>No issues.</p>
         {{/each}}
       </div>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name='select2Search'>
+      <input type="hidden" id="select2Search" style="width:300px" class="select2-offscreene" tabindex="-1">
     </script>
 
     <script type="text/x-handlebars" data-template-name="projects">
@@ -264,6 +270,7 @@
     <script src="js/lib/textile.js"></script>
     <script src="js/lib/moment.min.js"></script>
     <script src="js/lib/jquery.notyfy.js"></script>
+    <script src="js/lib/select2/select2.js"></script>
     <script src="js/lib/highcharts/js/highcharts.js"></script>
 
     <script src="/js/app-ember/main.js"></script>
