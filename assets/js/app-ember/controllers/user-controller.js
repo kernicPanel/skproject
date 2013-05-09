@@ -113,7 +113,7 @@ RealTeam.Select2Search = Ember.View.extend({
     var issues = this.issues.get('content').toArray();
     var view = this;
     $("#select2Search").select2({
-      minimumInputLength: 1,
+      minimumInputLength: 2,
       tags:[],
       query: function (query) {
         var data = {results: []};
@@ -121,22 +121,26 @@ RealTeam.Select2Search = Ember.View.extend({
         issues.forEach(function(issue){
           issue = RealTeam.Issue.find(issue.id);
           issue.eachRelationship(function(attr, val){
-            var attributeName = issue.get(attr).get('name');
-            if (!indexed[attributeName]) {
-              indexed[attributeName] = true;
-              filter = new RegExp(query.term, 'i');
-              if (!!attributeName && !!attributeName.toString().match(filter)) {
-                data.results.push({id: attributeName, text: attributeName});
+            if (!!issue.get(attr) && !!issue.get(attr).get('name')) {
+              var attributeName = issue.get(attr).get('name');
+              if (!indexed[attributeName]) {
+                indexed[attributeName] = true;
+                filter = new RegExp(query.term, 'i');
+                if (!!attributeName && !!attributeName.toString().match(filter)) {
+                  data.results.push({id: attributeName, text: attributeName});
+                }
               }
             }
           });
           issue.eachAttribute(function(attr, val){
-            var attributeName = issue.get(attr);
-            if (!indexed[attributeName]) {
-              indexed[attributeName] = true;
-              filter = new RegExp(query.term, 'i');
-              if (!!attributeName && !!attributeName.toString().match(filter)) {
-                data.results.push({id: attributeName, text: attributeName});
+            if (!!issue.get(attr)) {
+              var attributeName = issue.get(attr);
+              if (!indexed[attributeName]) {
+                indexed[attributeName] = true;
+                filter = new RegExp(query.term, 'i');
+                if (!!attributeName && !!attributeName.toString().match(filter)) {
+                  data.results.push({id: attributeName, text: attributeName});
+                }
               }
             }
           });
