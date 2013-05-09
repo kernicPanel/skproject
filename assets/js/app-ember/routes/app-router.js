@@ -71,6 +71,7 @@ RealTeam.UserRoute = Ember.Route.extend({
   },
   setupController: function(controller) {
     controller.set('filterString', '');
+    controller.set('filterArray', []);
     controller.filter();
   }
 });
