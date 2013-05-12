@@ -1,5 +1,5 @@
-// Version: v1.0.0-rc.3-271-ga8b6e30
-// Last commit: a8b6e30 (2013-05-09 18:28:11 -0700)
+// Version: v1.0.0-rc.3-244-gd9668bf
+// Last commit: d9668bf (2013-05-12 00:05:40 -0700)
 
 
 (function() {
@@ -151,8 +151,8 @@ Ember.deprecateFunc = function(message, func) {
 
 })();
 
-// Version: v1.0.0-rc.3-271-ga8b6e30
-// Last commit: a8b6e30 (2013-05-09 18:28:11 -0700)
+// Version: v1.0.0-rc.3-244-gd9668bf
+// Last commit: d9668bf (2013-05-12 00:05:40 -0700)
 
 
 (function() {
@@ -827,7 +827,7 @@ Ember.guidFor = function guidFor(obj) {
   if (obj === undefined) return "(undefined)";
   if (obj === null) return "(null)";
 
-  var cache, ret;
+  var ret;
   var type = typeof obj;
 
   // Don't allow prototype changes to String etc. to change the guidFor
@@ -1228,7 +1228,7 @@ if (needsFinallyFix) {
 */
 if (needsFinallyFix) {
   Ember.tryCatchFinally = function(tryable, catchable, finalizer, binding) {
-    var result, finalResult, finalError, finalReturn;
+    var result, finalResult, finalError;
 
     binding = binding || this;
 
@@ -2124,7 +2124,7 @@ var o_create = Ember.create,
     metaFor = Ember.meta,
     META_KEY = Ember.META_KEY,
     /* listener flags */
-    ONCE = 1, SUSPENDED = 2, IMMEDIATE = 4;
+    ONCE = 1, SUSPENDED = 2;
 
 /*
   The event system uses a series of nested hashes to store listeners on an
@@ -2745,7 +2745,7 @@ var endPropertyChanges = Ember.endPropertyChanges = function() {
   @param {Function} callback
   @param [binding]
 */
-var changeProperties = Ember.changeProperties = function(cb, binding){
+Ember.changeProperties = function(cb, binding){
   beginPropertyChanges();
   tryFinally(cb, endPropertyChanges, binding);
 };
@@ -2950,7 +2950,7 @@ var MANDATORY_SETTER = Ember.ENV.MANDATORY_SETTER;
   @private
   @constructor
 */
-var Descriptor = Ember.Descriptor = function() {};
+Ember.Descriptor = function() {};
 
 // ..........................................................
 // DEFINING PROPERTIES API
@@ -3511,7 +3511,7 @@ Ember.watchPath = function(obj, keyPath) {
 };
 
 Ember.unwatchPath = function(obj, keyPath) {
-  var m = metaFor(obj), watching = m.watching, desc;
+  var m = metaFor(obj), watching = m.watching;
 
   if (watching[keyPath] === 1) {
     watching[keyPath] = 0;
@@ -4378,8 +4378,6 @@ Ember.computed.defaultTo = function(defaultPath) {
 var AFTER_OBSERVERS = ':change';
 var BEFORE_OBSERVERS = ':before';
 
-var guidFor = Ember.guidFor;
-
 function changeEvent(keyName) {
   return keyName+AFTER_OBSERVERS;
 }
@@ -4476,462 +4474,183 @@ Ember.removeBeforeObserver = function(obj, path, target, method) {
 
 
 (function() {
-define("backburner",
-  ["backburner/deferred_action_queues","exports"],
-  function(__dependency1__, __exports__) {
-    "use strict";
-    var DeferredActionQueues = __dependency1__.DeferredActionQueues;
+// Ember.Logger
+// Ember.watch.flushPending
+// Ember.beginPropertyChanges, Ember.endPropertyChanges
+// Ember.guidFor, Ember.tryFinally
 
-    var slice = [].slice,
-        pop = [].pop,
-        debouncees = [],
-        timers = [],
-        autorun, laterTimer, laterTimerExpiresAt;
+/**
+@module ember-metal
+*/
 
-    function Backburner(queueNames, options) {
-      this.queueNames = queueNames;
-      this.options = options || {};
+// ..........................................................
+// HELPERS
+//
+
+var slice = [].slice,
+    forEach = Ember.ArrayPolyfills.forEach;
+
+// invokes passed params - normalizing so you can pass target/func,
+// target/string or just func
+function invoke(target, method, args, ignore) {
+
+  if (method === undefined) {
+    method = target;
+    target = undefined;
+  }
+
+  if ('string' === typeof method) { method = target[method]; }
+  if (args && ignore > 0) {
+    args = args.length > ignore ? slice.call(args, ignore) : null;
+  }
+
+  return Ember.handleErrors(function() {
+    // IE8's Function.prototype.apply doesn't accept undefined/null arguments.
+    return method.apply(target || this, args || []);
+  }, this);
+}
+
+
+// ..........................................................
+// RUNLOOP
+//
+
+/**
+Ember RunLoop (Private)
+
+@class RunLoop
+@namespace Ember
+@private
+@constructor
+*/
+var RunLoop = function(prev) {
+  this._prev = prev || null;
+  this.onceTimers = {};
+};
+
+RunLoop.prototype = {
+  /**
+    @method end
+  */
+  end: function() {
+    this.flush();
+  },
+
+  /**
+    @method prev
+  */
+  prev: function() {
+    return this._prev;
+  },
+
+  // ..........................................................
+  // Delayed Actions
+  //
+
+  /**
+    @method schedule
+    @param {String} queueName
+    @param target
+    @param method
+  */
+  schedule: function(queueName, target, method) {
+    var queues = this._queues, queue;
+    if (!queues) { queues = this._queues = {}; }
+    queue = queues[queueName];
+    if (!queue) { queue = queues[queueName] = []; }
+
+    var args = arguments.length > 3 ? slice.call(arguments, 3) : null;
+    queue.push({ target: target, method: method, args: args });
+    return this;
+  },
+
+  /**
+    @method flush
+    @param {String} queueName
+  */
+  flush: function(queueName) {
+    var queueNames, idx, len, queue, log;
+
+    if (!this._queues) { return this; } // nothing to do
+
+    function iter(item) {
+      invoke(item.target, item.method, item.args);
     }
 
-    Backburner.prototype = {
-      queueNames: null,
-      options: null,
-      currentInstance: null,
-      previousInstance: null,
+    function tryable() {
+      forEach.call(queue, iter);
+    }
 
-      begin: function() {
-        if (this.currentInstance) {
-          this.previousInstance = this.currentInstance;
+    Ember.watch.flushPending(); // make sure all chained watchers are setup
+
+    if (queueName) {
+      while (this._queues && (queue = this._queues[queueName])) {
+        this._queues[queueName] = null;
+
+        // the sync phase is to allow property changes to propagate. don't
+        // invoke observers until that is finished.
+        if (queueName === 'sync') {
+          log = Ember.LOG_BINDINGS;
+          if (log) { Ember.Logger.log('Begin: Flush Sync Queue'); }
+
+          Ember.beginPropertyChanges();
+
+          Ember.tryFinally(tryable, Ember.endPropertyChanges);
+
+          if (log) { Ember.Logger.log('End: Flush Sync Queue'); }
+
+        } else {
+          forEach.call(queue, iter);
         }
-        this.currentInstance = new DeferredActionQueues(this.queueNames, this.options);
-      },
+      }
 
-      end: function() {
-        try {
-          this.currentInstance.flush();
-        } finally {
-          this.currentInstance = null;
-          if (this.previousInstance) {
-            this.currentInstance = this.previousInstance;
-            this.previousInstance = null;
-          }
-        }
-      },
+    } else {
+      queueNames = Ember.run.queues;
+      len = queueNames.length;
+      idx = 0;
 
-      run: function(target, method /*, args */) {
-        var ret;
-        this.begin();
+      outerloop:
+      while (idx < len) {
+        queueName = queueNames[idx];
+        queue = this._queues && this._queues[queueName];
+        delete this._queues[queueName];
 
-        if (!method) {
-          method = target;
-          target = null;
-        }
+        if (queue) {
+          // the sync phase is to allow property changes to propagate. don't
+          // invoke observers until that is finished.
+          if (queueName === 'sync') {
+            log = Ember.LOG_BINDINGS;
+            if (log) { Ember.Logger.log('Begin: Flush Sync Queue'); }
 
-        if (typeof method === 'string') {
-          method = target[method];
-        }
+            Ember.beginPropertyChanges();
 
-        // Prevent Safari double-finally.
-        var finallyAlreadyCalled = false;
-        try {
-          if (arguments.length > 2) {
-            ret = method.apply(target, slice.call(arguments, 2));
+            Ember.tryFinally(tryable, Ember.endPropertyChanges);
+
+            if (log) { Ember.Logger.log('End: Flush Sync Queue'); }
           } else {
-            ret = method.call(target);
-          }
-        } finally {
-          if (!finallyAlreadyCalled) {
-            finallyAlreadyCalled = true;
-            this.end();
+            forEach.call(queue, iter);
           }
         }
-        return ret;
-      },
 
-      defer: function(queueName, target, method /* , args */) {
-        if (!method) {
-          method = target;
-          target = null;
-        }
-
-        if (typeof method === 'string') {
-          method = target[method];
-        }
-
-        var stack = new Error().stack,
-            args = arguments.length > 3 ? slice.call(arguments, 3) : undefined;
-        if (!this.currentInstance) { createAutorun(this); }
-        return this.currentInstance.schedule(queueName, target, method, args, false, stack);
-      },
-
-      deferOnce: function(queueName, target, method /* , args */) {
-        if (!method) {
-          method = target;
-          target = null;
-        }
-
-        if (typeof method === 'string') {
-          method = target[method];
-        }
-
-        var stack = new Error().stack,
-            args = arguments.length > 3 ? slice.call(arguments, 3) : undefined;
-        if (!this.currentInstance) { createAutorun(this); }
-        return this.currentInstance.schedule(queueName, target, method, args, true, stack);
-      },
-
-      setTimeout: function() {
-        var self = this,
-            wait = pop.call(arguments),
-            target = arguments[0],
-            method = arguments[1],
-            executeAt = (+new Date()) + wait;
-
-        if (!method) {
-          method = target;
-          target = null;
-        }
-
-        if (typeof method === 'string') {
-          method = target[method];
-        }
-
-        var fn, args;
-        if (arguments.length > 2) {
-          args = slice.call(arguments, 2);
-
-          fn = function() {
-            method.apply(target, args);
-          };
-        } else {
-          fn = function() {
-            method.call(target);
-          };
-        }
-
-        // find position to insert - TODO: binary search
-        var i, l;
-        for (i = 0, l = timers.length; i < l; i += 2) {
-          if (executeAt < timers[i]) { break; }
-        }
-
-        timers.splice(i, 0, executeAt, fn);
-
-        if (laterTimer && laterTimerExpiresAt < executeAt) { return fn; }
-
-        if (laterTimer) {
-          clearTimeout(laterTimer);
-          laterTimer = null;
-        }
-        laterTimer = setTimeout(function() {
-          executeTimers(self);
-          laterTimer = null;
-          laterTimerExpiresAt = null;
-        }, wait);
-        laterTimerExpiresAt = executeAt;
-
-        return fn;
-      },
-
-      debounce: function(target, method /* , args, wait */) {
-        var self = this,
-            args = arguments,
-            wait = pop.call(args),
-            debouncee;
-
-        for (var i = 0, l = debouncees.length; i < l; i++) {
-          debouncee = debouncees[i];
-          if (debouncee[0] === target && debouncee[1] === method) { return; } // do nothing
-        }
-
-        var timer = setTimeout(function() {
-          self.run.apply(self, args);
-
-          // remove debouncee
-          var index = -1;
-          for (var i = 0, l = debouncees.length; i < l; i++) {
-            debouncee = debouncees[i];
-            if (debouncee[0] === target && debouncee[1] === method) {
-              index = i;
-              break;
-            }
-          }
-
-          if (index > -1) { debouncees.splice(index, 1); }
-        }, wait);
-
-        debouncees.push([target, method, timer]);
-      },
-
-      cancelTimers: function() {
-        for (var i = 0, l = debouncees.length; i < l; i++) {
-          clearTimeout(debouncees[i][2]);
-        }
-        debouncees = [];
-
-        if (laterTimer) {
-          clearTimeout(laterTimer);
-          laterTimer = null;
-        }
-        timers = [];
-
-        if (autorun) { clearTimeout(autorun); }
-      },
-
-      hasTimers: function() {
-        return !!timers.length && !autorun;
-      },
-
-      cancel: function(timer) {
-        if (typeof timer === 'object' && timer.queue && timer.method) { // we're cancelling a deferOnce
-          return timer.queue.cancel(timer);
-        } else if (typeof timer === 'function') { // we're cancelling a setTimeout
-          for (var i = 0, l = timers.length; i < l; i += 2) {
-            if (timers[i + 1] === timer) {
-              timers.splice(i, 2); // remove the two elements
-              return true;
-            }
-          }
-        }
-      }
-    };
-
-    Backburner.prototype.schedule = Backburner.prototype.defer;
-    Backburner.prototype.scheduleOnce = Backburner.prototype.deferOnce;
-    Backburner.prototype.later = Backburner.prototype.setTimeout;
-
-    function createAutorun(backburner) {
-      backburner.begin();
-      autorun = setTimeout(function() {
-        backburner.end();
-      });
-    }
-
-    function executeTimers(self) {
-      var now = +new Date(),
-          time, fns, i, l;
-
-      self.run(function() {
-        // TODO: binary search
-        for (i = 0, l = timers.length; i < l; i += 2) {
-          time = timers[i];
-          if (time > now) { break; }
-        }
-
-        fns = timers.splice(0, i);
-
-        for (i = 1, l = fns.length; i < l; i += 2) {
-          self.schedule(self.queueNames[0], null, fns[i]); // TODO: make default queue configurable
-        }
-      });
-
-      if (timers.length) {
-        laterTimer = setTimeout(function() {
-          executeTimers(self);
-        }, timers[0] - now);
-        laterTimerExpiresAt = timers[0];
-      }
-    }
-
-
-    __exports__.Backburner = Backburner;
-  });
-
-define("backburner/deferred_action_queues",
-  ["backburner/queue","exports"],
-  function(__dependency1__, __exports__) {
-    "use strict";
-    var Queue = __dependency1__.Queue;
-
-    function DeferredActionQueues(queueNames, options) {
-      var queues = this.queues = {};
-      this.queueNames = queueNames = queueNames || [];
-
-      var queueName;
-      for (var i = 0, l = queueNames.length; i < l; i++) {
-        queueName = queueNames[i];
-        queues[queueName] = new Queue(this, queueName, options[queueName]);
-      }
-    }
-
-    DeferredActionQueues.prototype = {
-      queueNames: null,
-      queues: null,
-
-      schedule: function(queueName, target, method, args, onceFlag, stack) {
-        var queues = this.queues,
-            queue = queues[queueName];
-
-        if (!queue) { throw new Error("You attempted to schedule an action in a queue (" + queueName + ") that doesn't exist"); }
-
-        if (onceFlag) {
-          return queue.pushUnique(target, method, args, stack);
-        } else {
-          return queue.push(target, method, args, stack);
-        }
-      },
-
-      flush: function() {
-        var queues = this.queues,
-            queueNames = this.queueNames,
-            queueName, queue, queueItems, priorQueueNameIndex,
-            queueNameIndex = 0, numberOfQueues = queueNames.length;
-
-        outerloop:
-        while (queueNameIndex < numberOfQueues) {
-          queueName = queueNames[queueNameIndex];
-          queue = queues[queueName];
-          queueItems = queue._queue.slice();
-          queue._queue = [];
-
-          var options = queue.options,
-              before = options && options.before,
-              after = options && options.after,
-              target, method, args,
-              queueIndex = 0, numberOfQueueItems = queueItems.length;
-
-          if (numberOfQueueItems && before) { before(); }
-          while (queueIndex < numberOfQueueItems) {
-            target = queueItems[queueIndex];
-            method = queueItems[queueIndex+1];
-            args   = queueItems[queueIndex+2];
-
-            if (typeof method === 'string') { method = target[method]; }
-
-            // TODO: error handling
-            if (args && args.length > 0) {
-              method.apply(target, args);
-            } else {
-              method.call(target);
-            }
-
-            queueIndex += 4;
-          }
-          if (numberOfQueueItems && after) { after(); }
-
-          if ((priorQueueNameIndex = indexOfPriorQueueWithActions(this, queueNameIndex)) !== -1) {
-            queueNameIndex = priorQueueNameIndex;
+        // Loop through prior queues
+        for (var i = 0; i <= idx; i++) {
+          if (this._queues && this._queues[queueNames[i]]) {
+            // Start over at the first queue with contents
+            idx = i;
             continue outerloop;
           }
-
-          queueNameIndex++;
         }
+
+        idx++;
       }
-    };
-
-    function indexOfPriorQueueWithActions(daq, currentQueueIndex) {
-      var queueName, queue;
-
-      for (var i = 0, l = currentQueueIndex; i <= l; i++) {
-        queueName = daq.queueNames[i];
-        queue = daq.queues[queueName];
-        if (queue._queue.length) { return i; }
-      }
-
-      return -1;
     }
 
-    __exports__.DeferredActionQueues = DeferredActionQueues;
-  });
+    return this;
+  }
 
-define("backburner/queue",
-  ["exports"],
-  function(__exports__) {
-    "use strict";
-    function Queue(daq, name, options) {
-      this.daq = daq;
-      this.name = name;
-      this.options = options;
-      this._queue = [];
-    }
+};
 
-    Queue.prototype = {
-      daq: null,
-      name: null,
-      options: null,
-      _queue: null,
-
-      push: function(target, method, args, stack) {
-        var queue = this._queue;
-        queue.push(target, method, args, stack);
-        return {queue: this, target: target, method: method};
-      },
-
-      pushUnique: function(target, method, args, stack) {
-        var queue = this._queue, currentTarget, currentMethod;
-
-        for (var i = 0, l = queue.length; i < l; i += 4) {
-          currentTarget = queue[i];
-          currentMethod = queue[i+1];
-
-          if (currentTarget === target && currentMethod === method) {
-            queue[i+2] = args; // replace args
-            queue[i+3] = stack; // replace stack
-            return {queue: this, target: target, method: method}; // TODO: test this code path
-          }
-        }
-
-        this._queue.push(target, method, args, stack);
-        return {queue: this, target: target, method: method};
-      },
-
-      // TODO: remove me, only being used for Ember.run.sync
-      flush: function() {
-        var queue = this._queue,
-            options = this.options,
-            before = options && options.before,
-            after = options && options.after,
-            action, target, method, args, i, l = queue.length;
-
-        if (l && before) { before(); }
-        for (i = 0; i < l; i += 4) {
-          target = queue[i];
-          method = queue[i+1];
-          args   = queue[i+2];
-
-          method.apply(target, args); // TODO: error handling
-        }
-        if (l && after) { after(); }
-
-        // check if new items have been added
-        if (queue.length > l) {
-          this._queue = queue.slice(l);
-          this.flush();
-        } else {
-          this._queue.length = 0;
-        }
-      },
-
-      cancel: function(actionToCancel) {
-        var queue = this._queue, currentTarget, currentMethod, i, l;
-
-        for (i = 0, l = queue.length; i < l; i += 4) {
-          currentTarget = queue[i];
-          currentMethod = queue[i+1];
-
-          if (currentTarget === actionToCancel.target && currentMethod === actionToCancel.method) {
-            queue.splice(i, 4);
-            return true;
-          }
-        }
-      }
-    };
-
-    __exports__.Queue = Queue;
-  });
-})();
-
-
-
-(function() {
-var Backburner = requireModule('backburner').Backburner,
-    backburner = new Backburner(['sync', 'actions', 'destroy'], {
-      sync: {
-        before: Ember.beginPropertyChanges,
-        after: Ember.endPropertyChanges
-      }
-    }),
-    slice = [].slice;
+Ember.RunLoop = RunLoop;
 
 // ..........................................................
 // Ember.run - this is ideally the only public API the dev sees
@@ -4965,22 +4684,20 @@ var Backburner = requireModule('backburner').Backburner,
   @return {Object} return value from invoking the passed function.
 */
 Ember.run = function(target, method) {
-  var ret;
-  try {
-    ret = backburner.run.apply(backburner, arguments);
-  } catch (e) {
-    if (Ember.onerror) {
-      Ember.onerror(e);
-    } else {
-      throw e;
+  var args = arguments;
+  run.begin();
+
+  function tryable() {
+    if (target || method) {
+      return invoke(target, method, args, 2);
     }
   }
-  return ret;
+
+  return Ember.tryFinally(tryable, run.end);
 };
 
-Ember.run.backburner = backburner;
-
 var run = Ember.run;
+
 
 /**
   Begins a new RunLoop. Any deferred actions invoked after the begin will
@@ -4997,7 +4714,7 @@ var run = Ember.run;
   @return {void}
 */
 Ember.run.begin = function() {
-  backburner.begin();
+  run.currentRunLoop = new RunLoop(run.currentRunLoop);
 };
 
 /**
@@ -5015,7 +4732,12 @@ Ember.run.begin = function() {
   @return {void}
 */
 Ember.run.end = function() {
-  backburner.end();
+  Ember.assert('must have a current run loop', run.currentRunLoop);
+
+  function tryable()   { run.currentRunLoop.end();  }
+  function finalizer() { run.currentRunLoop = run.currentRunLoop.prev(); }
+
+  Ember.tryFinally(tryable, finalizer);
 };
 
 /**
@@ -5028,6 +4750,7 @@ Ember.run.end = function() {
   @type Array
   @default ['sync', 'actions', 'destroy']
 */
+Ember.run.queues = ['sync', 'actions', 'destroy'];
 
 /**
   Adds the passed target/method and any optional arguments to the named
@@ -5066,17 +4789,57 @@ Ember.run.end = function() {
   @return {void}
 */
 Ember.run.schedule = function(queue, target, method) {
-  backburner.schedule.apply(backburner, arguments);
+  var loop = run.autorun();
+  loop.schedule.apply(loop, arguments);
 };
+
+var scheduledAutorun;
+function autorun() {
+  scheduledAutorun = null;
+  if (run.currentRunLoop) { run.end(); }
+}
 
 // Used by global test teardown
 Ember.run.hasScheduledTimers = function() {
-  return backburner.hasTimers();
+  return !!(scheduledAutorun || scheduledLater);
 };
 
 // Used by global test teardown
 Ember.run.cancelTimers = function () {
-  backburner.cancelTimers();
+  if (scheduledAutorun) {
+    clearTimeout(scheduledAutorun);
+    scheduledAutorun = null;
+  }
+  if (scheduledLater) {
+    clearTimeout(scheduledLater);
+    scheduledLater = null;
+  }
+  timers = {};
+};
+
+/**
+  Begins a new RunLoop if necessary and schedules a timer to flush the
+  RunLoop at a later time. This method is used by parts of Ember to
+  ensure the RunLoop always finishes. You normally do not need to call this
+  method directly. Instead use `Ember.run()`
+
+  @method autorun
+  @example
+    Ember.run.autorun();
+  @return {Ember.RunLoop} the new current RunLoop
+*/
+Ember.run.autorun = function() {
+  if (!run.currentRunLoop) {
+    Ember.assert("You have turned on testing mode, which disabled the run-loop's autorun. You will need to wrap any code with asynchronous side-effects in an Ember.run", !Ember.testing);
+
+    run.begin();
+
+    if (!scheduledAutorun) {
+      scheduledAutorun = setTimeout(autorun, 1);
+    }
+  }
+
+  return run.currentRunLoop;
 };
 
 /**
@@ -5096,8 +4859,58 @@ Ember.run.cancelTimers = function () {
   @return {void}
 */
 Ember.run.sync = function() {
-  backburner.currentInstance.queues.sync.flush();
+  run.autorun();
+  run.currentRunLoop.flush('sync');
 };
+
+// ..........................................................
+// TIMERS
+//
+
+var timers = {}; // active timers...
+
+function sortByExpires(timerA, timerB) {
+  var a = timerA.expires,
+      b = timerB.expires;
+
+  if (a > b) { return  1; }
+  if (a < b) { return -1; }
+  return 0;
+}
+
+var scheduledLater, scheduledLaterExpires;
+function invokeLaterTimers() {
+  scheduledLater = null;
+  run(function() {
+    var now = (+ new Date()), earliest = -1;
+    var timersToBeInvoked = [];
+    for (var key in timers) {
+      if (!timers.hasOwnProperty(key)) { continue; }
+      var timer = timers[key];
+      if (timer && timer.expires) {
+        if (now >= timer.expires) {
+          delete timers[key];
+          timersToBeInvoked.push(timer);
+        } else {
+          if (earliest < 0 || (timer.expires < earliest)) { earliest = timer.expires; }
+        }
+      }
+    }
+
+    forEach.call(timersToBeInvoked.sort(sortByExpires), function(timer) {
+      invoke(timer.target, timer.method, timer.args, 2);
+    });
+
+    // schedule next timeout to fire when the earliest timer expires
+    if (earliest > 0) {
+      // To allow overwrite `setTimeout` as stub from test code.
+      // The assignment to `window.setTimeout` doesn't equal to `setTimeout` in older IE.
+      // So `window` is required.
+      scheduledLater = window.setTimeout(invokeLaterTimers, earliest - now);
+      scheduledLaterExpires = earliest;
+    }
+  });
+}
 
 /**
   Invokes the passed target/method and optional arguments after a specified
@@ -5126,8 +4939,73 @@ Ember.run.sync = function() {
     {{#crossLink "Ember/run.cancel"}}{{/crossLink}} later.
 */
 Ember.run.later = function(target, method) {
-  return backburner.later.apply(backburner, arguments);
+  var args, expires, timer, guid, wait;
+
+  // setTimeout compatibility...
+  if (arguments.length===2 && 'function' === typeof target) {
+    wait   = method;
+    method = target;
+    target = undefined;
+    args   = [target, method];
+  } else {
+    args = slice.call(arguments);
+    wait = args.pop();
+  }
+
+  expires = (+ new Date()) + wait;
+  timer   = { target: target, method: method, expires: expires, args: args };
+  guid    = Ember.guidFor(timer);
+  timers[guid] = timer;
+
+  if(scheduledLater && expires < scheduledLaterExpires) {
+    // Cancel later timer (then reschedule earlier timer below)
+    clearTimeout(scheduledLater);
+    scheduledLater = null;
+  }
+
+  if (!scheduledLater) {
+    // Schedule later timers to be run.
+    scheduledLater = setTimeout(invokeLaterTimers, wait);
+    scheduledLaterExpires = expires;
+  }
+
+  return guid;
 };
+
+function invokeOnceTimer(guid, onceTimers) {
+  if (onceTimers[this.tguid]) { delete onceTimers[this.tguid][this.mguid]; }
+  if (timers[guid]) { invoke(this.target, this.method, this.args); }
+  delete timers[guid];
+}
+
+function scheduleOnce(queue, target, method, args) {
+  var tguid = Ember.guidFor(target),
+    mguid = Ember.guidFor(method),
+    onceTimers = run.autorun().onceTimers,
+    guid = onceTimers[tguid] && onceTimers[tguid][mguid],
+    timer;
+
+  if (guid && timers[guid]) {
+    timers[guid].args = args; // replace args
+  } else {
+    timer = {
+      target: target,
+      method: method,
+      args:   args,
+      tguid:  tguid,
+      mguid:  mguid
+    };
+
+    guid  = Ember.guidFor(timer);
+    timers[guid] = timer;
+    if (!onceTimers[tguid]) { onceTimers[tguid] = {}; }
+    onceTimers[tguid][mguid] = guid; // so it isn't scheduled more than once
+
+    run.schedule(queue, timer, invokeOnceTimer, guid, onceTimers);
+  }
+
+  return guid;
+}
 
 /**
   Schedule a function to run one time during the current RunLoop. This is equivalent
@@ -5142,9 +5020,7 @@ Ember.run.later = function(target, method) {
   @return {Object} timer
 */
 Ember.run.once = function(target, method) {
-  var args = slice.call(arguments);
-  args.unshift('actions');
-  return backburner.scheduleOnce.apply(backburner, args);
+  return scheduleOnce('actions', target, method, slice.call(arguments, 2));
 };
 
 /**
@@ -5192,12 +5068,12 @@ Ember.run.once = function(target, method) {
   @return {Object} timer
 */
 Ember.run.scheduleOnce = function(queue, target, method) {
-  return backburner.scheduleOnce.apply(backburner, arguments);
+  return scheduleOnce(queue, target, method, slice.call(arguments, 3));
 };
 
 /**
-  Schedules an item to run from within a separate run loop, after
-  control has been returned to the system. This is equivalent to calling
+  Schedules an item to run from within a separate run loop, after 
+  control has been returned to the system. This is equivalent to calling 
   `Ember.run.later` with a wait time of 1ms.
 
   ```javascript
@@ -5209,7 +5085,7 @@ Ember.run.scheduleOnce = function(queue, target, method) {
   Multiple operations scheduled with `Ember.run.next` will coalesce
   into the same later run loop, along with any other operations
   scheduled by `Ember.run.later` that expire right around the same
-  time that `Ember.run.next` operations will fire.
+  time that `Ember.run.next` operations will fire. 
 
   Note that there are often alternatives to using `Ember.run.next`.
   For instance, if you'd like to schedule an operation to happen
@@ -5235,13 +5111,13 @@ Ember.run.scheduleOnce = function(queue, target, method) {
 
   One benefit of the above approach compared to using `Ember.run.next` is
   that you will be able to perform DOM/CSS operations before unprocessed
-  elements are rendered to the screen, which may prevent flickering or
+  elements are rendered to the screen, which may prevent flickering or 
   other artifacts caused by delaying processing until after rendering.
 
-  The other major benefit to the above approach is that `Ember.run.next`
-  introduces an element of non-determinism, which can make things much
-  harder to test, due to its reliance on `setTimeout`; it's much harder
-  to guarantee the order of scheduled operations when they are scheduled
+  The other major benefit to the above approach is that `Ember.run.next` 
+  introduces an element of non-determinism, which can make things much 
+  harder to test, due to its reliance on `setTimeout`; it's much harder 
+  to guarantee the order of scheduled operations when they are scheduled 
   outside of the current run loop, i.e. with `Ember.run.next`.
 
   @method next
@@ -5254,8 +5130,8 @@ Ember.run.scheduleOnce = function(queue, target, method) {
 */
 Ember.run.next = function() {
   var args = slice.call(arguments);
-  args.push(1);
-  return backburner.later.apply(backburner, args);
+  args.push(1); // 1 millisecond wait
+  return run.later.apply(this, args);
 };
 
 /**
@@ -5284,7 +5160,7 @@ Ember.run.next = function() {
   @return {void}
 */
 Ember.run.cancel = function(timer) {
-  return backburner.cancel(timer);
+  delete timers[timer];
 };
 
 })();
@@ -5959,14 +5835,6 @@ function mergeMixins(mixins, m, descs, values, base, keys) {
       if (mixin._without) { a_forEach.call(mixin._without, removeKeys); }
     }
   }
-}
-
-function writableReq(obj) {
-  var m = Ember.meta(obj), req = m.required;
-  if (!req || !m.hasOwnProperty('required')) {
-    req = m.required = req ? o_create(req) : {};
-  }
-  return req;
 }
 
 var IS_BINDING = Ember.IS_BINDING = /^.+Binding$/;
@@ -14642,7 +14510,7 @@ Ember.EventDispatcher = Ember.Object.extend(
 // Add a new named queue for rendering views that happens
 // after bindings have synced, and a queue for scheduling actions
 // that that should occur after view rendering.
-var queues = Ember.run.backburner.queueNames,
+var queues = Ember.run.queues,
     indexOf = Ember.ArrayPolyfills.indexOf;
 queues.splice(indexOf.call(queues, 'actions')+1, 0, 'render', 'afterRender');
 
@@ -23794,6 +23662,8 @@ define("router",
         var targetHandlerInfos = this.targetHandlerInfos,
             found = false, names, object, handlerInfo, handlerObj;
 
+        if (!targetHandlerInfos) { return; }
+
         for (var i=targetHandlerInfos.length-1; i>=0; i--) {
           handlerInfo = targetHandlerInfos[i];
           if (handlerInfo.name === handlerName) { found = true; }
@@ -27529,7 +27399,7 @@ var Application = Ember.Application = Ember.Namespace.extend(Ember.DeferredMixin
   },
 
   reset: function() {
-    Ember.assert('App#reset no longer needs to be wrapped in a run-loop', !Ember.run.backburner.currentInstance);
+    Ember.assert('App#reset no longer needs to be wrapped in a run-loop', !Ember.run.currentRunLoop);
     Ember.run(this, function(){
       Ember.run(this.__container__, 'destroy');
 
@@ -29242,6 +29112,74 @@ Ember.Test = {
   */
   onInjectHelpers: function(callback) {
     injectHelpersCallbacks.push(callback);
+  },
+
+  /**
+    @public
+
+    This returns a thenable tailored
+    for testing.  It catches failed
+    `onSuccess` callbacks and invokes
+    the `Ember.Test.failure` function
+    in the last chained then.
+
+    This method should be returned
+    by async helpers such as `wait`.
+
+    @method promise
+    @param resolver {Function}
+  */
+  promise: function(resolver) {
+    var promise = new Ember.RSVP.Promise(resolver);
+    var thenable = {
+      chained: false
+    };
+    thenable.then = function(onSuccess, onFailure) {
+      var self = this, thenPromise, nextPromise;
+      thenable.chained = true;
+      thenPromise = promise.then(onSuccess, onFailure);
+      // this is to ensure all downstream fulfillment
+      // handlers are wrapped in the error handling
+      nextPromise = Ember.Test.promise(function(resolve) {
+        resolve(thenPromise);
+      });
+      thenPromise.then(null, function(reason) {
+        // ensure this is the last promise in the chain
+        // if not, ignore and the exception will propagate
+        // this prevents the same error from being fired multiple times
+        if (!nextPromise.chained) {
+          Ember.Test.failure(reason);
+        }
+      });
+      return nextPromise;
+    };
+    return thenable;
+  },
+
+  /**
+    @public
+
+    Override this method with your
+    testing framework's false assertion
+    This function is called whenever
+    an exception occurs causing the testing
+    promise to fail.
+
+    QUnit example:
+
+    ```javascript
+    Ember.Test.failure = function(reason) {
+      ok(false, reason);
+    }
+    ```
+
+    @method failure
+    @param reason {String}
+  */
+  failure: function(error) {
+    setTimeout(function() {
+      throw error;
+    });
   }
 };
 
@@ -29292,8 +29230,7 @@ Ember.Application.reopen({
 
 
 (function() {
-var Promise = Ember.RSVP.Promise,
-    get = Ember.get,
+var get = Ember.get,
     helper = Ember.Test.registerHelper,
     pendingAjaxRequests = 0;
 
@@ -29335,13 +29272,13 @@ function find(app, selector) {
 }
 
 function wait(app, value) {
-  return new Promise(function(resolve) {
+  return Ember.Test.promise(function(resolve) {
     stop();
     var watcher = setInterval(function() {
       var routerIsLoading = app.__container__.lookup('router:main').router.isLoading;
       if (routerIsLoading) { return; }
       if (pendingAjaxRequests) { return; }
-      if (Ember.run.hasScheduledTimers() || Ember.run.backburner.currentInstance) { return; }
+      if (Ember.run.hasScheduledTimers() || Ember.run.currentRunLoop) { return; }
       clearInterval(watcher);
       start();
       Ember.run(function() {
@@ -29357,7 +29294,6 @@ helper('click', click);
 helper('fillIn', fillIn);
 helper('find', find);
 helper('wait', wait);
-
 })();
 
 
@@ -29368,8 +29304,8 @@ helper('wait', wait);
 
 
 })();
-// Version: v1.0.0-rc.3-271-ga8b6e30
-// Last commit: a8b6e30 (2013-05-09 18:28:11 -0700)
+// Version: v1.0.0-rc.3-244-gd9668bf
+// Last commit: d9668bf (2013-05-12 00:05:40 -0700)
 
 
 (function() {
