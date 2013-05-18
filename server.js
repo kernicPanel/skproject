@@ -419,12 +419,13 @@ server.get('/statuses/:id', [requireLogin], function(req,res){
   });
 });
 
-server.get('/currentuser', [requireLogin], function(req,res){
+server.get('/currentuser/', [requireLogin], function(req,res){
   //var requestLogin = { login: req.session.login };
   //console.log("req.session : ", req.session);
   //console.log("requestLogin : ", requestLogin);
   server.redmine.getUserByLogin(req.session.login, function(err, data){
-    res.send({currentuser: data});
+    //res.send({currentuser: data});
+    res.send(data);
   });
 });
 

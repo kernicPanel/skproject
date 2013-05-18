@@ -65,14 +65,24 @@ RealTeam.socket.on('addUserIssue', function (data){
   console.log('addUserIssue', data);
 
   updatedIssue = RealTeam.Issue.find(data.issueId);
+  //updatedIssue.destroy();
+  //updatedIssue = RealTeam.Issue.find(data.issueId);
 
-  updatedIssue.on('didLoad', function() {
-    console.log("Loaded!");
-    user = RealTeam.User.find(data.userId);
-    userIssues = user.get('issues');
-    userIssues.pushObject(updatedIssue);
-    user.set('issuesCount', user.get('issuesCount') + 1);
-  });
+  console.log("update !", updatedIssue);
+  user = RealTeam.User.find(data.userId);
+  userIssues = user.get('issues');
+  userIssues.pushObject(updatedIssue);
+  user.set('issuesCount', user.get('issuesCount') + 1);
+
+  /*
+   *updatedIssue.on('didLoad', function() {
+   *  console.log("Loaded!");
+   *  user = RealTeam.User.find(data.userId);
+   *  userIssues = user.get('issues');
+   *  userIssues.pushObject(updatedIssue);
+   *  user.set('issuesCount', user.get('issuesCount') + 1);
+   *});
+   */
 });
 
 RealTeam.socket.on('log', function(source, data){

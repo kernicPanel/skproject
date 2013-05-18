@@ -36,7 +36,7 @@
           </ul>
         </div>
       </div>
-      {{ template "currentuser" }}
+      {{ render "currentuser" RealTeam.currentuser }}
       <div class="container">
         <div class="row">
           <!--<div class="span12">-->
@@ -47,39 +47,36 @@
     </script>
 
     <script type="text/x-handlebars" data-template-name="currentuser">
-      {{#with RealTeam.currentuser}}
-          <div class="currentUser well">
-            <p>{{firstname}} {{lastname}} {{mail}}
-              {{#if hasAddtime}}
+      <div class="currentUser well">
+        <p>{{firstname}} {{lastname}} {{mail}}
+          {{#if hasAddtime}}
 
-                {{#with currentIssue}}
-                  {{view Ember.TextField valueBinding="id" id="id"}}
-                  {{view Ember.TextField valueBinding="hours" id="hours"}}
-                  {{view Ember.TextField valueBinding="minutes" id="minutes"}}
-                  {{view Ember.TextField valueBinding="message" id="message"}}
-                  <!--<input {{bindAttr value="id"}} type="text" name="id" id="id" />-->
-                  <!--<input {{bindAttr value="hours"}} type="text" name="hours" id="hours"/>-->
-                  <!--<input {{bindAttr value="minutes"}} type="text" name="minutes" id="minutes"/>-->
-                  <!--<input {{bindAttr value="startedAt"}} type="text" name="startedAt" id="startedAt" />-->
-                  <button class="btn btn-mini" {{action "addTime"}}>addTime</button>
-                  <button class="btn btn-mini" {{action "cancelTime"}}>cancel</button>
-                {{/with}}
-              {{else}}
-                {{#with currentIssue}}
-                  {{id}}
-                  {{issueStatus}}
-                  {{issueName}}
-                  {{!timer startedAt pendingDuration}}
-                  {{timer currentTimer}}
-                  <button class="btn btn-mini" {{action "pause"}}>pause</button>
-                  <button class="btn btn-mini" {{action "stop"}}>stop</button>
-                {{/with}}
-                {{!timer currentIssue.startedAt currentIssue.pendingDuration}}
-              {{/if}}
-            </p>
-          </div>
-        <!--</div>-->
-      {{/with}}
+            {{#with currentIssue}}
+              {{view Ember.TextField valueBinding="id" id="id"}}
+              {{view Ember.TextField valueBinding="hours" id="hours"}}
+              {{view Ember.TextField valueBinding="minutes" id="minutes"}}
+              {{view Ember.TextField valueBinding="message" id="message"}}
+              <!--<input {{bindAttr value="id"}} type="text" name="id" id="id" />-->
+              <!--<input {{bindAttr value="hours"}} type="text" name="hours" id="hours"/>-->
+              <!--<input {{bindAttr value="minutes"}} type="text" name="minutes" id="minutes"/>-->
+              <!--<input {{bindAttr value="startedAt"}} type="text" name="startedAt" id="startedAt" />-->
+              <button class="btn btn-mini" {{action "addTime"}}>addTime</button>
+              <button class="btn btn-mini" {{action "cancelTime"}}>cancel</button>
+            {{/with}}
+          {{else}}
+            {{#with currentIssue}}
+              {{id}}
+              {{issueStatus}}
+              {{issueName}}
+              {{!timer startedAt pendingDuration}}
+              {{timer currentTimer}}
+              <button class="btn btn-mini" {{action "pause"}}>pause</button>
+              <button class="btn btn-mini" {{action "stop"}}>stop</button>
+            {{/with}}
+            {{!timer currentIssue.startedAt currentIssue.pendingDuration}}
+          {{/if}}
+        </p>
+      </div>
     </script>
 
     <script type="text/x-handlebars" data-template-name="index">
@@ -265,8 +262,10 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/lib/jquery-1.9.1.min.js"></script>
     <script src="js/lib/ember/handlebars-1.0.rc.3.js"></script>
-    <script src="js/lib/ember/ember-1.0.0-rc.3.js"></script>
-    <script src="js/lib/ember/ember-data.js"></script>
+    <!--<script src="js/lib/ember/ember-1.0.0-rc.3.js"></script>-->
+    <script src="js/lib/ember/ember-latest.js"></script>
+    <!--<script src="js/lib/ember/ember-data.js"></script>-->
+    <script src="js/lib/ember/ember-data-latest.js"></script>
     <script src="js/lib/textile.js"></script>
     <script src="js/lib/moment.min.js"></script>
     <script src="js/lib/jquery.notyfy.js"></script>

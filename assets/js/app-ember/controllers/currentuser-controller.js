@@ -1,8 +1,10 @@
 RealTeam.CurrentuserController = Ember.ObjectController.extend({
-  templateName: 'currentuser',
+  //templateName: 'currentuser',
   init: function(){
     console.log('init CurrentuserController');
+    console.log("this : ", this);
     console.log("this.content : ", this.content);
+    console.log("this.model : ", this.model);
     console.log("RealTeam.currentuser : ", RealTeam.currentuser);
   },
   updateCurrentIssue: function (issue) {
@@ -68,6 +70,7 @@ RealTeam.CurrentuserController = Ember.ObjectController.extend({
     var currentIssue = RealTeam.currentuser.get('currentIssue');
     console.log("addTime currentuser : ", currentIssue);
     RealTeam.socket.emit('addTime', currentIssue, function (err, issue) {
+      console.log(err, issue);
       RealTeam.currentuser.set('hasAddtime', false);
       RealTeam.currentuserController.updateCurrentIssue(null);
     });
@@ -81,3 +84,11 @@ RealTeam.CurrentuserController = Ember.ObjectController.extend({
 });
 
 RealTeam.currentuserController = RealTeam.CurrentuserController.create();
+
+RealTeam.CurrentuserView = Ember.View.extend({
+  //templateName: "currentuser",
+  firstname: "cstcscstcs",
+  fuck: function(){
+    return "cstcscstcs";
+  }
+});
