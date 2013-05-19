@@ -1,4 +1,4 @@
-[![Build Status](http://travis-ci.org/kernicPanel/skproject.png)](http://travis-ci.org/kernicPanel/skproject)
+[![Build Status](https://travis-ci.org/kernicPanel/skproject.png)](https://travis-ci.org/kernicPanel/skproject)
 
 run "npm install" in root to install modules dependencies.
 
