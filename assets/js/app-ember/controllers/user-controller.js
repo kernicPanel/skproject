@@ -60,10 +60,11 @@ RealTeam.UserController = Ember.ObjectController.extend({
         isDisplayed = -1;
         filterArray.forEach(function(filter, ind){
           filter = filter.text;
+          filter = new RegExp(filter, 'i');
           item.eachRelationship(function(attr, val){
             if (!!item.get(attr) && !!item.get(attr).get('name')) {
               var attributeName = item.get(attr).get('name');
-              if (!!attributeName && attributeName.toString() === filter) {
+              if (!!attributeName && !!attributeName.toString().match(filter)) {
                 ++isDisplayed;
               }
             }
@@ -71,7 +72,7 @@ RealTeam.UserController = Ember.ObjectController.extend({
           item.eachAttribute(function(attr, val){
             if (!!item.get(attr)) {
               var attributeName = item.get(attr);
-              if (!!attributeName && attributeName.toString() === filter) {
+              if (!!attributeName && !!attributeName.toString().match(filter)) {
                 ++isDisplayed;
               }
             }
@@ -120,6 +121,7 @@ RealTeam.Select2Search = Ember.View.extend({
         var data = {results: []};
         var indexed = [];
         var issues = controller.get('issuesDisplayed').toArray();
+        data.results.push({id: query.term, text: query.term});
         issues.forEach(function(issue){
           issue = RealTeam.Issue.find(issue.id);
           issue.eachRelationship(function(attr, val){
