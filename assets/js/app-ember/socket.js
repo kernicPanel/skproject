@@ -73,7 +73,8 @@ RealTeam.socket.on('addUserIssue', function (data){
   userIssues = user.get('issues');
   userIssues.pushObject(updatedIssue);
   user.set('issuesCount', user.get('issuesCount') + 1);
-  RealTeam.userController.filter();
+  //RealTeam.userController.filter();
+  $("#select2Search").trigger('change');
 
   /*
    *updatedIssue.on('didLoad', function() {

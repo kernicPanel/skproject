@@ -110,6 +110,7 @@ RealTeam.UsersController = Ember.ArrayController.extend({
 RealTeam.Select2Search = Ember.View.extend({
   templateName: "select2Search",
   didInsertElement: function (buffer) {
+    //var issues = this.issuesDisplayed.get('content').toArray();
     var view = this;
     var controller = view.get('controller');
     $("#select2Search").select2({
