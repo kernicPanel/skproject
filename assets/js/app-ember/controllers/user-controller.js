@@ -99,7 +99,7 @@ RealTeam.UserController = Ember.ObjectController.extend({
     var ids = issuesDisplayed.map(function(issue){
       return 'ids%5B%5D=' + issue.id;
     });
-    $.getJSON( '/statsUser/status/?' + ids.join('&'))
+    $.getJSON( '/statsUser/priority/?' + ids.join('&'))
     .done(function( stats ) {
       $('#chartContainer').highcharts({
         chart: {
@@ -108,7 +108,7 @@ RealTeam.UserController = Ember.ObjectController.extend({
           plotShadow: false
         },
         title: {
-          text: 'Statuses'
+          text: 'Priority'
         },
         tooltip: {
           pointFormat: '{series.name}: <b>{point.percentage}%</b>',
@@ -131,7 +131,7 @@ RealTeam.UserController = Ember.ObjectController.extend({
         },
         series: [{
           type: 'pie',
-          name: 'Browser share',
+          name: 'Issues',
           data: stats
         }]
       });
