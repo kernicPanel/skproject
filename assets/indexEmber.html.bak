@@ -17,7 +17,6 @@
     <link rel='stylesheet' href='css/bootstrap.css'>
     <link rel='stylesheet' href='css/jquery.notyfy.css'>
     <link rel='stylesheet' href='css/default.notyfy.css'>
-    <link rel='stylesheet' href='js/lib/select2/select2.css'>
     <link rel='stylesheet' href='css/realteam.notyfy.css'>
     <link rel='stylesheet' href='css/style.css'>
     <link rel='stylesheet' href='css/bootstrap-responsive.css'>
@@ -36,7 +35,7 @@
           </ul>
         </div>
       </div>
-      {{ render "currentuser" RealTeam.currentuser }}
+      {{ template "currentuser" }}
       <div class="container">
         <div class="row">
           <!--<div class="span12">-->
@@ -47,36 +46,39 @@
     </script>
 
     <script type="text/x-handlebars" data-template-name="currentuser">
-      <div class="currentUser well">
-        <p>{{firstname}} {{lastname}} {{mail}}
-          {{#if hasAddtime}}
+      {{#with RealTeam.currentuser}}
+          <div class="currentUser well">
+            <p>{{firstname}} {{lastname}} {{mail}}
+              {{#if hasAddtime}}
 
-            {{#with currentIssue}}
-              {{view Ember.TextField valueBinding="id" id="id"}}
-              {{view Ember.TextField valueBinding="hours" id="hours"}}
-              {{view Ember.TextField valueBinding="minutes" id="minutes"}}
-              {{view Ember.TextField valueBinding="message" id="message"}}
-              <!--<input {{bindAttr value="id"}} type="text" name="id" id="id" />-->
-              <!--<input {{bindAttr value="hours"}} type="text" name="hours" id="hours"/>-->
-              <!--<input {{bindAttr value="minutes"}} type="text" name="minutes" id="minutes"/>-->
-              <!--<input {{bindAttr value="startedAt"}} type="text" name="startedAt" id="startedAt" />-->
-              <button class="btn btn-mini" {{action "addTime"}}>addTime</button>
-              <button class="btn btn-mini" {{action "cancelTime"}}>cancel</button>
-            {{/with}}
-          {{else}}
-            {{#with currentIssue}}
-              {{id}}
-              {{issueStatus}}
-              {{issueName}}
-              {{!timer startedAt pendingDuration}}
-              {{timer currentTimer}}
-              <button class="btn btn-mini" {{action "pause"}}>pause</button>
-              <button class="btn btn-mini" {{action "stop"}}>stop</button>
-            {{/with}}
-            {{!timer currentIssue.startedAt currentIssue.pendingDuration}}
-          {{/if}}
-        </p>
-      </div>
+                {{#with currentIssue}}
+                  {{view Ember.TextField valueBinding="id" id="id"}}
+                  {{view Ember.TextField valueBinding="hours" id="hours"}}
+                  {{view Ember.TextField valueBinding="minutes" id="minutes"}}
+                  {{view Ember.TextField valueBinding="message" id="message"}}
+                  <!--<input {{bindAttr value="id"}} type="text" name="id" id="id" />-->
+                  <!--<input {{bindAttr value="hours"}} type="text" name="hours" id="hours"/>-->
+                  <!--<input {{bindAttr value="minutes"}} type="text" name="minutes" id="minutes"/>-->
+                  <!--<input {{bindAttr value="startedAt"}} type="text" name="startedAt" id="startedAt" />-->
+                  <button class="btn btn-mini" {{action "addTime"}}>addTime</button>
+                  <button class="btn btn-mini" {{action "cancelTime"}}>cancel</button>
+                {{/with}}
+              {{else}}
+                {{#with currentIssue}}
+                  {{id}}
+                  {{issueStatus}}
+                  {{issueName}}
+                  {{!timer startedAt pendingDuration}}
+                  {{timer currentTimer}}
+                  <button class="btn btn-mini" {{action "pause"}}>pause</button>
+                  <button class="btn btn-mini" {{action "stop"}}>stop</button>
+                {{/with}}
+                {{!timer currentIssue.startedAt currentIssue.pendingDuration}}
+              {{/if}}
+            </p>
+          </div>
+        <!--</div>-->
+      {{/with}}
     </script>
 
     <script type="text/x-handlebars" data-template-name="index">
@@ -123,25 +125,17 @@
     <script type="text/x-handlebars" data-template-name="user">
       <div class="user">
         <h1>{{name}} {{issuesCount}}</h1>
-        <!--{{view RealTeam.IssueFilter valueBinding="filterString"}}-->
-        {{view RealTeam.Select2Search}}
-        <div class="stats">
-          {{view RealTeam.UserGraphView issuesDisplayedBinding=issuesDisplayed}}
-        </div>
-        {{#each issue in issuesDisplayed}}
+        <button class="btn btn-mini" {{action "sort" "id"}}>id</button>
+        <button class="btn btn-mini" {{action "sort" "subject"}}>subject</button>
+        <button class="btn btn-mini" {{action "sort" "project.name"}}>project.name</button>
+        <button class="btn btn-mini" {{action "sort" "priority.id" false}}>priority.id</button>
+        <!--<button class="btn btn-mini" {{action "filter" "Immédiat" false}}>filter Immédiat</button>-->
+        {{#each issue in issuesSorted}}
           {{template "issue"}}
         {{else}}
           <p>No issues.</p>
         {{/each}}
       </div>
-    </script>
-
-    <script type="text/x-handlebars" data-template-name='select2Search'>
-      <input type="hidden" id="select2Search" class="select2-offscreene" tabindex="-1" data-placeholder="Filter">
-    </script>
-
-    <script type="text/x-handlebars" data-template-name='userGraph'>
-      <div id="chartContainer" style="height: 300px; width: 100%;"> </div>
     </script>
 
     <script type="text/x-handlebars" data-template-name="projects">
@@ -171,30 +165,17 @@
     <script type="text/x-handlebars" data-template-name="_projectMenu">
       <div class="sidebar-nav navbar navbar-inverse">
         <div class="navbar-inner">
-          <ul class="nav projects">
+          <ul class="nav">
           {{#each rootProject in rootProjects}}
               <li>
-                {{#if rootProject.hasChildren}}
-                  <a class="showChildren" {{action showChildren rootProject.id}}>
-                    {{#if rootProject.isExpanded}}
-                      -
-                    {{else}}
-                      +
-                    {{/if}}
-                  </a>
-                {{/if}}
                 {{#linkTo "project" rootProject}}{{ rootProject.name }}{{/linkTo}}
-                {{#if rootProject.hasChildren}}
-                  {{#if rootProject.isExpanded}}
-                    <ul class="subnav">
-                      {{#each child in rootProject.children}}
-                        <li>
-                          {{#linkTo "project" child}}{{ child.name }}{{/linkTo}}
-                        </li>
-                      {{/each}}
-                    </ul>
-                  {{/if}}
-                {{/if}}
+                <ul>
+                  {{#each child in rootProject.children}}
+                    <li>
+                      {{#linkTo "project" child}}{{ child.name }} ({{ child.issuesCount }}){{/linkTo}}
+                    </li>
+                  {{/each}}
+                </ul>
               </li>
           {{/each}}
           </ul>
@@ -205,25 +186,13 @@
     <script type="text/x-handlebars" data-template-name="project">
       <div class="user">
         <h1>{{name}} {{issuesCount}}</h1>
-        <div class="navbar navbar-inverse">
-          <div class="navbar-inner">
-            <ul class="nav">
-              {{#linkTo "project" parent}}{{ parent.name }}{{/linkTo}}
-              {{#each child in children}}
-                <li>
-                  {{#linkTo "project" child}}{{ child.name }}{{/linkTo}}
-                </li>
-              {{/each}}
-            </ul>
-          </div>
-        </div>
         <!--<button class="btn btn-mini" {{action "sort" "id"}}>id</button>-->
         <!--<button class="btn btn-mini" {{action "sort" "subject"}}>subject</button>-->
         <!--<button class="btn btn-mini" {{action "sort" "project.name"}}>project.name</button>-->
         <!--<button class="btn btn-mini" {{action "sort" "priority.id" false}}>priority.id</button>-->
         <!--<button class="btn btn-mini" {{action "filter" "Immédiat" false}}>filter Immédiat</button>-->
         <div class="stats">
-          {{view RealTeam.ProjectGraphView idBinding=id}}
+          {{view RealTeam.GraphView idBinding=id}}
         </div>
         {{#each issue in issues}}
           {{template "issue"}}
@@ -233,7 +202,7 @@
       </div>
     </script>
 
-    <script type="text/x-handlebars" data-template-name='projectGraph'>
+    <script type="text/x-handlebars" data-template-name='graph'>
       <div id="chartContainer" style="height: 300px; width: 100%;"> </div>
     </script>
 
@@ -269,14 +238,11 @@
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/lib/jquery-1.9.1.min.js"></script>
     <script src="js/lib/ember/handlebars-1.0.rc.3.js"></script>
-    <!--<script src="js/lib/ember/ember-1.0.0-rc.3.js"></script>-->
-    <script src="js/lib/ember/ember-latest.js"></script>
-    <!--<script src="js/lib/ember/ember-data.js"></script>-->
-    <script src="js/lib/ember/ember-data-latest.js"></script>
+    <script src="js/lib/ember/ember-1.0.0-rc.3.js"></script>
+    <script src="js/lib/ember/ember-data.js"></script>
     <script src="js/lib/textile.js"></script>
     <script src="js/lib/moment.min.js"></script>
     <script src="js/lib/jquery.notyfy.js"></script>
-    <script src="js/lib/select2/select2.js"></script>
     <script src="js/lib/highcharts/js/highcharts.js"></script>
 
     <script src="/js/app-ember/main.js"></script>

@@ -21,8 +21,8 @@ RealTeam.ProjectsController = Ember.ArrayController.extend({
   }.property('@each.parent')
 });
 
-RealTeam.GraphView = Ember.View.extend({
-  templateName: "graph",
+RealTeam.ProjectGraphView = Ember.View.extend({
+  templateName: "projectGraph",
   didInsertElement: function () {
     $.getJSON( '/statsProject/' + this.id)
     .done(function( stats ) {

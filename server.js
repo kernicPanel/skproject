@@ -407,6 +407,12 @@ server.get('/statsProject/:id', [requireLogin], function(req,res){
   });
 });
 
+server.get('/statsUser/:type/:ids?', [requireLogin], function(req,res){
+  server.redmine.getStatsIssues(req.query.ids, req.params.type, function(err, stats){
+    res.send(stats);
+  });
+});
+
 server.get('/priorities/:id', [requireLogin], function(req,res){
   server.redmine.getPriority(req.params.id, function(err, data){
     res.send({priorities: data});

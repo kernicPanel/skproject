@@ -86,11 +86,56 @@ RealTeam.UserController = Ember.ObjectController.extend({
     else {
       controller.set('issuesDisplayed', controller.get('model.issues'));
     }
+    this.graph();
   },
   filtered: false,
   scope: function(arg){
     console.log('issue scope', arg);
     test = arg;
+  },
+  graph: function(){
+    //console.log(this.get('issuesDisplayed'));
+    var issuesDisplayed = this.get('issuesDisplayed').toArray();
+    var ids = issuesDisplayed.map(function(issue){
+      return 'ids%5B%5D=' + issue.id;
+    });
+    $.getJSON( '/statsUser/status/?' + ids.join('&'))
+    .done(function( stats ) {
+      $('#chartContainer').highcharts({
+        chart: {
+          plotBackgroundColor: null,
+          plotBorderWidth: null,
+          plotShadow: false
+        },
+        title: {
+          text: 'Statuses'
+        },
+        tooltip: {
+          pointFormat: '{series.name}: <b>{point.percentage}%</b>',
+          percentageDecimals: 1
+        },
+        plotOptions: {
+          pie: {
+            allowPointSelect: true,
+            cursor: 'pointer',
+            dataLabels: {
+              enabled: true,
+              color: '#000000',
+              connectorColor: '#000000',
+              formatter: function() {
+                //console.log('formatter', this);
+                return '<b>'+ this.point.name +'</b> : ' + this.y + ' ('+ this.percentage +'%)';
+              }
+            }
+          }
+        },
+        series: [{
+          type: 'pie',
+          name: 'Browser share',
+          data: stats
+        }]
+      });
+    });
   }
 });
 
@@ -162,5 +207,12 @@ RealTeam.Select2Search = Ember.View.extend({
       view.get('controller').filter();
     });
 
+  }
+});
+
+RealTeam.UserGraphView = Ember.View.extend({
+  templateName: "userGraph",
+  didInsertElement: function () {
+    //console.log(this.issuesDisplayed.get('content').toArray());
   }
 });
