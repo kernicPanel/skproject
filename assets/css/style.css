@@ -85,6 +85,12 @@ ul.nav {
   min-height: 29px;
 }
 
+.navbar .nav > li > p {
+  padding: 0 8px;
+  margin: 0;
+  color: #555;
+}
+
 .navbar .nav > li > a {
   padding: 4px 8px 4px;
 }

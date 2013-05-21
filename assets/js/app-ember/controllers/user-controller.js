@@ -4,7 +4,16 @@ RealTeam.UserController = Ember.ObjectController.extend({
   },
   updateCurrentIssue: function (issue) {
     var user = RealTeam.User.find(issue.userId);
-    user.set('current', issue.issueId);
+    var currentIRCIssue = null;
+    user.set('currentIRCIssueTime', issue.issueTime);
+    user.set('currentIRCIssueStatus', issue.issueStatus);
+    if (issue.issueId !== 'Aucune') {
+      currentIRCIssue = RealTeam.Issue.find(issue.issueId);
+    }
+    else {
+      user.set('currentIRCIssueStatus', issue.issueId);
+    }
+    user.set('currentIRCIssue', currentIRCIssue);
 
 //debugger;
   },

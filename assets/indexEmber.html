@@ -87,7 +87,9 @@
       {{#each user in controller}}
         <div class="user span4 well">
           <p>{{#linkTo "user" user}}{{ user.name }} {{ user.issuesCount }}{{/linkTo}}</p>
-          <p>{{user.current}}</p>
+          <p>{{user.currentIRCIssue.project.name}}</p>
+          <p><a {{bindAttr href="user.currentIRCIssue.url"}} target="_blank">{{user.currentIRCIssue.id}} {{user.currentIRCIssue.subject}}</a></p>
+          <p>{{user.currentIRCIssueStatus}} {{user.currentIRCIssueTime}}</p>
         </div>
       {{/each}}
     </script>
@@ -110,9 +112,9 @@
           <ul class="nav">
           {{#each user in controller}}
             <li>
-              {{#linkTo "user" user}}{{ user.name }} ({{ user.issuesCount }})<br />
-              {{user.current}}
-              {{/linkTo}}
+              {{#linkTo "user" user}}{{ user.name }} ({{ user.issuesCount }}){{/linkTo}}
+              <p><a {{bindAttr href="user.currentIRCIssue.url"}} target="_blank">{{user.currentIRCIssue.id}} {{user.currentIRCIssue.subject}}</a></p>
+              <p>{{user.currentIRCIssueStatus}} {{user.currentIRCIssueTime}}</p>
             </li>
           {{/each}}
           </ul>

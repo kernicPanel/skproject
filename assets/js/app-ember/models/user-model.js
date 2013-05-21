@@ -5,11 +5,13 @@ RealTeam.User = DS.Model.extend({
     return this.get('firstname') + ' ' + this.get('lastname');
   }.property('firstname', 'lastname'),
   issues: DS.hasMany('RealTeam.Issue'),
-  current: DS.attr('string'),
+  currentIRCIssue: DS.belongsTo('RealTeam.Issue'),
+  currentIRCIssueTime: DS.attr('string'),
+  currentIRCIssueStatus: DS.attr('string'),
   issuesCount: function() {
     var issues = this.get('issues');
     return issues.toArray().length;
-  }.property('issues'),
+  }.property('issues')
   /*
    *issuesDisplayed: function() {
    *  //return this.get('issuesSorted');
