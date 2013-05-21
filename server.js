@@ -408,7 +408,13 @@ server.get('/statsProject/:id', [requireLogin], function(req,res){
 });
 
 server.get('/statsUser/:type/:ids?', [requireLogin], function(req,res){
-  server.redmine.getStatsIssues(req.query.ids, req.params.type, function(err, stats){
+  server.redmine.getStatsIssuesByType(req.query.ids, req.params.type, function(err, stats){
+    res.send(stats);
+  });
+});
+
+server.get('/statsUser/:ids?', [requireLogin], function(req,res){
+  server.redmine.getAllStatsIssues(req.query.ids, function(err, stats){
     res.send(stats);
   });
 });

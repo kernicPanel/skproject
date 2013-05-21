@@ -99,7 +99,7 @@ RealTeam.UserController = Ember.ObjectController.extend({
     var ids = issuesDisplayed.map(function(issue){
       return 'ids%5B%5D=' + issue.id;
     });
-    $.getJSON( '/statsUser/priority/?' + ids.join('&'))
+    $.getJSON( '/statsUser/?' + ids.join('&'))
     .done(function( stats ) {
       $('#chartContainer').highcharts({
         chart: {
@@ -108,7 +108,8 @@ RealTeam.UserController = Ember.ObjectController.extend({
           plotShadow: false
         },
         title: {
-          text: 'Priority'
+          //text: 'Priority'
+          text: ''
         },
         tooltip: {
           pointFormat: '{series.name}: <b>{point.percentage}%</b>',
@@ -120,11 +121,22 @@ RealTeam.UserController = Ember.ObjectController.extend({
             cursor: 'pointer',
             dataLabels: {
               enabled: true,
-              color: '#000000',
-              connectorColor: '#000000',
+              //color: '#000000',
+              //connectorColor: '#000000',
               formatter: function() {
                 //console.log('formatter', this);
-                return '<b>'+ this.point.name +'</b> : ' + this.y + ' ('+ this.percentage +'%)';
+                var percentage = Math.round(this.percentage * 10) / 10;
+                return '<b>'+ this.point.name +'</b> : ' + this.y;
+              }
+            },
+            point: {
+              events: {
+                click: function(event) {
+                  var $select2Search = $("#select2Search");
+                  var filters = $select2Search.select2('data');
+                  filters.push({id: this.name, text: this.name});
+                  $select2Search.select2('data', filters).trigger("change");
+                }
               }
             }
           }
@@ -132,7 +144,13 @@ RealTeam.UserController = Ember.ObjectController.extend({
         series: [{
           type: 'pie',
           name: 'Issues',
-          data: stats
+          center: ['25%', '50%'],
+          data: stats.status
+        },{
+          type: 'pie',
+          name: 'Issues',
+          center: ['75%', '50%'],
+          data: stats.priority
         }]
       });
     });
