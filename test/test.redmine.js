@@ -22,7 +22,7 @@ along with realTeam.  If not, see <http://www.gnu.org/licenses/>.
 var path = require('path'),
     util = require('util'),
     colors = require('colors'),
-    should = require('should'),
+    should = require('chai').should,
     mongoose = require('mongoose');
 
  mongoose.models = {};
@@ -50,37 +50,55 @@ var redmine = require(path.join(libdir, 'redmine.js')),
 
 describe('redmine', function(){
 
-    after(function(done){
-       mongoose.disconnect(function () {
-         console.log('mongoose disconnected');
-         done();
-       });
+  after(function(done){
+    mongoose.disconnect(function () {
+      console.log('mongoose disconnected');
+      done();
     });
+  });
 
-    describe('redmine', function(){
-        it('should be an object', function() {
-            redmine.should.be.a('object');
-        });
+  describe('redmine', function(){
+    it('should be an object', function() {
+      redmine.should.be.a('object');
     });
+  });
 
-    describe('redmine.init', function(){
-        it('should be a function', function() {
-            redmine.init.should.be.a('function');
-        });
+  describe('redmine.init', function(){
+    it('should be a function', function() {
+      redmine.init.should.be.a('function');
     });
+  });
 
-    describe('redmine.sync', function(){
-        it('should be a function', function() {
-            redmine.sync.should.be.a('function');
-        });
+  describe('redmine.sync', function(){
+    it('should be a function', function() {
+      redmine.sync.should.be.a('function');
     });
+  });
 
-    /*
-     *describe('redmineRest', function(){
-     *    it('should be a function', function() {
-     *        redmineRest.should.be.a('function');
-     *    });
-     *});
-     */
+  describe('fake test redmine.truc', function(){
+    it('should callback true', function() {
+      redmine.truc(function(result){
+        result.should.be.true;
+      });
+    });
+  });
+
+  describe('redmine.fetchRedmineUsers', function(){
+    it('should fetch redmine users', function() {
+      redmine.fetchRedmineUsers(function(err, users){
+        console.log('users', users);
+        err.should.be.a('null');
+        users.should.not.be.a('null');
+      });
+    });
+  });
+
+  /*
+   *describe('redmineRest', function(){
+   *    it('should be a function', function() {
+   *        redmineRest.should.be.a('function');
+   *    });
+   *});
+   */
 
 });
