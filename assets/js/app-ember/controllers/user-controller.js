@@ -144,13 +144,21 @@ RealTeam.UserController = Ember.ObjectController.extend({
         series: [{
           type: 'pie',
           name: 'Issues',
-          center: ['25%', '50%'],
+          center: ['20%', '25%'],
+          size: 100,
           data: stats.status
         },{
           type: 'pie',
           name: 'Issues',
-          center: ['75%', '50%'],
+          center: ['20%', '80%'],
+          size: 100,
           data: stats.priority
+        },{
+          type: 'pie',
+          name: 'Issues',
+          center: ['70%', '50%'],
+          size: 100,
+          data: stats.project
         }]
       });
     });
