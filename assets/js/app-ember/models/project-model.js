@@ -1,5 +1,7 @@
 RealTeam.Issue = DS.Model.extend({
-  user: DS.belongsTo('RealTeam.User'),
+  user: DS.belongsTo('RealTeam.User', {
+    inverse: 'issues'
+  }),
   project: DS.belongsTo('RealTeam.Project'),
   subject: DS.attr('string'),
   url: DS.attr('string'),
