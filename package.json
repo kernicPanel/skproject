@@ -29,6 +29,7 @@
   "devDependencies": {
     "vows": "0.5.x",
     "mocha": "*",
+    "chai": "*",
     "should": "*"
   },
   "scripts": {
