@@ -7,84 +7,85 @@ RealTeam.socket.on('redmine::currentIssueUpdated', function (issue){
   RealTeam.userController.updateCurrentIssue(issue);
 });
 
-/*
- *RealTeam.socket.on('createIssue', function (issueID){
- *  console.log('createIssue', issueID);
- *  var createdIssue = RealTeam.Issue.find(issueID);
- *  console.log('createdIssue', createdIssue);
- *});
- */
+RealTeam.socket.on('updateIssue', function (issueId, detail){
+  notyfy({text:'updating issue ' + issueId, layout: 'topRight', timeout:3000});
+  console.log('issueId, detail', issueId, detail);
 
-RealTeam.socket.on('updateIssue', function (issueID, detail){
-  notyfy({text:'updating issue ' + issueID, layout: 'topRight', timeout:3000});
-  //notyfy({text:'from ' + issue.assigned_to.name, layout: 'topRight', timeout:3000});
-  //notyfy({text:'to ' + issue.assigned_to.name, layout: 'topRight', timeout:3000});
-  console.log('issueID, detail', issueID, detail);
-
-  var updatedIssue = RealTeam.Issue.find(issueID);
-  console.log("updatedIssue : ", updatedIssue);
-  test = detail;
-  if (detail.name ==='status_id') {
-    updatedIssue.set('status', RealTeam.Status.find( detail.new_value ));
+  console.log('RealTeam.Issue.isLoaded(issueId)', RealTeam.Issue.isLoaded(issueId));
+  if (RealTeam.Issue.isLoaded(issueId)) {
+    var issue = RealTeam.Issue.find(issueId);
+    issue.reload();
+    if (Ember.get(issue, 'isReloading')) {
+      issue.on('didReload', function() {
+        console.log("updateIssue Reloaded!");
+        $("#select2Search").trigger('change');
+      });
+    }
+    else {
+      console.log("updateIssue Loaded!");
+      $("#select2Search").trigger('change');
+    }
   }
-
-  if (detail.name ==='priority_id') {
-    updatedIssue.set('priority', RealTeam.Priority.find( detail.new_value ));
-  }
-
-  if (detail.name ==='done_ratio') {
-    updatedIssue.set('doneRatio', detail.new_value );
-  }
-
-/*
- *  var oldUser = RealTeam.User.find(data.oldUserId);
- *  var oldUserIssues = oldUser.get('issues');
- *  oldUserIssues.removeObject(updatedIssue);
- *
- *  var newUser = RealTeam.User.find(data.newUserId);
- *  var newUserIssues = newUser.get('issues');
- *  newUserIssues.addObject(updatedIssue);
- */
-
-  //issues.removeObject(RealTeam.Issue.find(8770))
-  //issues.addObject
 });
 
 RealTeam.socket.on('removeUserIssue', function (data){
   console.log('removeUserIssue', data);
+  if (RealTeam.User.isLoaded(data.userId)) {
+    var updatedIssue = RealTeam.Issue.find(data.issueId);
 
-  var updatedIssue = RealTeam.Issue.find(data.issueId);
+    var removeUserIssue = function removeUserIssue(){
+      user = RealTeam.User.find(data.userId);
+      userIssues = user.get('issues');
+      userIssues.removeObject(updatedIssue);
+      user.set('issuesCount', user.get('issuesCount') - 1);
+      $("#select2Search").trigger('change');
+    };
 
-  var user = RealTeam.User.find(data.userId);
-  var userIssues = user.get('issues');
-  userIssues.removeObject(updatedIssue);
-  user.set('issuesCount', user.get('issuesCount') - 1);
+    if (Ember.get(updatedIssue, 'isLoading') || Ember.get(updatedIssue, 'isReloading')) {
+      updatedIssue.on('didLoad', function() {
+        console.log("Loaded!");
+        removeUserIssue();
+      });
+      updatedIssue.on('didReload', function() {
+        console.log("Reloaded!");
+        removeUserIssue();
+      });
+    }
+    else {
+      console.log("Already loaded!");
+      removeUserIssue();
+    }
+  }
 });
 
 RealTeam.socket.on('addUserIssue', function (data){
   console.log('addUserIssue', data);
+  if (RealTeam.User.isLoaded(data.userId)) {
+    var updatedIssue = RealTeam.Issue.find(data.issueId);
 
-  updatedIssue = RealTeam.Issue.find(data.issueId);
-  //updatedIssue.destroy();
-  //updatedIssue = RealTeam.Issue.find(data.issueId);
+    var addUserIssue = function addUserIssue(){
+      user = RealTeam.User.find(data.userId);
+      userIssues = user.get('issues');
+      userIssues.pushObject(updatedIssue);
+      user.set('issuesCount', user.get('issuesCount') + 1);
+      $("#select2Search").trigger('change');
+    };
 
-  console.log("update !", updatedIssue);
-  user = RealTeam.User.find(data.userId);
-  userIssues = user.get('issues');
-  userIssues.pushObject(updatedIssue);
-  user.set('issuesCount', user.get('issuesCount') + 1);
-  //RealTeam.userController.filter();
-  $("#select2Search").trigger('change');
-
-  /*
-   *updatedIssue.on('didLoad', function() {
-   *  console.log("Loaded!");
-   *  user = RealTeam.User.find(data.userId);
-   *  userIssues = user.get('issues');
-   *  userIssues.pushObject(updatedIssue);
-   *  user.set('issuesCount', user.get('issuesCount') + 1);
-   *});
-   */
+    if (Ember.get(updatedIssue, 'isLoading') || Ember.get(updatedIssue, 'isReloading')) {
+      updatedIssue.on('didLoad', function() {
+        console.log("Loaded!");
+        addUserIssue();
+      });
+      updatedIssue.on('didReload', function() {
+        console.log("Reloaded!");
+        addUserIssue();
+      });
+    }
+    else {
+      console.log("Already loaded!");
+      addUserIssue();
+    }
+  }
 });
 
 RealTeam.socket.on('log', function(source, data){
