@@ -5,6 +5,9 @@ RealTeam.User = DS.Model.extend({
     return this.get('firstname') + ' ' + this.get('lastname');
   }.property('firstname', 'lastname'),
   issues: DS.hasMany('RealTeam.Issue'),
+  currentIssue: DS.belongsTo('RealTeam.Issue'),
+  currentIssueTime: DS.attr('string'),
+  currentIssueStatus: DS.attr('string'),
   currentIRCIssue: DS.belongsTo('RealTeam.Issue'),
   currentIRCIssueTime: DS.attr('string'),
   currentIRCIssueStatus: DS.attr('string'),

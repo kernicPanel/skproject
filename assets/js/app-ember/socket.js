@@ -4,7 +4,24 @@ RealTeam.socket.on('realTeam::connect', function (data){
 });
 
 RealTeam.socket.on('redmine::currentIssueUpdated', function (issue){
-  RealTeam.userController.updateCurrentIssue(issue);
+  RealTeam.userController.updateCurrentIRCIssue(issue);
+});
+
+RealTeam.socket.on('startCurrentIssue', function (issue){
+  console.log('startCurrentIssue', issue);
+  RealTeam.userController.runTimer(issue);
+});
+
+RealTeam.socket.on('pauseCurrentIssue', function (issue){
+  console.log('pauseCurrentIssue', issue);
+  //RealTeam.userController.updateCurrentIssue(issue);
+  RealTeam.userController.pauseTimer(issue);
+});
+
+RealTeam.socket.on('stopCurrentIssue', function (userId){
+  console.log('stopCurrentIssue', userId);
+  //RealTeam.userController.updateCurrentIssue(issue);
+  RealTeam.userController.stopTimer(userId);
 });
 
 RealTeam.socket.on('updateIssue', function (issueId, detail){

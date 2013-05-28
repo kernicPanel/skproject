@@ -2,7 +2,7 @@ RealTeam.UserController = Ember.ObjectController.extend({
   init: function(){
     console.log('init UserController');
   },
-  updateCurrentIssue: function (issue) {
+  updateCurrentIRCIssue: function (issue) {
     var user = RealTeam.User.find(issue.userId);
     var currentIRCIssue = null;
     user.set('currentIRCIssueTime', issue.issueTime);
@@ -16,6 +16,30 @@ RealTeam.UserController = Ember.ObjectController.extend({
     user.set('currentIRCIssue', currentIRCIssue);
 
 //debugger;
+  },
+  updateCurrentIssue: function (issue) {
+    console.log('updateCurrentIssue', issue);
+  },
+  runTimer: function(issue){
+    var user = RealTeam.User.find(issue.userId);
+    issue.currentTimer = new Date().getTime() - issue.startedAt + issue.pendingDuration - 60 * 60 * 1000;
+    var currentIssue = RealTeam.Issue.find(issue.issueId);
+    user.set("currentIssue", currentIssue);
+    //user.set("currentIssueTime", issue.currentTimer);
+    user.set("currentIssueStatus", issue.paused ? 'paused' : 'pending');
+    user.set('currentTimerId', setInterval(function(){
+      var currentTimer = user.get('currentIssueTime');
+      user.set('currentIssueTime', currentTimer + 1000);
+    }, 1000));
+  },
+  pauseTimer: function(issue){
+    var user = RealTeam.User.find(issue.userId);
+    clearInterval(user.get('currentTimerId'));
+  },
+  stopTimer: function(userId){
+    var user = RealTeam.User.find(userId);
+    user.set('currentIssueTime', - 60 * 60 * 1000);
+    clearInterval(user.get('currentTimerId'));
   },
   start: function(issue){
     console.log('user start', issue.get('id'));

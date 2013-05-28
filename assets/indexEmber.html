@@ -90,6 +90,8 @@
           <p>{{user.currentIRCIssue.project.name}}</p>
           <p><a {{bindAttr href="user.currentIRCIssue.url"}} target="_blank">{{user.currentIRCIssue.id}} {{user.currentIRCIssue.subject}}</a></p>
           <p>{{user.currentIRCIssueStatus}} {{user.currentIRCIssueTime}}</p>
+          <p><a {{bindAttr href="user.currentIssue.url"}} target="_blank">{{user.currentIssue.id}} {{user.currentIssue.subject}}</a></p>
+          <p>{{user.currentIssueStatus}} {{timer user.currentIssueTime}}</p>
         </div>
       {{/each}}
     </script>
@@ -115,6 +117,8 @@
               {{#linkTo "user" user}}{{ user.name }} ({{ user.issuesCount }}){{/linkTo}}
               <p><a {{bindAttr href="user.currentIRCIssue.url"}} target="_blank">{{user.currentIRCIssue.id}} {{user.currentIRCIssue.subject}}</a></p>
               <p>{{user.currentIRCIssueStatus}} {{user.currentIRCIssueTime}}</p>
+              <p><a {{bindAttr href="user.currentIssue.url"}} target="_blank">{{user.currentIssue.id}} {{user.currentIssue.subject}}</a></p>
+              <p>{{user.currentIssueStatus}} {{timer user.currentIssueTime}}</p>
             </li>
           {{/each}}
           </ul>
