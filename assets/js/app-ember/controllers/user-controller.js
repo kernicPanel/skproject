@@ -86,7 +86,7 @@ RealTeam.UserController = Ember.ObjectController.extend({
     var controller = this;
     var filterArray = this.get('filterArray');
     var isDisplayed, included;
-    var issuesSorted = controller.get('model.issues');
+    var issuesSorted = this.get('model.issues');
     if (filterArray.length) {
       var issuesDisplayed = issuesSorted.filter(function(item, index, self) {
         included = false;
@@ -114,10 +114,10 @@ RealTeam.UserController = Ember.ObjectController.extend({
         });
         return included;
       });
-      controller.set('issuesDisplayed', issuesDisplayed);
+      this.set('issuesDisplayed', issuesDisplayed);
     }
     else {
-      controller.set('issuesDisplayed', controller.get('model.issues'));
+      this.set('issuesDisplayed', this.get('model.issues'));
     }
     this.graph();
   },
