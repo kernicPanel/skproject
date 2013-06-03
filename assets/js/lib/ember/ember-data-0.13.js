@@ -40,7 +40,7 @@ var define, requireModule;
 */
 
 /**
-  All Ember Data methods and functions are defined inside of this namespace. 
+  All Ember Data methods and functions are defined inside of this namespace.
 
   @class DS
   @static
@@ -863,7 +863,7 @@ DS.Transaction = Ember.Object.extend({
       if(!record.get('isDirty')) {
         this.remove(record);
       }
-    }, this); 
+    }, this);
   },
 
   /**
@@ -3956,6 +3956,7 @@ var storeAlias = function(methodName) {
 };
 
 DS.Model.reopenClass({
+  isLoaded: storeAlias('recordIsLoaded'),
 
   /** @private
     Alias DS.Model's `create` method to `_create`. This allows us to create DS.Model
@@ -4243,8 +4244,8 @@ DS.RelationshipChange.determineRelationshipType = function(recordType, knownSide
     else{
       return knownKind === "belongsTo" ? "oneToMany" : "manyToMany";
     }
-  } 
- 
+  }
+
 };
 
 DS.RelationshipChange.createChange = function(firstRecordReference, secondRecordReference, store, options){
@@ -7370,7 +7371,7 @@ DS.loaderFor = loaderFor;
 
   For an example implementation, see {{#crossLink "DS.RestAdapter"}} the
   included REST adapter.{{/crossLink}}.
-  
+
   @class Adapter
   @namespace DS
   @extends Ember.Object
