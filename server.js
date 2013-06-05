@@ -263,6 +263,7 @@ server.post("/create-user", function (req, res) {
   var last_login_on = req.body.last_login_on;
   var created_on = req.body.created_on;
   var mail = req.body.mail;
+  var irc = req.body.irc;
   var id = req.body.id;
 
   if (password !== confirmPassword) {
@@ -290,10 +291,10 @@ server.post("/update-user", function (req, res) {
   });
 });
 
-
 server.post("/update-user-password", function (req, res) {
   res.redirect('/account');
 });
+
 server.get('/extract', [requireLogin], function(req,res){
   res.render('extract.jade',  {
       title : server.host + ':' + server.port + ' | skProject | ' + server.config.clientFramework ,
