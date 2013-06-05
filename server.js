@@ -284,6 +284,16 @@ server.post("/create-user", function (req, res) {
   }
 });
 
+server.post("/update-user", function (req, res) {
+  server.redmine.updateUser(req.session.login, req.body, function(err, user){
+    res.redirect('/account');
+  });
+});
+
+
+server.post("/update-user-password", function (req, res) {
+  res.redirect('/account');
+});
 server.get('/extract', [requireLogin], function(req,res){
   res.render('extract.jade',  {
       title : server.host + ':' + server.port + ' | skProject | ' + server.config.clientFramework ,
@@ -313,8 +323,7 @@ server.get('/stats', [requireLogin], function(req,res){
 });
 
 server.get("/account", [requireLogin], function (req, res) {
-  var requestLogin = { login: req.session.login };
-  server.redmine.getAppUser(requestLogin, function(err, data) {
+  server.redmine.getUserByLogin(req.session.login, function(err, data){
     if (data) {
       addLocals( data, function() {
         data.error = null;
@@ -323,6 +332,21 @@ server.get("/account", [requireLogin], function (req, res) {
         data.admin = true;
       console.log('data!!!', data);
         res.render('account.jade', data);
+      });
+    }
+  });
+});
+
+server.get("/account-password", [requireLogin], function (req, res) {
+  server.redmine.getUserByLogin(req.session.login, function(err, data){
+    if (data) {
+      addLocals( data, function() {
+        data.error = null;
+        data.login = req.session.login;
+        data.title = 'Account | ' + data.title;
+        data.admin = true;
+      console.log('data!!!', data);
+        res.render('password.jade', data);
       });
     }
   });

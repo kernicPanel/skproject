@@ -6,14 +6,21 @@ block content
   if error
     p Error : #{error}
 
-  form(method="post", action="/create-user")
-    input(type="text", name="login", placeholder="Login", autofocus, required, value="#{login}")
-    input(type="password", name="password", placeholder="Password", required, value="")
-    input(type="password", name="confirmPassword", placeholder="Confirm password", required, value="")
-    input(type="text", name="firstname", value="#{firstname}")
-    input(type="text", name="lastname", value="#{lastname}")
-    input(type="text", name="mail", value="#{mail}")
+  form(method="post", action="/update-user")
+    label login
+      input(type="text", name="login", placeholder="Login", autofocus, required, value="#{login}")
+    label firstname
+      input(type="text", name="firstname", value="#{firstname}")
+    label lastname
+      input(type="text", name="lastname", value="#{lastname}")
+    label email
+      input(type="text", name="mail", value="#{mail}")
+    label nick irc
+      input(type="text", name="irc", value="#{irc}")
+    input(type="hidden", name="id", value="#{id}")
     input(type="submit")
+
+  a(href='/account-password') Change password
 
   ul
     li apiKey: #{apiKey}

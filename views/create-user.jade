@@ -7,6 +7,7 @@ p Login : #{login}
 form(method="post", action="/create-user")
   input(type="password", name="password", placeholder="Password", autofocus, required, value="")
   input(type="password", name="confirmPassword", placeholder="Confirm password", required, value="")
+  input(type="text", name="irc", placeholder="IRC nick", value="")
   input(type="hidden", name="login", value="#{login}")
   input(type="hidden", name="firstname", value="#{firstname}")
   input(type="hidden", name="lastname", value="#{lastname}")
