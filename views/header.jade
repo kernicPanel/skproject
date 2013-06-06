@@ -1,45 +1,23 @@
 block header
-  .navbar.navbar-fixed-top
+  .navbar.navbar-fixed-top.navbar-inverse
     .navbar-inner
-      .container-fluid
-        a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
-          span.icon-bar
-          span.icon-bar
-          span.icon-bar
-        a.brand(href='#') realTeam
-        .nav-collapse
-          ul.nav
-            if admin
-              li
-                a(href='/admin') Admin
-              //- li.dropdown
-                //- a.dropdown-toggle(href='#', data-toggle='dropdown')
-                //-   | Admin
-                //-   b.caret
-                //-   ul.dropdown-menu
-                //-     li
-                //-       a(href='/admin') Admin
-                //-     li
-                //-       a#sync(href='#') Rebuild base
-                //-     li
-                //-       a#setusers(href='#') Create users
-                //-     li
-                //-       a#setprojects(href='#') Create projects
-                //-     li
-                //-       a#setprojects(href='http://0.0.0.0:5959', target='_BLANK') Look Nodetime
-              li.divider-vertical
+        a.brand(href='#') RealTeam
+        ul.nav
+          if admin
             li
-              a(href='/') Team
-            li
-              a(href='/stats') Stats
+              a(href='/admin') Admin
+          li
+            a(href='/') Team
+          li
+            a(href='href="#/projects"') Projects
 
-          ul.nav.pull-right
-            li.dropdown
-              a.dropdown-toggle(data-toggle='dropdown', href='#')
-                | #{login}
-                b.caret
-              ul.dropdown-menu
-                li
-                  a(href='/account') account
-                li
-                  a(href='/logout') logout
+        ul.nav.pull-right
+          li.dropdown
+            a.dropdown-toggle(data-toggle='dropdown', href='#')
+              | #{login}
+              b.caret
+            ul.dropdown-menu
+              li
+                a(href='/account') account
+              li
+                a(href='/logout') logout

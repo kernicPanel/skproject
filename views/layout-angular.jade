@@ -16,9 +16,16 @@ html.no-js(lang='en', ng-app="realTeam")
     meta(name="author", content=author)
     meta(name="viewport", content='width=device-width, initial-scale=1')
 
+    link(rel='stylesheet', href='/css/h5bp-head.css')
     link(rel='stylesheet', href='/css/bootstrap.css')
+    link(rel='stylesheet', href='/css/jquery.notyfy.css')
+    link(rel='stylesheet', href='/css/default.notyfy.css')
+    link(rel='stylesheet', href='/js/lib/select2/select2.css')
+    link(rel='stylesheet', href='/css/realteam.notyfy.css')
     link(rel='stylesheet', href='/css/style.css')
     link(rel='stylesheet', href='/css/bootstrap-responsive.css')
+    link(rel='stylesheet', href='/css/h5bp-foot.css')
+
     //script(src='js/libs/modernizr-2.0.6.min.js')
   body
     include header
@@ -33,7 +40,7 @@ html.no-js(lang='en', ng-app="realTeam")
             #dialog-message(title='Modal Dialog')
             //
                 end static dialog
-            © 2012 Nicolas Clerc
+            © 2013 Nicolas Clerc
         //Dependances
         //- script(defer, src='/socket.io/socket.io.js')
         script(src='/js/lib/jquery-1.8.2.min.js')

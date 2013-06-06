@@ -692,13 +692,12 @@ tr.sameUser {
 }
 
 footer {
-  color: #aaa;
+  color: #5F5F5F;
   padding: 20px 0;
   margin-top: 70px;
-  border-top: 1px solid #E5E5E5;
-  background-color: whiteSmoke;
+  border-top: 1px solid #313131;
+  background-color: #131313;
   margin-left: -20px;
-  /*margin-right: -20px;*/
   padding-left: 20px;
   padding-right: 20px;
   text-align: right;

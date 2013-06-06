@@ -4,10 +4,19 @@ if error
   p Error : #{error}
 
 p Login : #{login}
-form(method="post", action="/create-user")
-  input(type="password", name="password", placeholder="Password", autofocus, required, value="")
-  input(type="password", name="confirmPassword", placeholder="Confirm password", required, value="")
-  input(type="text", name="irc", placeholder="IRC nick", value="")
+form.fullForm(method="post", action="/create-user")
+  fieldset
+    label(for="password") password
+    input(type="password", id="password", name="password", placeholder="Password", autofocus, required, value="")
+
+  fieldset
+    label(for="confirmPassword") confirm password
+    input(type="password", id="confirmPassword", name="confirmPassword", placeholder="Confirm password", required, value="")
+
+  fieldset
+    label(for="irc") confirm password
+    input(type="text", id="irc", name="irc", placeholder="IRC nick", value="")
+
   input(type="hidden", name="login", value="#{login}")
   input(type="hidden", name="firstname", value="#{firstname}")
   input(type="hidden", name="lastname", value="#{lastname}")
@@ -16,4 +25,5 @@ form(method="post", action="/create-user")
   input(type="hidden", name="created_on", value="#{created_on}")
   input(type="hidden", name="mail", value="#{mail}")
   input(type="hidden", name="id", value="#{id}")
-  input(type="submit")
+
+  button(type="submit", class="btn  btn-primary") Submit
