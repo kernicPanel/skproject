@@ -27,11 +27,11 @@ RealTeam.CurrentuserController = Ember.ObjectController.extend({
     //clearInterval(RealTeam.get('currentIntervalId'));
     //RealTeam.currentuser.set('currentIssue', issue);
     RealTeam.socket.emit('startIssue', issue.id, function (err, issue) {
-      console.log("startIssue : ", issue);
-      RealTeam.currentuserController.updateCurrentIssue(issue);
-      //RealTeam.currentuserController.stopTimer();
-      RealTeam.currentuser.set('currentIssue.currentTimer', - 60 * 60 * 1000);
-      RealTeam.currentuserController.runTimer();
+      //console.log("startIssue : ", issue);
+      //RealTeam.currentuserController.updateCurrentIssue(issue);
+      ////RealTeam.currentuserController.stopTimer();
+      //RealTeam.currentuser.set('currentIssue.currentTimer', - 60 * 60 * 1000);
+      //RealTeam.currentuserController.runTimer();
     });
   },
   pause: function(){
