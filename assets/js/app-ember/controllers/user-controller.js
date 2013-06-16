@@ -17,8 +17,10 @@ RealTeam.UserController = Ember.ObjectController.extend({
 
 //debugger;
   },
-  updateCurrentIssue: function (issue) {
+  updateCurrentIssue: function (userId, issue) {
     console.log('updateCurrentIssue', issue);
+    var user = RealTeam.User.find(userId);
+    user.set("currentIssue", issue);
   },
   runTimer: function(issue){
     var user = RealTeam.User.find(issue.userId);

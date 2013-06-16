@@ -7,9 +7,15 @@ RealTeam.socket.on('redmine::currentIssueUpdated', function (issue){
   RealTeam.userController.updateCurrentIRCIssue(issue);
 });
 
-RealTeam.socket.on('issueStarted', function (issue){
-  console.log('issueStarted', issue);
-  RealTeam.userController.runTimer(issue);
+RealTeam.socket.on('issueStarted', function (issueStarted){
+  console.log('issueStarted', issueStarted);
+  RealTeam.userController.runTimer(issueStarted);
+  if (RealTeam.currentuser.get('id') === issueStarted.userId) {
+    var issue = RealTeam.Issue.find(issueStarted.issueId);
+    RealTeam.currentuserController.updateCurrentIssue(issue);
+    RealTeam.currentuser.set('currentIssue.currentTimer', - 60 * 60 * 1000);
+    RealTeam.currentuserController.runTimer();
+  }
 });
 
 RealTeam.socket.on('issuePaused', function (issue){
@@ -20,8 +26,12 @@ RealTeam.socket.on('issuePaused', function (issue){
 
 RealTeam.socket.on('issueStopped', function (userId){
   console.log('issueStopped', userId);
-  //RealTeam.userController.updateCurrentIssue(issue);
+  RealTeam.userController.updateCurrentIssue(userId, null);
   RealTeam.userController.stopTimer(userId);
+  if (RealTeam.currentuser.get('id') === userId) {
+    RealTeam.currentuserController.stopTimer();
+    RealTeam.currentuserController.updateCurrentIssue(null);
+  }
 });
 
 RealTeam.socket.on('updateIssue', function (issueId, detail){
