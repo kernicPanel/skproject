@@ -1,6 +1,15 @@
 RealTeam.UserController = Ember.ObjectController.extend({
   init: function(){
-    console.log('init UserController');
+    console.log('init UserController', this);
+    test = this;
+    //var users = RealTeam.User.all();
+    /*
+     *users.forEach(function(user){
+     *  console.log(user.get('id'));
+     *  var userId = user.get('id');
+     *  this.runTimer();
+     *});
+     */
   },
   updateCurrentIRCIssue: function (issue) {
     var user = RealTeam.User.find(issue.userId);
@@ -22,6 +31,12 @@ RealTeam.UserController = Ember.ObjectController.extend({
     var user = RealTeam.User.find(userId);
     user.set("currentIssue", issue);
   },
+  /*
+   *initTimer: function(){
+   *  var currentIssue = this.get('model.currentIssue');
+   *  console.log('currentIssue', currentIssue);
+   *}.property(model.currentIssue),
+   */
   runTimer: function(issue){
     var user = RealTeam.User.find(issue.userId);
     issue.currentTimer = new Date().getTime() - issue.startedAt + issue.pendingDuration - 60 * 60 * 1000;
@@ -126,7 +141,6 @@ RealTeam.UserController = Ember.ObjectController.extend({
   filtered: false,
   scope: function(arg){
     console.log('issue scope', arg);
-    test = arg;
   },
   graph: function(){
     //console.log(this.get('issuesDisplayed'));

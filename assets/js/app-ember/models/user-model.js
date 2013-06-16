@@ -8,6 +8,7 @@ RealTeam.User = DS.Model.extend({
   currentIssue: DS.belongsTo('RealTeam.Issue'),
   currentIssueTime: DS.attr('string'),
   currentIssueStatus: DS.attr('string'),
+  currentIssueStartedAt: DS.attr('string'),
   currentIRCIssue: DS.belongsTo('RealTeam.Issue'),
   currentIRCIssueTime: DS.attr('string'),
   currentIRCIssueStatus: DS.attr('string'),

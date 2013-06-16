@@ -91,7 +91,7 @@
           <p><a {{bindAttr href="user.currentIRCIssue.url"}} target="_blank">{{user.currentIRCIssue.id}} {{user.currentIRCIssue.subject}}</a></p>
           <p>{{user.currentIRCIssueStatus}} {{user.currentIRCIssueTime}}</p>
           <p><a {{bindAttr href="user.currentIssue.url"}} target="_blank">{{user.currentIssue.id}} {{user.currentIssue.subject}}</a></p>
-          <p>{{user.currentIssueStatus}} {{timer user.currentIssueTime}}</p>
+          <p>{{user.currentIssueStatus}} {{!date user.currentIssueStartedAt}} {{!timer user.currentIssueTime}}</p>
         </div>
       {{/each}}
     </script>
@@ -118,7 +118,7 @@
               <p><a {{bindAttr href="user.currentIRCIssue.url"}} target="_blank">{{user.currentIRCIssue.id}} {{user.currentIRCIssue.subject}}</a></p>
               <p>{{user.currentIRCIssueStatus}} {{user.currentIRCIssueTime}}</p>
               <p><a {{bindAttr href="user.currentIssue.url"}} target="_blank">{{user.currentIssue.id}} {{user.currentIssue.subject}}</a></p>
-              <p>{{user.currentIssueStatus}} {{timer user.currentIssueTime}}</p>
+              <p>{{user.currentIssueStatus}} {{!date user.currentIssueStartedAt}} {{!timer user.currentIssueTime}}</p>
             </li>
           {{/each}}
           </ul>
@@ -249,7 +249,10 @@
         
         <span {{bindAttr class=":priority issue.priority.cssClass"}}>{{issue.priority.name}}</span>
         <span {{bindAttr class=":status issue.status.cssClass"}}>{{issue.status.name}}</span>
-        <p>created: {{date issue.createdOn}} | updated: {{date issue.updatedOn}}</p>
+        {{#each user in issue.startedBy}}
+          <h3>started by: {{user.id}}</h3>
+        {{/each}}
+        <p>created: {{date issue.createdOn}} | updated: {{date issue.updatedOn}}
         <p>estimatedHours : {{issue.estimatedHours}} | timeEntriesTotal : {{issue.timeEntriesTotal}} | doneRatio : {{issue.doneRatio}}%</p>
         <p>{{textile issue.description}}</p>
       </div>

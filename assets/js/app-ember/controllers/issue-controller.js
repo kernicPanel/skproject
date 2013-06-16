@@ -11,7 +11,6 @@ RealTeam.IssueController = Ember.ObjectController.extend({
   },
   scope: function(arg){
     console.log('issue scope', arg);
-    test = arg;
   }
 });
 
@@ -24,7 +23,6 @@ RealTeam.IssuesController = Ember.ArrayController.extend({
   },
   scope: function(arg){
     console.log('issue scope', arg);
-    test = arg;
   }
 });
 
