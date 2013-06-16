@@ -7,19 +7,19 @@ RealTeam.socket.on('redmine::currentIssueUpdated', function (issue){
   RealTeam.userController.updateCurrentIRCIssue(issue);
 });
 
-RealTeam.socket.on('startCurrentIssue', function (issue){
-  console.log('startCurrentIssue', issue);
+RealTeam.socket.on('issueStarted', function (issue){
+  console.log('issueStarted', issue);
   RealTeam.userController.runTimer(issue);
 });
 
-RealTeam.socket.on('pauseCurrentIssue', function (issue){
-  console.log('pauseCurrentIssue', issue);
+RealTeam.socket.on('issuePaused', function (issue){
+  console.log('issuePaused', issue);
   //RealTeam.userController.updateCurrentIssue(issue);
   RealTeam.userController.pauseTimer(issue);
 });
 
-RealTeam.socket.on('stopCurrentIssue', function (userId){
-  console.log('stopCurrentIssue', userId);
+RealTeam.socket.on('issueStopped', function (userId){
+  console.log('issueStopped', userId);
   //RealTeam.userController.updateCurrentIssue(issue);
   RealTeam.userController.stopTimer(userId);
 });
