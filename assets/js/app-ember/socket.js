@@ -20,13 +20,22 @@ RealTeam.socket.on('issueStarted', function (issueStarted){
 
 RealTeam.socket.on('issuePaused', function (issue){
   console.log('issuePaused', issue);
-  //RealTeam.userController.updateCurrentIssue(issue);
+  RealTeam.userController.updateCurrentIssue(issue);
   RealTeam.userController.pauseTimer(issue);
+  if (RealTeam.currentuser.get('id') === issue.userId) {
+    RealTeam.currentuserController.updateCurrentIssue(issue);
+    if (issue.paused) {
+      RealTeam.currentuserController.pauseTimer();
+    }
+    else {
+      RealTeam.currentuserController.runTimer();
+    }
+  }
 });
 
 RealTeam.socket.on('issueStopped', function (userId){
   console.log('issueStopped', userId);
-  RealTeam.userController.updateCurrentIssue(userId, null);
+  RealTeam.userController.stopCurrentIssue(userId);
   RealTeam.userController.stopTimer(userId);
   if (RealTeam.currentuser.get('id') === userId) {
     RealTeam.currentuserController.stopTimer();
