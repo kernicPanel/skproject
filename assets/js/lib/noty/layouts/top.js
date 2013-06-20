@@ -8,7 +8,7 @@
 			selector: 'ul#noty_top_layout_container',
 			style: function() {
 				$(this).css({
-					top: 40,
+					top: 66,
 					left: '10%',
 					position: 'fixed',
 					width: '80%',

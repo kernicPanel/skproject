@@ -218,12 +218,17 @@ angular.module('realTeam.directives', []).
       });
 
       $(element).find('#fetchUsers').on('click', function(){
-        socket.emit('fetchUsers', {}, function (err, data) {
+        socket.emit('fetchRedmineUsers', {}, function (err, data) {
         });
       });
 
       $(element).find('#createTeam').on('click', function(){
         socket.emit('createTeam', {}, function (err, data) {
+        });
+      });
+
+      $(element).find('#createProjects').on('click', function(){
+        socket.emit('createProjects', {}, function (err, data) {
         });
       });
 
