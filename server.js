@@ -97,7 +97,7 @@ server.users = {};
 
 //setup the errors
 server.use(function(err, req, res, next){
-  console.error(err.stack);
+  //console.error(err.stack);
   res.send(500, 'Something broke!');
 });
 httpServer.listen( server.port, server.host);
@@ -154,6 +154,7 @@ server.addUser = function addUser ( login, callback ) {
     server.users[login] = {};
   }
   server.redmine.connectUser( login, function(err, data){
+    console.log(server.users);
     //res.redirect('/');
     callback(err, data);
   });
@@ -239,17 +240,22 @@ server.post("/redmine-key", function (req, res) {
     }
     else {
       var user = data.user;
-      res.render('create-user.jade', {
-          error: null,
-          login:  user.mail.split('@')[0],
-          firstname:  user.firstname,
-          lastname:  user.lastname,
-          apiKey: req.body.key,
-          last_login_on: user.last_login_on,
-          created_on: user.created_on,
-          mail: user.mail,
-          id: user.id
-        });
+      addLocals( null, function( err, locals) {
+        //locals.login = '';
+        //locals.title = 'Login | ' + locals.title;
+
+          locals.title = 'Create user | ' + locals.title;
+          locals.error = null;
+          locals.login =  user.mail.split('@')[0];
+          locals.firstname =  user.firstname;
+          locals.lastname =  user.lastname;
+          locals.apiKey = req.body.key;
+          locals.last_login_on = user.last_login_on;
+          locals.created_on = user.created_on;
+          locals.mail = user.mail;
+          locals.id = user.id;
+        res.render('create-user.jade', locals);
+      });
     }
   });
 });
@@ -275,12 +281,31 @@ server.post("/create-user", function (req, res) {
   }
   else {
     delete req.body.confirmPassword;
-    server.redmine.createUser(req.body);
-    addLocals( null, function( err, locals) {
-      locals.error = null;
-      locals.login = login;
-      locals.title = 'Login | ' + locals.title;
-      res.render('login.jade', locals);
+    server.redmine.createUser(req.body, function(err, user){
+      server.redmine.login(req.body, function(err, isAuth) {
+        if (!isAuth) {
+          addLocals( null, function( err, locals) {
+            locals.error = "Wrong login or password";
+            locals.login = login;
+            locals.title = 'Login | ' + locals.title;
+            res.render('login.jade', locals);
+          });
+        }
+        else {
+          req.session.login = req.body.login;
+          server.addUser( req.body.login, function( err, data ){
+            res.redirect('/');
+          });
+        }
+      /*
+       *addLocals( null, function( err, locals) {
+       *  locals.error = null;
+       *  locals.login = login;
+       *  locals.title = 'Login | ' + locals.title;
+       *  res.render('login.jade', locals);
+       *});
+       */
+      });
     });
   }
 });
