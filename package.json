@@ -24,7 +24,8 @@
     "connect-redis": "~1.4.5",
     "debug": "~0.7.2",
     "bcrypt-nodejs": "0.0.3",
-    "nimble": "0.0.2"
+    "nimble": "0.0.2",
+    "request": "~2.33.0"
   },
   "devDependencies": {
     "vows": "0.5.x",

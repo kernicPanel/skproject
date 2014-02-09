@@ -108,6 +108,9 @@ server.eventsManager.init(server);
 server.redmine = require('./lib/redmine.js');
 server.redmine.init();
 
+server.gitlab = require('./lib/gitlab.js');
+server.gitlab.init();
+
 server.redmineStats = require('./lib/redmineStats.js');
 server.redmineStats.init();
 
@@ -320,29 +323,6 @@ server.post("/update-user-password", function (req, res) {
   res.redirect('/account');
 });
 
-server.post("/gitlab", function (req, res) {
-  console.log(req.body);
-  var event = req.body;
-  var message = '';
-  var type = !!event.boject_kind ? event.object_kind : 'push';
-  if (type === 'push') {
-    message = '[' + event.repository.name + '] ';
-    message += event.user_name + ' ';
-    message += 'pushed ' + event.total_commits_count + ' commit';
-    if (event.total_commits_count > 1) {
-      message += 's';
-    }
-    message += ' ';
-    message += 'to ' + event.ref.split('/')[2] + '\n';
-    for (var i = 0, l = event.commits.length; i < l; i ++) {
-      var commit = event.commits[i];
-      message += commit.message + ' ';
-      message += commit.url + '\n';
-    }
-  }
-  server.irc.broadcast(message);
-  res.send(200);
-});
 
 server.get('/extract', [requireLogin], function(req,res){
   res.render('extract.jade',  {
