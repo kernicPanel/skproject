@@ -227,7 +227,7 @@ ul.nav {
   top: 30px;
   width: 100%;
   position: fixed;
-  z-index: 10001;
+  /*z-index: 9999;*/
 }
 
 .currentUser input[type=text] {

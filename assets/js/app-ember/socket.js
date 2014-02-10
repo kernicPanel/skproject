@@ -43,6 +43,21 @@ RealTeam.socket.on('issueStopped', function (userId){
   }
 });
 
+RealTeam.socket.on('addTimeOk', function (data){
+  console.log('addTimeOk', data);
+  var text = 'Addtime OK<br>';
+  text += data.time_entry.hours + ' hours added to ' + data.time_entry.issue.id;
+  notyfy({text: text, timeout:5000});
+});
+
+RealTeam.socket.on('addTimeError', function (error, data){
+  console.log('addTimeError', error, data);
+  var text = 'Addtime ERROR !<br>';
+  text += error + '<br> ';
+  text += data.time_entry.hours + ' hours NOT added to ' + data.time_entry.issue_id + ' !!';
+  notyfy({text: text, type: 'error', modal: true, layout: 'center'});
+});
+
 RealTeam.socket.on('updateIssue', function (issueId, detail){
   notyfy({text:'updating issue ' + issueId, layout: 'topRight', timeout:3000});
   console.log('issueId, detail', issueId, detail);
