@@ -336,7 +336,7 @@ var display = (function () {
             delaiFermeJourOuvre: delaiFermeJourOuvre,
             delaiRejeteJourOuvre: delaiRejeteJourOuvre,
 
-            time: round2decimals(issue.time_entriesTotal)
+            time: round2decimals(issue.time_entries_total)
         });
 
         var excluded = false;

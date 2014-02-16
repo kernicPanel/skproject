@@ -1,18 +1,73 @@
-p Welcome #{firstname} #{lastname}
+!!! 5
+//if lt IE 7
+  html.no-js.ie6.oldie(lang='en')
+//if IE 7
+  html.no-js.ie7.oldie(lang='en')
+//if IE 8
+  html.no-js.ie8.oldie(lang='en')
+//[if gt IE 8]><!
+html.no-js(lang='en')
+  //<![end if]
+  head
+    meta(charset='utf-8')
+    meta(http-equiv='X-UA-Compatible', content='IE=edge,chrome=1')
+    title=title
+    meta(name="description", content=description)
+    meta(name="author", content=author)
+    meta(name="viewport", content='width=device-width, initial-scale=1')
 
-if error
-  p Error : #{error}
+    link(rel='stylesheet', href='/css/bootstrap-cyborg.css')
+    link(rel='stylesheet', href='/css/h5bp-head.css')
+    link(rel='stylesheet', href='/css/style.css')
+    link(rel='stylesheet', href='/css/h5bp-foot.css')
+    link(rel='stylesheet', href='/css/bootstrap-responsive.css')
 
-p Login : #{username}
-form(method="post", action="/create-user")
-  input(type="password", name="password", placeholder="Password", autofocus, required, value="")
-  input(type="password", name="confirmPassword", placeholder="Confirm password", required, value="")
-  input(type="hidden", name="username", value="#{username}")
-  input(type="hidden", name="firstname", value="#{firstname}")
-  input(type="hidden", name="lastname", value="#{lastname}")
-  input(type="hidden", name="key", value="#{apiKey}")
-  input(type="hidden", name="last_login_on", value="#{last_login_on}")
-  input(type="hidden", name="created_on", value="#{created_on}")
-  input(type="hidden", name="mail", value="#{mail}")
-  input(type="hidden", name="id", value="#{id}")
-  input(type="submit")
+  body
+    .navbar.navbar-fixed-top
+        .navbar-inner
+            .container-fluid
+              a.btn.btn-navbar(data-toggle='collapse', data-target='.nav-collapse')
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+              a.brand(href='#') realTeam
+
+    .container
+      .row
+        #loginForm.span6.offset3.well
+            if error
+              p.alert Error : #{error}
+
+            .row-fluid
+              .span12
+                h1 Welcome #{firstname} #{lastname}
+
+                form.fullForm(method="post", action="/create-user")
+                  .row-fluid
+                    .span6
+                      fieldset
+                        label(for="password") password
+                        input(type="password", id="password", name="password", placeholder="Password", autofocus, required, value="")
+
+                    .span6
+                      fieldset
+                        label(for="confirmPassword") confirm password
+                        input(type="password", id="confirmPassword", name="confirmPassword", placeholder="Confirm password", required, value="")
+
+                  .row-fluid
+                    .span6
+                      fieldset
+                        label(for="irc") IRC Nickname
+                        input(type="text", id="irc", name="irc", placeholder="IRC nick", value="")
+
+                        input(type="hidden", name="login", value="#{login}")
+                        input(type="hidden", name="firstname", value="#{firstname}")
+                        input(type="hidden", name="lastname", value="#{lastname}")
+                        input(type="hidden", name="apiKey", value="#{apiKey}")
+                        input(type="hidden", name="last_login_on", value="#{last_login_on}")
+                        input(type="hidden", name="created_on", value="#{created_on}")
+                        input(type="hidden", name="mail", value="#{mail}")
+                        input(type="hidden", name="id", value="#{id}")
+
+                    .span6
+                      button(type="submit", class="btn  btn-primary") Submit

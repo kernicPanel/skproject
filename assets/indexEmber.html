@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+
+<!-- paulirish.com/2008/conditional-stylesheets-vs-css-hacks-answer-neither/ -->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+  <head>
+    <meta charset="utf-8" />
+
+    <!-- Set the viewport width to device width for mobile -->
+    <meta name="viewport" content="width=device-width" />
+
+    <title>RealTeam</title>
+
+    <!-- Included CSS Files (Compressed) -->
+    <link rel='stylesheet' href='css/h5bp-head.css'>
+    <!--<link rel='stylesheet' href='css/bootstrap-cyborg.css'>-->
+    <link rel='stylesheet' href='css/bootstrap.css'>
+    <link rel='stylesheet' href='css/jquery.notyfy.css'>
+    <link rel='stylesheet' href='css/default.notyfy.css'>
+    <link rel='stylesheet' href='js/lib/select2/select2.css'>
+    <link rel='stylesheet' href='css/realteam.notyfy.css'>
+    <link rel='stylesheet' href='css/style.css'>
+    <link rel='stylesheet' href='css/bootstrap-responsive.css'>
+    <link rel='stylesheet' href='css/h5bp-foot.css'>
+  </head>
+  <body>
+    <script type="text/x-handlebars" data-template-name="application">
+      <div class="navbar navbar-fixed-top navbar-inverse">
+        <div class="navbar-inner">
+          <a class="brand" href="#">RealTeam</a>
+          <ul class="nav">
+            <li><a href="/admin">Admin</a></li>
+            <li>{{#linkTo 'index'}}Team{{/linkTo}}</li>
+            <li>{{#linkTo 'projects'}}Projects{{/linkTo}}</li>
+          </ul>
+        </div>
+      </div>
+      {{ render "currentuser" RealTeam.currentuser }}
+      <div class="container">
+        <div class="row">
+          <!--<div class="span12">-->
+            {{ outlet }}
+          <!--</div>-->
+        </div>
+      </div>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="currentuser">
+      <div class="currentUser well">
+        <p>{{firstname}} {{lastname}} {{mail}}
+          {{#if hasAddtime}}
+
+            {{#with currentIssue}}
+              {{view Ember.TextField valueBinding="id" id="id"}}
+              {{view Ember.TextField valueBinding="hours" id="hours"}}
+              {{view Ember.TextField valueBinding="minutes" id="minutes"}}
+              {{view Ember.TextField valueBinding="message" id="message"}}
+              <!--<input {{bindAttr value="id"}} type="text" name="id" id="id" />-->
+              <!--<input {{bindAttr value="hours"}} type="text" name="hours" id="hours"/>-->
+              <!--<input {{bindAttr value="minutes"}} type="text" name="minutes" id="minutes"/>-->
+              <!--<input {{bindAttr value="startedAt"}} type="text" name="startedAt" id="startedAt" />-->
+              <button class="btn btn-mini" {{action "addTime"}}>addTime</button>
+              <button class="btn btn-mini" {{action "cancelTime"}}>cancel</button>
+            {{/with}}
+          {{else}}
+            {{#with currentIssue}}
+              {{id}}
+              {{issueStatus}}
+              {{issueName}}
+              {{!timer startedAt pendingDuration}}
+              {{timer currentTimer}}
+              <button class="btn btn-mini" {{action "pause"}}>pause</button>
+              <button class="btn btn-mini" {{action "stop"}}>stop</button>
+            {{/with}}
+            {{!timer currentIssue.startedAt currentIssue.pendingDuration}}
+          {{/if}}
+        </p>
+      </div>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="index">
+      {{ template "team"}}
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="team">
+      {{#each user in controller}}
+        <div class="user span4 well">
+          <p>{{#linkTo "user" user}}{{ user.name }} {{ user.issuesCount }}{{/linkTo}}</p>
+          <p>{{user.currentIRCIssue.project.name}}</p>
+          <p><a {{bindAttr href="user.currentIRCIssue.url"}} target="_blank">{{user.currentIRCIssue.id}} {{user.currentIRCIssue.subject}}</a></p>
+          <p>{{user.currentIRCIssueStatus}} {{user.currentIRCIssueTime}}</p>
+          <p><a {{bindAttr href="user.currentIssue.url"}} target="_blank">{{user.currentIssue.id}} {{user.currentIssue.subject}}</a></p>
+          <p>{{user.currentIssueStatus}} {{!date user.currentIssueStartedAt}} {{!timer user.currentIssueTime}}</p>
+        </div>
+      {{/each}}
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="users">
+      <div class="row">
+        <div id="users" class="span2">
+          {{ template "userMenu"}}
+        </div>
+
+        <div id="user" class="span10">
+          {{outlet}}
+        </div>
+      </div>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="userMenu">
+      <div class="sidebar-nav navbar navbar-inverse">
+        <div class="navbar-inner">
+          <ul class="nav">
+          {{#each user in controller}}
+            <li>
+              {{#linkTo "user" user}}{{ user.name }} ({{ user.issuesCount }}){{/linkTo}}
+              <p><a {{bindAttr href="user.currentIRCIssue.url"}} target="_blank">{{user.currentIRCIssue.id}} {{user.currentIRCIssue.subject}}</a></p>
+              <p>{{user.currentIRCIssueStatus}} {{user.currentIRCIssueTime}}</p>
+              <p><a {{bindAttr href="user.currentIssue.url"}} target="_blank">{{user.currentIssue.id}} {{user.currentIssue.subject}}</a></p>
+              <p>{{user.currentIssueStatus}} {{!date user.currentIssueStartedAt}} {{!timer user.currentIssueTime}}</p>
+            </li>
+          {{/each}}
+          </ul>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="user">
+      <div class="user">
+        <h1>{{name}} {{issuesCount}}</h1>
+        <!--{{view RealTeam.IssueFilter valueBinding="filterString"}}-->
+        {{view RealTeam.Select2Search}}
+        <div class="stats">
+          {{view RealTeam.UserGraphView issuesDisplayedBinding=issuesDisplayed}}
+        </div>
+        {{#each issue in issuesDisplayed}}
+          {{template "issue"}}
+        {{else}}
+          <p>No issues.</p>
+        {{/each}}
+      </div>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name='select2Search'>
+      <input type="hidden" id="select2Search" class="select2-offscreene" tabindex="-1" data-placeholder="Filter">
+    </script>
+
+    <script type="text/x-handlebars" data-template-name='userGraph'>
+      <div id="chartContainer" style="height: 400px; width: 100%;"> </div>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="projects">
+      <div class="row">
+        <div id="users" class="span2">
+          {{ partial "projectMenu"}}
+        </div>
+
+        <div id="user" class="span10">
+          {{outlet}}
+        </div>
+      </div>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="issues">
+      <div class="row">
+        <div id="users" class="span12">
+          {{#each issue in controller}}
+            {{template "issue"}}
+          {{else}}
+            <p>... Fetching issues ...</p>
+          {{/each}}
+        </div>
+      </div>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="_projectMenu">
+      <div class="sidebar-nav navbar navbar-inverse">
+        <div class="navbar-inner">
+          <ul class="nav projects">
+          {{#each rootProject in rootProjects}}
+              <li>
+                {{#if rootProject.hasChildren}}
+                  <a class="showChildren" {{action showChildren rootProject.id}}>
+                    {{#if rootProject.isExpanded}}
+                      -
+                    {{else}}
+                      +
+                    {{/if}}
+                  </a>
+                {{/if}}
+                {{#linkTo "project" rootProject}}{{ rootProject.name }}{{/linkTo}}
+                {{#if rootProject.hasChildren}}
+                  {{#if rootProject.isExpanded}}
+                    <ul class="subnav">
+                      {{#each child in rootProject.children}}
+                        <li>
+                          {{#linkTo "project" child}}{{ child.name }}{{/linkTo}}
+                        </li>
+                      {{/each}}
+                    </ul>
+                  {{/if}}
+                {{/if}}
+              </li>
+          {{/each}}
+          </ul>
+        </div>
+      </div>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="project">
+      <div class="user">
+        <h1>{{name}} {{issuesCount}}</h1>
+        <div class="navbar navbar-inverse">
+          <div class="navbar-inner">
+            <ul class="nav">
+              {{#linkTo "project" parent}}{{ parent.name }}{{/linkTo}}
+              {{#each child in children}}
+                <li>
+                  {{#linkTo "project" child}}{{ child.name }}{{/linkTo}}
+                </li>
+              {{/each}}
+            </ul>
+          </div>
+        </div>
+        <!--<button class="btn btn-mini" {{action "sort" "id"}}>id</button>-->
+        <!--<button class="btn btn-mini" {{action "sort" "subject"}}>subject</button>-->
+        <!--<button class="btn btn-mini" {{action "sort" "project.name"}}>project.name</button>-->
+        <!--<button class="btn btn-mini" {{action "sort" "priority.id" false}}>priority.id</button>-->
+        <!--<button class="btn btn-mini" {{action "filter" "Immédiat" false}}>filter Immédiat</button>-->
+        <div class="stats">
+          {{view RealTeam.ProjectGraphView idBinding=id}}
+        </div>
+        {{#each issue in issues}}
+          {{template "issue"}}
+        {{else}}
+          <p>No issues.</p>
+        {{/each}}
+      </div>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name='projectGraph'>
+      <div id="chartContainer" style="height: 300px; width: 100%;"> </div>
+    </script>
+
+    <script type="text/x-handlebars" data-template-name="issue">
+      <div class="issue well">
+        <h2>{{issue.project.name}}<a {{bindAttr href="issue.url"}} target="_blank">{{issue.id}} {{issue.subject}}</a><button class="btn btn-mini" {{action "start" issue}}>start</button></h2>
+        
+        <span {{bindAttr class=":priority issue.priority.cssClass"}}>{{issue.priority.name}}</span>
+        <span {{bindAttr class=":status issue.status.cssClass"}}>{{issue.status.name}}</span>
+        {{#each user in issue.startedBy}}
+          <h3>started by: {{user.id}}</h3>
+        {{/each}}
+        <p>created: {{date issue.createdOn}} | updated: {{date issue.updatedOn}}
+        <p>estimatedHours : {{issue.estimatedHours}} | timeEntriesTotal : {{issue.timeEntriesTotal}} | doneRatio : {{issue.doneRatio}}%</p>
+        <p>{{textile issue.description}}</p>
+      </div>
+    </script>
+
+    <!--
+       -<script type="text/x-handlebars" data-template-name="issues">
+       -  <ul id="customer-issues">
+       -    {{#each issue in issues}}
+       -      <li>
+       -        <p>{{issue.subject}}</p>
+       -        <p>{{issue.url}}</p>
+       -      </li>
+       -    {{else}}
+       -      <li>
+       -        <p>No issues</p>
+       -      </li>
+       -    {{/each}}
+       -  </ul>
+       -</script>
+       -->
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/lib/jquery-1.9.1.min.js"></script>
+
+    <script src="js/lib/ember/handlebars-1.0.rc.3.js"></script>
+    <script src="js/lib/ember/handlebars-1.0.rc.4.js"></script>
+    <!--<script src="js/lib/ember/handlebars.js"></script>-->
+
+    <!--<script src="js/lib/ember/ember-latest.js"></script>-->
+    <script src="js/lib/ember/ember-1.0.0-rc.5.js"></script>
+
+    <!--<script src="js/lib/ember/ember-data.js"></script>-->
+    <!--<script src="js/lib/ember/ember-data-latest.js"></script>-->
+    <script src="js/lib/ember/ember-data-0.13.js"></script>
+    <script src="js/lib/textile.js"></script>
+    <script src="js/lib/moment.min.js"></script>
+    <script src="js/lib/jquery.notyfy.js"></script>
+    <script src="js/lib/select2/select2.js"></script>
+    <script src="js/lib/highcharts/js/highcharts.js"></script>
+    <script src="js/lib/highcharts/js/themes/realteam.js"></script>
+
+    <script src="/js/app-ember/main.js"></script>
+    <script src="/js/app-ember/socket.js"></script>
+    <script src="/js/app-ember/routes/app-router.js"></script>
+    <script src="/js/app-ember/controllers/application-controller.js"></script>
+    <script src="/js/app-ember/controllers/currentuser-controller.js"></script>
+    <script src="/js/app-ember/controllers/user-controller.js"></script>
+    <script src="/js/app-ember/controllers/issue-controller.js"></script>
+    <script src="/js/app-ember/controllers/project-controller.js"></script>
+    <script src="/js/app-ember/store.js"></script>
+    <script src="/js/app-ember/models/application-model.js"></script>
+    <script src="/js/app-ember/models/currentuser-model.js"></script>
+    <script src="/js/app-ember/models/user-model.js"></script>
+    <script src="/js/app-ember/models/project-model.js"></script>
+    <script src="/js/app-ember/models/issue-model.js"></script>
+
+    <script src="/js/app-ember/views/application-view.js"></script>
+    <script src="/js/app-ember/views/user-view.js"></script>
+
+    <!--<script src="/js/app-ember/helpers/issuesCount.js"></script>-->
+    <script src="/js/app-ember/helpers/textile.js"></script>
+    <script src="/js/app-ember/helpers/date.js"></script>
+    <script src="/js/app-ember/helpers/timer.js"></script>
+
+    <!--<script src="js/app-ember/app.js"></script>-->
+  </body>
+</html>

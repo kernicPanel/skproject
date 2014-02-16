@@ -1,0 +1,6 @@
+**/test/**
+**/views/**
+**/yeoman/**
+**/assets/**
+**/log/**
+**/.git/**

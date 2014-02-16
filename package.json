@@ -4,18 +4,15 @@
   "author": "YOUR NAME <your@emailaddress.com>",
   "version": "0.0.1",
   "dependencies": {
-    "connect": "1.8.5",
-    "express": "2.5.2",
-    "jade": "0.20.0",
+    "connect": "~2.7.4",
+    "express": "~3.1.1",
+    "jade": "~0.28.2",
     "connect-assets": "=2.1.6",
-    "connect-mongodb": "*",
-    "session-mongoose": "0.0.3",
     "irc": "git://github.com/martynsmith/node-irc.git",
-    "socket.io": "0.9.5",
-    "socket.io-client": "0.9.6",
+    "socket.io": "~0.9.14",
+    "socket.io-client": "0.9.11",
     "socket.io-sessions": "0.6.1",
-    "mongoose": "2.5.10",
-    "bcrypt": "0.7.2",
+    "mongoose": "3.6.8",
     "stextile": "0.0.8",
     "textilejs": "*",
     "textile-js": "*",
@@ -23,11 +20,17 @@
     "cdir": "*",
     "winston": "0.6.2",
     "colors": "*",
-    "replify": "*"
+    "replify": "*",
+    "connect-redis": "~1.4.5",
+    "debug": "~0.7.2",
+    "bcrypt-nodejs": "0.0.3",
+    "nimble": "0.0.2",
+    "request": "~2.33.0"
   },
   "devDependencies": {
     "vows": "0.5.x",
     "mocha": "*",
+    "chai": "*",
     "should": "*"
   },
   "scripts": {

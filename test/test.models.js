@@ -19,17 +19,19 @@ along with realTeam.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
-var path = require('path'),
-    util = require('util'),
-    should = require('should'),
-    mongoose = require('mongoose');
-
-var basedir = path.join(__dirname, '..');
-var libdir = path.join(basedir, 'lib');
-
-var redmine = require(path.join(libdir, 'redmine.js'));
-var config = require(path.join(libdir, 'config.js'));
-var Redmine = require(path.join(libdir, 'redmine-rest.js'));
+/*
+ *var path = require('path'),
+ *    util = require('util'),
+ *    should = require('should'),
+ *    mongoose = require('mongoose');
+ *
+ *var basedir = path.join(__dirname, '..');
+ *var libdir = path.join(basedir, 'lib');
+ *
+ *var redmine = require(path.join(libdir, 'redmine.js'));
+ *var config = require(path.join(libdir, 'config.js'));
+ *var Redmine = require(path.join(libdir, 'redmine-rest.js'));
+ */
 
 
 /*
