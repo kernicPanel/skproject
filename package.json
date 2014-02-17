@@ -16,7 +16,7 @@
     "stextile": "0.0.8",
     "textilejs": "*",
     "textile-js": "*",
-    "moment": "1.6.2",
+    "moment": "2.5.1",
     "cdir": "*",
     "winston": "0.6.2",
     "colors": "*",
